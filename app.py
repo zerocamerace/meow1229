@@ -1529,7 +1529,8 @@ def save_psychology_scores():
                 "summary": data.get("summary", ""),
                 "keywords": data.get("keywords", []),
                 "emotion_vector": data.get("emotionVector", {}),
-                "conversation_history": data.get("conversationHistory", []),
+                # 11/12只存數據不存對話：不在 Firestore 留下聊天內容
+                "conversation_history": [],
                 "submit_time": SERVER_TIMESTAMP,
             }
         )
