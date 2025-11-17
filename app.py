@@ -254,6 +254,92 @@ def _normalize_health_data(report: dict):
     return warnings, vitals_display
 
 
+HEALTH_RECOMMENDATIONS = [
+    ("膽固醇", "減少油炸與加工食品，增加可溶性纖維與omega-3脂肪酸攝取。"),
+    ("血糖", "控制精緻糖攝取，注意三餐定時並搭配適量運動。"),
+    ("血壓", "減少鈉攝取，保持作息與壓力管理，維持充足睡眠。"),
+    ("體重", "規律運動並調整飲食份量，朝向健康體重範圍。"),
+    ("肝", "減少酒精與高脂飲食，必要時尋求醫師評估。"),
+]
+
+
+def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
+    """Create health tips based on warnings or vitals for the '了解更多' section."""
+    tips = []
+    vitals = report.get("vital_stats") or {}
+
+    def _to_number(value):
+        try:
+            if isinstance(value, str):
+                value = value.replace(",", "").strip()
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    def _get_recommendation(text: str) -> str | None:
+        lower = text.lower()
+        for keyword, advice in HEALTH_RECOMMENDATIONS:
+            if keyword.lower() in lower:
+                return advice
+        return None
+
+    for warning in warnings:
+        recommendation = _get_recommendation(warning) or "持續調整飲食與作息，並諮詢專業醫師。"
+        tips.append(
+            {
+                "title": "健康提醒",
+                "description": warning,
+                "recommendation": recommendation,
+                "value": None,
+                "threshold": None,
+                "percent": None,
+            }
+        )
+        if len(tips) >= limit:
+            break
+
+    if len(tips) < limit:
+        metrics = (
+            ("total_cholesterol", "總膽固醇", 200),
+            ("ldl_cholesterol", "LDL 壞膽固醇", 130),
+            ("glucose", "空腹血糖", 100),
+            ("triglycerides", "三酸甘油脂", 150),
+            ("bmi", "BMI", 24),
+        )
+        for key, label, threshold in metrics:
+            if len(tips) >= limit:
+                break
+            value = vitals.get(key)
+            numeric_value = _to_number(value)
+            if numeric_value is not None:
+                percent = None
+                if threshold:
+                    percent = max(0, min((numeric_value / threshold) * 100.0, 130))
+                tips.append(
+                    {
+                        "title": label,
+                        "description": f"{label} 目前為 {numeric_value}",
+                        "recommendation": _get_recommendation(label) or "保持規律運動、均衡飲食與充足睡眠。",
+                        "value": numeric_value,
+                        "threshold": threshold,
+                        "percent": percent,
+                    }
+                )
+
+    if not tips:
+        tips.append(
+            {
+                "title": "保持良好習慣",
+                "description": "目前沒有紅字，但仍建議規律作息、適量運動並持續追蹤健康。",
+                "recommendation": "保持良好生活型態，並定期回診追蹤各項指標。",
+                "value": None,
+                "threshold": None,
+                "percent": None,
+            }
+        )
+    return tips
+
+
 # 🟡 0929修改：九宮格貓咪分區
 def _score_to_interval(score) -> int | None:
     """將數值分數換成 1~3 區間。"""
@@ -1581,15 +1667,30 @@ def generate_card():
             flash("請先完成心理測驗！", "error")  # 🟡 0929修改：修正提示字串
             return redirect(url_for("psychology_test"))
 
-        latest_report = max(
+        sorted_reports = sorted(
             reports,
             key=lambda r: _to_datetime(r.get("created_at") or r.get("report_date")),
         )
+        latest_report = sorted_reports[-1]
         warnings, vitals_display = _normalize_health_data(
             latest_report
         )  # 🟡 0929修改：整理健檢提醒與指標
         latest_report["_display_warnings"] = warnings
         latest_report["_display_vitals"] = vitals_display
+        health_tips = _build_health_tips(latest_report, warnings)
+        history_labels = []
+        history_scores = []
+        for entry in sorted_reports[-6:]:
+            score_value = entry.get("health_score")
+            if score_value is None:
+                continue
+            created_at = _to_datetime(entry.get("created_at") or entry.get("report_date"))
+            if created_at and created_at != datetime.min:
+                label = created_at.strftime("%m/%d")
+            else:
+                label = entry.get("report_date") or "N/A"
+            history_labels.append(label)
+            history_scores.append(score_value)
 
         latest_test = max(
             tests,
@@ -1642,6 +1743,9 @@ def generate_card():
             card_image_url=card_image_url,
             report=latest_report,
             psychology=latest_test,
+            health_tips=health_tips,
+            health_history_labels=history_labels,
+            health_history_scores=history_scores,
             is_logged_in=True,
         )
     except Exception as e:
