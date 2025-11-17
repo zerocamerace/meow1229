@@ -212,6 +212,46 @@ def _delete_user_storage_files(user_id: str):
         logging.warning("Failed to delete storage objects for %s: %s", user_id, exc)
 
 
+def _award_login_points(user_ref, daily_points: int = 5):
+    """Add login points if user hasn't received points today. Returns (new_points, new_badges)."""
+    try:
+        snapshot = user_ref.get()
+        data = snapshot.to_dict() or {}
+    except Exception as exc:
+        logging.warning("Failed to fetch user for points: %s", exc)
+        data = {}
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    last_date = data.get("last_point_login_date")
+    current_points = int(data.get("points") or 0)
+
+    if last_date == today:
+        return current_points, []
+
+    updated_points = current_points + daily_points
+    unlocked_before = {
+        badge["points"] for badge in REWARD_BADGES if current_points >= badge["points"]
+    }
+    unlocked_after = {
+        badge["points"] for badge in REWARD_BADGES if updated_points >= badge["points"]
+    }
+    new_badges = sorted(unlocked_after - unlocked_before)
+
+    try:
+        user_ref.set(
+            {
+                "points": updated_points,
+                "last_point_login_date": today,
+            },
+            merge=True,
+        )
+    except Exception as exc:
+        logging.error("Failed to update points for %s: %s", user_ref.id, exc)
+        return current_points, []
+
+    return updated_points, new_badges
+
+
 # ?? 0929修改：共用工具
 def _safe_url(url: str | None) -> str | None:
     if not url:
@@ -984,6 +1024,47 @@ JSON_RESPONSE_CONFIG = genai_types.GenerateContentConfig(
     temperature=0.6,
 )
 
+REWARD_BADGES = [
+    {
+        "points": 5,
+        "name": "新晉貓奴",
+        "description": "獲得貓砂盆與貓砂鏟！",
+        "image": "5p.png",
+    },
+    {
+        "points": 20,
+        "name": "美食家",
+        "description": "獲得元氣罐罐！",
+        "image": "20p.png",
+    },
+    {
+        "points": 30,
+        "name": "快樂舞者",
+        "description": "獲得貓草盆栽！",
+        "image": "30p.png",
+    },
+    {
+        "points": 50,
+        "name": "活力指揮家",
+        "description": "獲得逗貓棒！",
+        "image": "50p.png",
+    },
+    {
+        "points": 80,
+        "name": "探險家",
+        "description": "獲得貓跳台！",
+        "image": "80p.png",
+    },
+]
+
+AVATAR_CHOICES = [
+    "profile01.png",
+    "profile02.png",
+    "profile03.png",
+    "profile04.png",
+]
+DEFAULT_AVATAR = AVATAR_CHOICES[0]
+
 # ?? 0929修改：貓咪九宮格對應既有圖庫
 _CAT_LOCAL_IMAGE_DIR = CAT_CARD_DIR / "images" / "cats"
 _CAT_LOCAL_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
@@ -1110,6 +1191,85 @@ def home():
     return render_template("home.html", is_logged_in=is_logged_in)
 
 
+@app.route("/badges")
+def badges():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("請先登入後再查看徽章頁面。", "error")
+        return redirect(url_for("login"))
+
+    user_points = session.get("points")
+    if user_points is None:
+        try:
+            snapshot = db.collection("users").document(user_id).get()
+            data = snapshot.to_dict() or {}
+            user_points = int(data.get("points") or 0)
+            session["points"] = user_points
+        except Exception as exc:
+            logging.debug("Failed to refresh points in badges page: %s", exc)
+            user_points = 0
+
+    user_points = int(user_points or 0)
+    max_points = REWARD_BADGES[-1]["points"] if REWARD_BADGES else 0
+    progress_percent = 0
+    if max_points > 0:
+        progress_percent = min(user_points, max_points) / max_points * 100
+
+    next_badge = next((badge for badge in REWARD_BADGES if badge["points"] > user_points), None)
+    points_to_next = next_badge["points"] - user_points if next_badge else 0
+
+    enriched_badges = []
+    for badge in REWARD_BADGES:
+        enriched = dict(badge)
+        enriched["unlocked"] = user_points >= badge["points"]
+        enriched["position_percent"] = (
+            (badge["points"] / max_points) * 100 if max_points else 0
+        )
+        enriched_badges.append(enriched)
+
+    return render_template(
+        "badges.html",
+        reward_badges=enriched_badges,
+        user_points=user_points,
+        progress_percent=progress_percent,
+        next_badge=next_badge,
+        points_to_next=points_to_next,
+        max_badge_points=max_points,
+        is_logged_in=True,
+    )
+
+
+@app.route("/profile/avatar", methods=["GET", "POST"])
+def choose_avatar():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("請先登入後再更換頭像。", "error")
+        return redirect(url_for("login"))
+
+    current_avatar = session.get("avatar") or DEFAULT_AVATAR
+
+    if request.method == "POST":
+        selected = request.form.get("avatar")
+        if selected not in AVATAR_CHOICES:
+            flash("選擇的頭像無效，請重新選擇。", "error")
+        else:
+            try:
+                db.collection("users").document(user_id).set({"avatar": selected}, merge=True)
+                session["avatar"] = selected
+                flash("頭像已更新！", "success")
+                return redirect(url_for("badges"))
+            except Exception as exc:
+                logging.error("Failed to update avatar for %s: %s", user_id, exc)
+                flash("頭像更新失敗，請稍後再試。", "error")
+
+    return render_template(
+        "choose_avatar.html",
+        avatar_options=AVATAR_CHOICES,
+        current_avatar=current_avatar,
+        is_logged_in=True,
+    )
+
+
 # 註冊
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -1143,11 +1303,11 @@ def register():
             db.collection("users").document(user.uid).set(
                 {
                     "email": email,
-                    # ?? 修改開始：Firestore 儲存生理性別
                     "gender": gender,
-                    # ?? 修改結束
                     "created_at": SERVER_TIMESTAMP,
                     "last_login": None,
+                    "avatar": DEFAULT_AVATAR,
+                    "points": 0,
                 }
             )
             logging.debug(f"User document created in Firestore for uid: {user.uid}")
@@ -1189,16 +1349,16 @@ def login():
         if "INVALID_PASSWORD" in code or "password is invalid" in msg:
             return "帳號或密碼有誤，請重新輸入。"
         if "TOO_MANY_ATTEMPTS" in code or "too many attempts" in msg:
-            return "帳號或密碼有誤，請重新輸入。"
+            return "登入失敗：嘗試次數過多，請稍後再試。"
         if "USER_DISABLED" in code or "user disabled" in msg:
-            return "帳號或密碼有誤，請重新輸入。"
+            return "登入失敗：此帳號已被停用，請聯絡管理員。"
         if "AUTH_SERVICE_NOT_CONFIGURED" in code:
-            return "帳號或密碼有誤，請重新輸入。"
+            return "登入失敗：尚未設定身份驗證服務，請通知系統管理員。"
         if "AUTH_NETWORK_ERROR" in code:
-            return "帳號或密碼有誤，請重新輸入。"
+            return "登入失敗：驗證服務暫時無法使用，請稍後再試。"
         if "AUTH_RESPONSE_INVALID" in code:
-            return "帳號或密碼有誤，請重新輸入。"
-        return "帳號或密碼有誤，請重新輸入。"
+            return "登入失敗：驗證結果格式異常，請稍後再試。"
+        return "登入失敗：系統目前忙碌，請稍後再試。"
 
 
 
@@ -1224,13 +1384,37 @@ def login():
             firebase_uid = _authenticate_with_password(email, password)
             user_ref = db.collection("users").document(firebase_uid)
             snapshot = user_ref.get()
+            user_data = {}
             if snapshot.exists:
+                user_data = snapshot.to_dict() or {}
                 user_ref.update({"last_login": SERVER_TIMESTAMP})
             else:
-                user_ref.set({"email": email, "created_at": SERVER_TIMESTAMP, "last_login": SERVER_TIMESTAMP})
-            logging.debug(f"User login updated in Firestore for uid: {firebase_uid}")
+                user_data = {
+                    "email": email,
+                    "created_at": SERVER_TIMESTAMP,
+                    "last_login": SERVER_TIMESTAMP,
+                    "points": 0,
+                    "avatar": DEFAULT_AVATAR,
+                }
+                user_ref.set(user_data, merge=True)
+            if not user_data.get("avatar"):
+                user_data["avatar"] = DEFAULT_AVATAR
+                user_ref.set({"avatar": DEFAULT_AVATAR}, merge=True)
+            points, new_badges = _award_login_points(user_ref)
+            logging.debug(
+                "User login updated in Firestore for uid: %s, points=%s",
+                firebase_uid,
+                points,
+            )
             session["user_id"] = firebase_uid
-            flash("?????", "success")
+            session["points"] = points
+            session["avatar"] = user_data.get("avatar") or DEFAULT_AVATAR
+            session["badge_thresholds"] = [
+                badge["points"] for badge in REWARD_BADGES if points >= badge["points"]
+            ]
+            if new_badges:
+                session["reward_unlocks"] = new_badges
+            flash("登入成功！", "success")
             return redirect(url_for("home"))
         except ValueError as auth_error:
             error_code = str(auth_error)
@@ -1241,10 +1425,6 @@ def login():
             err = str(auth_runtime)
             logging.error(f"Password auth runtime error: {err}")
             flash(_localized_login_error(err, email), "error")
-            return render_template("login.html", is_logged_in=is_logged_in)
-        except Exception as e:
-            logging.error(f"Unexpected login error: {str(e)}")
-            flash("??????????????????", "error")
             return render_template("login.html", is_logged_in=is_logged_in)
         except Exception as e:
             logging.error(f"Unexpected login error: {str(e)}")
@@ -1931,6 +2111,52 @@ def generate_card():
         return render_template(
             "generate_card.html", error=f"生成圖卡失敗：{str(e)}", is_logged_in=True
         )
+
+
+@app.context_processor
+def inject_badge_context():
+    """Provide login badge state to templates for dropdown + modal rendering."""
+    user_id = session.get("user_id")
+    user_points = session.get("points")
+    user_avatar = session.get("avatar")
+
+    if user_id and (user_points is None or user_avatar is None):
+        try:
+            snapshot = db.collection("users").document(user_id).get()
+            data = snapshot.to_dict() or {}
+            if user_points is None:
+                user_points = int(data.get("points") or 0)
+                session["points"] = user_points
+            if user_avatar is None:
+                user_avatar = data.get("avatar") or DEFAULT_AVATAR
+                session["avatar"] = user_avatar
+        except Exception as exc:
+            logging.debug(f"Failed to refresh user info for %s: %s", user_id, exc)
+            if user_points is None:
+                user_points = 0
+            if user_avatar is None:
+                user_avatar = DEFAULT_AVATAR
+
+    user_points = int(user_points or 0)
+    user_avatar = user_avatar or DEFAULT_AVATAR
+    unlocked_points = [badge["points"] for badge in REWARD_BADGES if user_points >= badge["points"]]
+    session["badge_thresholds"] = unlocked_points
+
+    reward_unlocks = session.pop("reward_unlocks", None) if "reward_unlocks" in session else []
+
+    enriched_badges = []
+    for badge in REWARD_BADGES:
+        enriched = dict(badge)
+        enriched["unlocked"] = badge["points"] in unlocked_points
+        enriched_badges.append(enriched)
+
+    return {
+        "is_logged_in": bool(user_id),
+        "user_points": user_points,
+        "reward_badges": enriched_badges,
+        "reward_unlocks": reward_unlocks,
+        "user_avatar": user_avatar,
+    }
 
 
 if __name__ == "__main__":

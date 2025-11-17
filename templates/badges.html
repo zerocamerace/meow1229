@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>我的徽章 - Meow Yourself</title>
+        <style>
+            @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
+            *, :after, :before {
+                border: 0 solid #e5e7eb;
+                box-sizing: border-box;
+            }
+            body {
+                line-height: inherit;
+                margin: 0;
+                overflow-x: hidden;
+                background-color: #f1e7e0;
+                background-image: linear-gradient(160deg, #f1e7e0 0%, #e7d2c5 45%, #f8f1eb 100%);
+                font-family: "Lato", "PingFang TC", "Microsoft JhengHei", sans-serif;
+            }
+            #webcrumbs .warm-shell {
+                background: linear-gradient(180deg, #f9f0e9 0%, #f1e7e0 55%, #e7d4c6 100%);
+            }
+            #webcrumbs .warm-card {
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 1.5rem;
+                padding: 2.5rem;
+                box-shadow: 0 20px 60px rgba(233, 204, 183, 0.45);
+            }
+            #webcrumbs .btn-primary {
+                border: 1px solid rgba(203, 164, 140, 0.6);
+                border-radius: 999px;
+                padding: 0.85rem 1.8rem;
+                background: linear-gradient(120deg, #f6c7a8 0%, #f0b796 100%);
+                color: #4b2b1f;
+                font-weight: 600;
+                text-decoration: none;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+            }
+            #webcrumbs .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(244, 189, 152, 0.4);
+            }
+            .progress-wrapper {
+                margin: 2.5rem 0 2.5rem;
+                position: relative;
+            }
+            .progress-track {
+                position: relative;
+                height: 32px;
+                border-radius: 999px;
+                background: rgba(226, 211, 201, 0.6);
+                overflow: hidden;
+            }
+            .progress-fill {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                border-radius: 999px;
+                background: linear-gradient(90deg, #789c6d 0%, #a1c181 80%);
+                transition: width 0.4s ease;
+            }
+            .progress-node {
+                position: absolute;
+                top: -82px;
+                width: 64px;
+                text-align: center;
+                transform: translateX(-50%);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+            .progress-node img {
+                width: 48px;
+                height: 48px;
+                object-fit: contain;
+                filter: grayscale(1);
+                opacity: 0.4;
+                transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+            }
+            .progress-node.unlocked img {
+                filter: none;
+                opacity: 1;
+                transform: translateY(-6px) scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            }
+            .progress-node .node-label {
+                margin-top: 0.4rem;
+                font-size: 0.85rem;
+                color: #6b4b3a;
+            }
+            .points-summary {
+                display: flex;
+                flex-direction: column;
+                gap: 0.4rem;
+                margin-bottom: 1.5rem;
+            }
+            .points-summary .current {
+                font-size: 2.2rem;
+                font-weight: 700;
+                color: #4b2b1f;
+            }
+            .points-summary .next {
+                font-size: 1rem;
+                color: #7b5c4b;
+            }
+            .badge-grid {
+                margin-top: 2rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1.25rem;
+            }
+            .badge-card {
+                border: 1px solid rgba(221, 199, 184, 0.7);
+                border-radius: 1rem;
+                padding: 1rem;
+                background: #fffdf8;
+                text-align: center;
+                box-shadow: 0 15px 35px rgba(236, 205, 189, 0.25);
+            }
+            .badge-card img {
+                height: 56px;
+                width: 56px;
+                object-fit: contain;
+                margin-bottom: 0.75rem;
+            }
+            .badge-card h4 {
+                margin: 0;
+                font-size: 1rem;
+                color: #4b3428;
+            }
+            .badge-card p {
+                margin: 0.25rem 0 0;
+                font-size: 0.9rem;
+                color: #735b4a;
+            }
+            .badge-card.locked {
+                opacity: 0.45;
+            }
+            @media (max-width: 768px) {
+                .progress-node {
+                    top: -72px;
+                }
+                .progress-node img {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+            .actions-row {
+                margin-top: 3rem;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="webcrumbs">
+            <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
+                <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
+                    <div class="flex items-center">
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">home</span> 首頁
+                        </a>
+                        <a href="{{ url_for('featured_cats') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
+                            <span class="material-symbols-outlined mr-1">pets</span> 探索我們的九宮格貓咪
+                        </a>
+                    </nav>
+                    <div class="flex items-center">
+                        <details class="relative">
+                            <summary class="list-none flex items-center cursor-pointer">
+                                <img src="{{ url_for('static', filename=user_avatar) }}" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200 object-cover" alt="Profile" />
+                            </summary>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu">
+                                {% if is_logged_in %}
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-xs text-gray-500 mb-1">目前積分</p>
+                                    <p class="text-lg font-semibold text-amber-500">{{ user_points }}</p>
+                                </div>
+                                <a href="{{ url_for('choose_avatar') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
+                                    更換頭像
+                                </a>
+                                <a href="{{ url_for('badges') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
+                                    我的徽章
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{{ url_for('delete_account') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登出</a>
+                                {% else %}
+                                <a href="{{ url_for('login') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登入</a>
+                                {% endif %}
+                            </div>
+                        </details>
+                    </div>
+                </header>
+
+                <main class="p-6 sm:p-4">
+                    <div class="flex flex-col items-center justify-center w-full max-w-4xl sm:max-w-full mx-auto px-4">
+                        <div class="warm-card w-full">
+                            <p class="text-lg text-gray-600 mb-2">每次登入即可獲得 5 點，當日最高 5 點。累積足夠積分就能解鎖專屬徽章！</p>
+                            <p class="text-base text-gray-500">&nbsp;</p>
+
+                            <div class="progress-wrapper">
+                            <div class="progress-track">
+                                <div class="progress-fill" style="width: {{ '%0.2f'|format(progress_percent) }}%;"></div>
+                                {% for badge in reward_badges %}
+                                <div class="progress-node {{ 'unlocked' if badge.unlocked else '' }}" style="left: calc({{ '%0.2f'|format(badge.position_percent) }}%);">
+                                    <img src="{{ url_for('static', filename=badge.image) }}" alt="{{ badge.name }}" />
+                                    <p class="node-label">{{ badge.points }} 分</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="points-summary">
+                            <p class="current">目前積分：{{ user_points }}</p>
+                            {% if next_badge %}
+                            <p class="next">下一個獎勵：{{ next_badge.name }}（還差 {{ points_to_next }} 點）</p>
+                            {% else %}
+                            <p class="next">太棒了！你已解鎖所有徽章。</p>
+                            {% endif %}
+                        </div>
+
+                            <div class="badge-grid">
+                                {% for badge in reward_badges %}
+                                <div class="badge-card {{ '' if badge.unlocked else 'locked' }}">
+                                    <img src="{{ url_for('static', filename=badge.image) }}" alt="{{ badge.name }}" />
+                                    <h4>{{ badge.name }}</h4>
+                                    <p>達到 {{ badge.points }} 點</p>
+                                    <p class="text-sm text-gray-500 mt-2">{{ badge.description }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="actions-row">
+                                <a href="{{ url_for('home') }}" class="btn-primary">回到首頁</a>
+                                <a href="{{ url_for('upload_health') }}" class="btn-primary" style="background: linear-gradient(120deg, #d4e6b5 0%, #a0c971 100%); color: #365314;">
+                                    進入上傳健檢
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>

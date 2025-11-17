@@ -274,10 +274,21 @@
                     <div class="flex items-center">
                         <details class="relative">
                             <summary class="list-none flex items-center cursor-pointer">
-                                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200" alt="Profile" />
+                                <img src="{{ url_for('static', filename=user_avatar) }}" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200 object-cover" alt="Profile" />
                             </summary>
                             <div id="profile-menu" class="absolute right-0 mt-2 w-40 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu">
                             {% if is_logged_in %}
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-xs text-gray-500 mb-1">目前積分</p>
+                                <p class="text-lg font-semibold text-amber-500">{{ user_points }}</p>
+                            </div>
+                            <a href="{{ url_for('choose_avatar') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
+                                更換頭像
+                            </a>
+                            <a href="{{ url_for('badges') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
+                                我的徽章
+                            </a>
+                            <div class="border-t border-gray-100 my-1"></div>
                             <a href="{{ url_for('delete_account') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>
                             <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登出</a>
                             {% else %}
