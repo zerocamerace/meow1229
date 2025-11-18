@@ -282,11 +282,8 @@
                                 <p class="text-xs text-gray-500 mb-1">目前積分</p>
                                 <p class="text-lg font-semibold text-amber-500">{{ user_points }}</p>
                             </div>
-                            <a href="{{ url_for('choose_avatar') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
-                                更換頭像
-                            </a>
-                            <a href="{{ url_for('badges') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
-                                我的徽章
+                            <a href="{{ url_for('profile') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
+                                我的檔案
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
                             <a href="{{ url_for('delete_account') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>

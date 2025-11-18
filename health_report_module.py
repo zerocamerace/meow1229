@@ -378,21 +378,23 @@ def calculate_health_score(vital_stats, gender=None):
                         grade = grade_level
                         break
 
-        if grade == "A":
-            score -= 5
-            warnings.append(
-                f"{standard_info.get('name', key)} 數值為 A 級 ({value})，超過正常範圍"
-            )
-        elif grade == "B":
-            score -= 10
-            warnings.append(
-                f"{standard_info.get('name', key)} 數值為 B 級 ({value})，顯著超出正常範圍"
-            )
-        elif grade == "C":
-            score -= 15
-            warnings.append(
-                f"{standard_info.get('name', key)} 數值為 C 級 ({value})，嚴重超出正常範圍"
-            )
+        if grade in {"A", "B", "C"}:
+            metric_name = standard_info.get("name", key)
+            if grade == "C":
+                warnings.append(
+                    f"{metric_name} 數值 {value}，嚴重超出正常範圍，建議儘速與專業人員討論。"
+                )
+                score -= 15
+            elif grade == "B":
+                warnings.append(
+                    f"{metric_name} 數值 {value}，明顯超過正常範圍，請盡快調整生活作息。"
+                )
+                score -= 10
+            else:
+                warnings.append(
+                    f"{metric_name} 數值 {value}，超過正常範圍，請多加留意。"
+                )
+                score -= 5
 
     # 綜合性三高判斷 - 修正為根據數值判斷，而非警告訊息
     three_high_count = 0
@@ -418,15 +420,17 @@ def calculate_health_score(vital_stats, gender=None):
     ):
         three_high_count += 1
 
-    if three_high_count == 1:
-        score -= 5
-        warnings.append("符合「一高」條件，額外扣 5 分。")
-    elif three_high_count == 2:
-        score -= 10
-        warnings.append("符合「兩高」條件，額外扣 10 分。")
-    elif three_high_count == 3:
-        score -= 15
-        warnings.append("符合「三高」條件，額外扣 15 分。")
+    if three_high_count > 0:
+        if three_high_count == 1:
+            score -= 5
+            level_text = "一高"
+        elif three_high_count == 2:
+            score -= 10
+            level_text = "二高"
+        else:
+            score -= 15
+            level_text = "三高"
+        warnings.append(f"三高為高血糖／高血脂／高血壓，您目前為{level_text}。")
 
     if score < 1:
         score = 1

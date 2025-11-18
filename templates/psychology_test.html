@@ -243,7 +243,7 @@
         }
 
         /* GALING 調整喵奶奶頭像52px/48px 10/04 */
-        .grandma-avatar, .reporter-avatar {
+        .grandma-avatar, .reporter-avatar, .user-avatar {
             width: 52px;
             height: 52px;
             border-radius: 9999px;
@@ -252,7 +252,7 @@
         }
         @media (max-width: 640px) {
             /* GALING 調整喵奶奶頭像52px/48px 10/04 */
-            .grandma-avatar, .reporter-avatar {
+            .grandma-avatar, .reporter-avatar, .user-avatar {
                 width: 48px;
                 height: 48px;
             }
@@ -676,6 +676,7 @@
         // GALING 調整喵奶奶頭像動畫 10/04
         const grandmaAvatarUrl = "{{ url_for('static', filename='grandma.jpg') }}";
         const reportAvatarUrl = "{{ url_for('static', filename='reporter.jpg') }}";
+        const userAvatarUrl = "{{ url_for('static', filename=user_avatar or 'profile01.png') }}";
 
 
         // 10/02Galing修改 自動偵測裝置 電腦/筆電Ctrl+Enter送出
@@ -1377,12 +1378,13 @@
             let avatarElement = null;
 
             if (sender === 'user') {
-                const userIcon = document.createElement('div');
-                userIcon.className = 'w-8 h-8 rounded-full flex-shrink-0 bg-gray-200';
-                userIcon.innerHTML = `<svg class="w-full h-full text-gray-500 p-1.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+                const userImg = document.createElement('img');
+                userImg.src = userAvatarUrl;
+                userImg.alt = '使用者頭像';
+                userImg.className = 'user-avatar';
                 bubble.classList.add('bg-[var(--user-bubble)]', 'text-[var(--text-primary)]', 'rounded-br-none');
                 bubble.textContent = text;
-                avatarElement = userIcon;
+                avatarElement = userImg;
             } else { // model
                 bubble.classList.add('bg-[var(--gemini-bubble)]', 'text-[var(--text-primary)]', 'rounded-bl-none', 'border', 'border-gray-100');
                 bubble.textContent = text;

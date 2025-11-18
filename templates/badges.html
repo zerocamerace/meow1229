@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>我的徽章 - Meow Yourself</title>
+        <title>我的檔案 - Meow Yourself</title>
         <style>
             @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
             @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
@@ -12,103 +12,124 @@
                 box-sizing: border-box;
             }
             body {
-                line-height: inherit;
                 margin: 0;
-                overflow-x: hidden;
-                background-color: #f1e7e0;
-                background-image: linear-gradient(160deg, #f1e7e0 0%, #e7d2c5 45%, #f8f1eb 100%);
                 font-family: "Lato", "PingFang TC", "Microsoft JhengHei", sans-serif;
+                background: linear-gradient(160deg, #f1e7e0 0%, #e7d2c5 45%, #f8f1eb 100%);
+                color: #4b2b1f;
+            }
+            a {
+                text-decoration: none;
             }
             #webcrumbs .warm-shell {
                 background: linear-gradient(180deg, #f9f0e9 0%, #f1e7e0 55%, #e7d4c6 100%);
             }
-            #webcrumbs .warm-card {
-                background: rgba(255, 255, 255, 0.95);
-                border-radius: 1.5rem;
-                padding: 2.5rem;
-                box-shadow: 0 20px 60px rgba(233, 204, 183, 0.45);
+            .page-shell {
+                max-width: 1200px;
+                width: 100%;
+                margin: 0 auto;
+                padding: 0 1.25rem 3rem;
             }
-            #webcrumbs .btn-primary {
-                border: 1px solid rgba(203, 164, 140, 0.6);
-                border-radius: 999px;
-                padding: 0.85rem 1.8rem;
-                background: linear-gradient(120deg, #f6c7a8 0%, #f0b796 100%);
-                color: #4b2b1f;
+            .app-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 1.5rem 0;
+                flex-wrap: wrap;
+                color: #5c2f80;
                 font-weight: 600;
-                text-decoration: none;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .main-nav {
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            .main-nav a {
+                color: #5c2f80;
+                font-weight: 600;
                 display: inline-flex;
                 align-items: center;
                 gap: 0.4rem;
             }
-            #webcrumbs .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px rgba(244, 189, 152, 0.4);
-            }
-            .progress-wrapper {
-                margin: 2.5rem 0 2.5rem;
-                position: relative;
-            }
-            .progress-track {
-                position: relative;
-                height: 32px;
+            .nav-toggle {
+                display: none;
+                background: rgba(255, 255, 255, 0.8);
+                border: 1px solid rgba(92, 47, 128, 0.2);
                 border-radius: 999px;
-                background: rgba(226, 211, 201, 0.6);
-                overflow: hidden;
+                padding: 0.35rem 0.65rem;
+                color: #5c2f80;
+                cursor: pointer;
             }
-            .progress-fill {
-                position: absolute;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                border-radius: 999px;
-                background: linear-gradient(90deg, #789c6d 0%, #a1c181 80%);
-                transition: width 0.4s ease;
+            details summary::-webkit-details-marker,
+            details summary::marker {
+                display: none;
             }
-            .progress-node {
-                position: absolute;
-                top: -82px;
-                width: 64px;
-                text-align: center;
-                transform: translateX(-50%);
-                transition: opacity 0.3s ease, transform 0.3s ease;
+            .profile-card {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 1.5rem;
+                padding: 2.5rem;
+                box-shadow: 0 20px 50px rgba(212, 182, 163, 0.45);
             }
-            .progress-node img {
-                width: 48px;
-                height: 48px;
-                object-fit: contain;
-                filter: grayscale(1);
-                opacity: 0.4;
-                transition: filter 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-            }
-            .progress-node.unlocked img {
-                filter: none;
-                opacity: 1;
-                transform: translateY(-6px) scale(1.05);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            }
-            .progress-node .node-label {
-                margin-top: 0.4rem;
-                font-size: 0.85rem;
-                color: #6b4b3a;
+            .intro-text,
+            .points-summary {
+                font-size: 1rem;
+                color: #6c4f3f;
             }
             .points-summary {
                 display: flex;
                 flex-direction: column;
                 gap: 0.4rem;
-                margin-bottom: 1.5rem;
+                margin-bottom: 2rem;
             }
-            .points-summary .current {
-                font-size: 2.2rem;
-                font-weight: 700;
+            .points-summary .label {
+                letter-spacing: 0.05em;
+            }
+            .points-summary .value {
+                font-weight: 600;
                 color: #4b2b1f;
+                margin-left: 0.35rem;
             }
-            .points-summary .next {
-                font-size: 1rem;
-                color: #7b5c4b;
+            .avatar-grid {
+                margin-top: 1.25rem;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            .avatar-option {
+                border: 1px solid rgba(226, 202, 187, 0.8);
+                border-radius: 1rem;
+                padding: 0.75rem;
+                text-align: center;
+                background: #fffdf8;
+                transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+                cursor: pointer;
+            }
+            .avatar-option.selected {
+                border-color: #f0b795;
+                box-shadow: 0 10px 25px rgba(240, 183, 149, 0.35);
+                transform: translateY(-2px);
+            }
+            .avatar-option input {
+                display: none;
+            }
+            .avatar-option img {
+                width: 172px;
+                height: 172px;
+                border-radius: 999px;
+                object-fit: cover;
+                border: 1px solid rgba(161, 130, 110, 0.35);
+                background: #fff;
+                padding: 0.3rem;
+            }
+            .section-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #4b2b1f;
+                margin: 2rem 0 0.5rem;
             }
             .badge-grid {
-                margin-top: 2rem;
+                margin-top: 1.25rem;
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
                 gap: 1.25rem;
@@ -119,82 +140,177 @@
                 padding: 1rem;
                 background: #fffdf8;
                 text-align: center;
-                box-shadow: 0 15px 35px rgba(236, 205, 189, 0.25);
+                box-shadow: 0 10px 25px rgba(236, 205, 189, 0.25);
             }
             .badge-card img {
-                height: 56px;
-                width: 56px;
+                width: 150px;
+                height: 150px;
                 object-fit: contain;
-                margin-bottom: 0.75rem;
-            }
-            .badge-card h4 {
-                margin: 0;
-                font-size: 1rem;
-                color: #4b3428;
-            }
-            .badge-card p {
-                margin: 0.25rem 0 0;
-                font-size: 0.9rem;
-                color: #735b4a;
+                margin-bottom: 0.6rem;
             }
             .badge-card.locked {
                 opacity: 0.45;
             }
-            @media (max-width: 768px) {
-                .progress-node {
-                    top: -72px;
-                }
-                .progress-node img {
-                    width: 40px;
-                    height: 40px;
-                }
-            }
             .actions-row {
-                margin-top: 3rem;
+                margin-top: 2.5rem;
                 display: flex;
                 justify-content: center;
                 gap: 1rem;
                 flex-wrap: wrap;
             }
+            .btn-primary {
+                border: 1px solid rgba(203, 164, 140, 0.6);
+                border-radius: 999px;
+                padding: 0.85rem 1.8rem;
+                background: linear-gradient(120deg, #f6c7a8 0%, #f0b796 100%);
+                color: #4b2b1f;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 24px rgba(244, 189, 152, 0.35);
+            }
+            .avatar-actions {
+                margin-top: 1.25rem;
+                display: flex;
+                justify-content: center;
+            }
+            .flash {
+                margin-top: 1rem;
+                padding: 0.75rem 1rem;
+                border-radius: 0.75rem;
+                font-size: 0.95rem;
+            }
+            .flash.success {
+                background: rgba(197, 243, 203, 0.7);
+                color: #1d6b2d;
+            }
+            .flash.error {
+                background: rgba(254, 215, 215, 0.9);
+                color: #a62626;
+            }
+            .profile-controls {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            details.profile-actions {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+            }
+            details.profile-actions summary {
+                list-style: none;
+                display: inline-flex;
+                cursor: pointer;
+            }
+            .profile-trigger {
+                list-style: none;
+                border: 2px solid rgba(251, 191, 36, 0.5);
+                border-radius: 999px;
+                display: inline-flex;
+                width: 4.2rem;
+                height: 4.2rem;
+                align-items: center;
+                justify-content: center;
+                background: #fffaf4;
+                box-shadow: 0 6px 18px rgba(251, 191, 36, 0.25);
+                cursor: pointer;
+            }
+            .profile-trigger img {
+                width: 3.6rem;
+                height: 3.6rem;
+                border-radius: 999px;
+                object-fit: cover;
+            }
+            .profile-trigger .guest-avatar {
+                width: 3.2rem;
+                height: 3.2rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 999px;
+                background: radial-gradient(circle, #fffdfa 0%, #f6ddc9 100%);
+                color: #8c6a5a;
+                font-size: 1.6rem;
+                font-weight: 600;
+            }
+            .profile-menu-links a {
+                display: block;
+            }
+            @media (max-width: 900px) {
+                .nav-toggle {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .main-nav {
+                    display: none;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                    width: 100%;
+                    padding: 0.75rem 0;
+                }
+                .main-nav.open {
+                    display: flex;
+                }
+                .app-header {
+                    align-items: flex-start;
+                }
+            }
+            @media (max-width: 600px) {
+                .page-shell {
+                    padding: 0 1rem 2rem;
+                }
+                .profile-card {
+                    padding: 1.75rem;
+                }
+                .avatar-grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
         </style>
     </head>
     <body>
         <div id="webcrumbs">
-            <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
-                <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
+            <div class="page-shell warm-shell">
+                <header class="app-header">
                     <div class="flex items-center">
                         <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
                     </div>
-                    <nav class="hidden md:flex space-x-6">
-                        <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
-                            <span class="material-symbols-outlined mr-1">home</span> 首頁
-                        </a>
-                        <a href="{{ url_for('featured_cats') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
-                            <span class="material-symbols-outlined mr-1">pets</span> 探索我們的九宮格貓咪
-                        </a>
+                    <button id="profile-nav-toggle" class="nav-toggle" type="button" aria-label="切換選單">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                    <nav id="profile-nav-links" class="main-nav">
+                        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span> 首頁</a>
+                        <a href="{{ url_for('featured_cats') }}"><span class="material-symbols-outlined">pets</span> 探索我們的九宮格貓咪</a>
                     </nav>
-                    <div class="flex items-center">
-                        <details class="relative">
-                            <summary class="list-none flex items-center cursor-pointer">
-                                <img src="{{ url_for('static', filename=user_avatar) }}" class="h-8 w-8 rounded-full border border-gray-200 hover:border-gray-400 transition-all duration-200 object-cover" alt="Profile" />
-                            </summary>
-                            <div id="profile-menu" class="absolute right-0 mt-2 w-40 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu">
+                    <div class="profile-controls">
+                        <details class="profile-actions">
+                            <summary class="profile-trigger">
                                 {% if is_logged_in %}
-                                <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-xs text-gray-500 mb-1">目前積分</p>
-                                    <p class="text-lg font-semibold text-amber-500">{{ user_points }}</p>
-                                </div>
-                                <a href="{{ url_for('choose_avatar') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
-                                    更換頭像
-                                </a>
-                                <a href="{{ url_for('badges') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">
-                                    我的徽章
-                                </a>
-                                <div class="border-t border-gray-100 my-1"></div>
-                                <a href="{{ url_for('delete_account') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>
-                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登出</a>
+                                <img src="{{ url_for('static', filename=user_avatar) }}" alt="目前頭像" />
                                 {% else %}
-                                <a href="{{ url_for('login') }}" class="block px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登入</a>
+                                <span class="guest-avatar" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                        <circle cx="12" cy="8" r="4"></circle>
+                                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                                    </svg>
+                                </span>
+                                {% endif %}
+                            </summary>
+                            <div id="profile-menu" class="absolute right-0 mt-2 w-44 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu bg-white profile-menu-links">
+                                {% if is_logged_in %}
+                                <a href="{{ url_for('profile') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">我的檔案</a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{{ url_for('delete_account') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>
+                                <a href="{{ url_for('logout') }}" class="px-4 py-2 text-sm transition-colors	duration-200 warm-menu-link">登出</a>
+                                {% else %}
+                                <a href="{{ url_for('login') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登入</a>
                                 {% endif %}
                             </div>
                         </details>
@@ -202,32 +318,37 @@
                 </header>
 
                 <main class="p-6 sm:p-4">
-                    <div class="flex flex-col items-center justify-center w-full max-w-4xl sm:max-w-full mx-auto px-4">
-                        <div class="warm-card w-full">
-                            <p class="text-lg text-gray-600 mb-2">每次登入即可獲得 5 點，當日最高 5 點。累積足夠積分就能解鎖專屬徽章！</p>
-                            <p class="text-base text-gray-500">&nbsp;</p>
-
-                            <div class="progress-wrapper">
-                            <div class="progress-track">
-                                <div class="progress-fill" style="width: {{ '%0.2f'|format(progress_percent) }}%;"></div>
-                                {% for badge in reward_badges %}
-                                <div class="progress-node {{ 'unlocked' if badge.unlocked else '' }}" style="left: calc({{ '%0.2f'|format(badge.position_percent) }}%);">
-                                    <img src="{{ url_for('static', filename=badge.image) }}" alt="{{ badge.name }}" />
-                                    <p class="node-label">{{ badge.points }} 分</p>
+                    <div class="flex flex-col items-center justify-center w-full max-w-4xl mx-auto px-0 sm:px-4">
+                        <form method="POST" class="avatar-form">
+                                <div class="section-title">更換大頭貼</div>
+                                <p class="text-sm text-gray-500">你好，{{ user_name }}！挑選一張你喜歡的吧！</p>
+                                <div class="avatar-grid">
+                                    {% for option in avatar_options %}
+                                    <label class="avatar-option {{ 'selected' if option == current_avatar else '' }}">
+                                        <input type="radio" name="avatar" value="{{ option }}" {% if option == current_avatar %}checked{% endif %} />
+                                        <img src="{{ url_for('static', filename=option) }}" alt="頭像選項 {{ loop.index }}" />
+                                    </label>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
+                                <div class="avatar-actions">
+                                    <button type="submit" class="btn-primary">更換大頭貼</button>
+                                </div>
+                            </form>
+
+                        <div class="profile-card">
+                            <p class="intro-text">每次登入即可獲得 5 點，當日最高 5 點。累積足夠積分就能解鎖徽章！</p>
+
+                            <div class="points-summary">
+                                <p class="label">目前積分：<span class="value">{{ user_points }}</span></p>
+                                {% if next_badge %}
+                                <p class="hint">Next：{{ next_badge.name }}（還差 {{ points_to_next }} 點）</p>
+                                {% else %}
+                                <p class="hint">太棒了！你已解鎖所有徽章。</p>
+                                {% endif %}
                             </div>
-                        </div>
 
-                        <div class="points-summary">
-                            <p class="current">目前積分：{{ user_points }}</p>
-                            {% if next_badge %}
-                            <p class="next">下一個獎勵：{{ next_badge.name }}（還差 {{ points_to_next }} 點）</p>
-                            {% else %}
-                            <p class="next">太棒了！你已解鎖所有徽章。</p>
-                            {% endif %}
-                        </div>
-
+                            
+                            <div class="section-title">徽章一覽</div>
                             <div class="badge-grid">
                                 {% for badge in reward_badges %}
                                 <div class="badge-card {{ '' if badge.unlocked else 'locked' }}">
@@ -240,9 +361,11 @@
                             </div>
 
                             <div class="actions-row">
-                                <a href="{{ url_for('home') }}" class="btn-primary">回到首頁</a>
+                                <a href="{{ url_for('home') }}" class="btn-primary">
+                                    <span class="material-symbols-outlined">home</span> 回到首頁
+                                </a>
                                 <a href="{{ url_for('upload_health') }}" class="btn-primary" style="background: linear-gradient(120deg, #d4e6b5 0%, #a0c971 100%); color: #365314;">
-                                    進入上傳健檢
+                                    <span class="material-symbols-outlined">cloud_upload</span> 上傳健檢報告
                                 </a>
                             </div>
                         </div>
@@ -250,5 +373,20 @@
                 </main>
             </div>
         </div>
+        <script>
+            const avatarInputs = document.querySelectorAll(".avatar-option input");
+            avatarInputs.forEach((input) => {
+                input.addEventListener("change", () => {
+                    document.querySelectorAll(".avatar-option").forEach((opt) => opt.classList.remove("selected"));
+                    input.closest(".avatar-option").classList.add("selected");
+                });
+            });
+
+            const navToggle = document.getElementById("profile-nav-toggle");
+            const navLinks = document.getElementById("profile-nav-links");
+            navToggle?.addEventListener("click", () => {
+                navLinks?.classList.toggle("open");
+            });
+        </script>
     </body>
 </html>

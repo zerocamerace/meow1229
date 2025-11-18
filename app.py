@@ -252,6 +252,31 @@ def _award_login_points(user_ref, daily_points: int = 5):
     return updated_points, new_badges
 
 
+def _maybe_award_daily_points():
+    """Ensure daily login points are granted even if user stays logged in past midnight."""
+    user_id = session.get("user_id")
+    if not user_id:
+        return
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    if session.get("daily_points_check") == today:
+        return
+
+    try:
+        user_ref = db.collection("users").document(user_id)
+        points, new_badges = _award_login_points(user_ref)
+        session["points"] = points
+        session["daily_points_check"] = today
+        if new_badges:
+            session["reward_unlocks"] = new_badges
+    except Exception as exc:
+        logging.debug("Daily point refresh skipped for %s: %s", user_id, exc)
+
+
+def _refresh_daily_points():
+    _maybe_award_daily_points()
+
+
 # ?? 0929修改：共用工具
 def _safe_url(url: str | None) -> str | None:
     if not url:
@@ -1004,6 +1029,7 @@ app.secret_key = os.getenv(
 )  # 從 .env 載入或使用預設值
 logging.basicConfig(level=logging.DEBUG)
 FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+app.before_request(_refresh_daily_points)
 
 # ?? 0929修改：設定圖卡輸出位置與備援資料
 BASE_DIR = Path(__file__).resolve().parent
@@ -1191,23 +1217,51 @@ def home():
     return render_template("home.html", is_logged_in=is_logged_in)
 
 
-@app.route("/badges")
-def badges():
+@app.route("/profile", methods=["GET", "POST"])
+@app.route("/badges", methods=["GET", "POST"])
+def profile():
     user_id = session.get("user_id")
     if not user_id:
-        flash("請先登入後再查看徽章頁面。", "error")
+        flash("請先登入後再查看我的檔案頁面。", "error")
         return redirect(url_for("login"))
 
+    current_avatar = session.get("avatar") or DEFAULT_AVATAR
+    user_email = session.get("user_email")
+
+    if request.method == "POST":
+        selected_avatar = request.form.get("avatar")
+        if selected_avatar not in AVATAR_CHOICES:
+            flash("選擇的頭像無效，請重新選擇。", "error")
+        else:
+            try:
+                db.collection("users").document(user_id).set({"avatar": selected_avatar}, merge=True)
+                session["avatar"] = selected_avatar
+                current_avatar = selected_avatar
+                flash("頭像已更新！", "success")
+            except Exception as exc:
+                logging.error("Failed to update avatar for %s: %s", user_id, exc)
+                flash("頭像更新失敗，請稍後再試。", "error")
+        return redirect(url_for("profile"))
+
     user_points = session.get("points")
-    if user_points is None:
+    need_user_doc = user_points is None or not user_email
+    user_data = {}
+    if need_user_doc:
         try:
             snapshot = db.collection("users").document(user_id).get()
-            data = snapshot.to_dict() or {}
-            user_points = int(data.get("points") or 0)
-            session["points"] = user_points
+            user_data = snapshot.to_dict() or {}
         except Exception as exc:
-            logging.debug("Failed to refresh points in badges page: %s", exc)
-            user_points = 0
+            logging.debug("Failed to refresh user doc in profile page: %s", exc)
+
+    if user_points is None:
+        user_points = int(user_data.get("points") or 0)
+        session["points"] = user_points
+        current_avatar = user_data.get("avatar") or current_avatar
+        session["avatar"] = current_avatar
+    if not user_email:
+        user_email = user_data.get("email") or ""
+        if user_email:
+            session["user_email"] = user_email
 
     user_points = int(user_points or 0)
     max_points = REWARD_BADGES[-1]["points"] if REWARD_BADGES else 0
@@ -1227,6 +1281,11 @@ def badges():
         )
         enriched_badges.append(enriched)
 
+    if user_email and "@" in user_email:
+        user_name = user_email.split("@", 1)[0] or "朋友"
+    else:
+        user_name = user_email or "朋友"
+
     return render_template(
         "badges.html",
         reward_badges=enriched_badges,
@@ -1235,37 +1294,9 @@ def badges():
         next_badge=next_badge,
         points_to_next=points_to_next,
         max_badge_points=max_points,
-        is_logged_in=True,
-    )
-
-
-@app.route("/profile/avatar", methods=["GET", "POST"])
-def choose_avatar():
-    user_id = session.get("user_id")
-    if not user_id:
-        flash("請先登入後再更換頭像。", "error")
-        return redirect(url_for("login"))
-
-    current_avatar = session.get("avatar") or DEFAULT_AVATAR
-
-    if request.method == "POST":
-        selected = request.form.get("avatar")
-        if selected not in AVATAR_CHOICES:
-            flash("選擇的頭像無效，請重新選擇。", "error")
-        else:
-            try:
-                db.collection("users").document(user_id).set({"avatar": selected}, merge=True)
-                session["avatar"] = selected
-                flash("頭像已更新！", "success")
-                return redirect(url_for("badges"))
-            except Exception as exc:
-                logging.error("Failed to update avatar for %s: %s", user_id, exc)
-                flash("頭像更新失敗，請稍後再試。", "error")
-
-    return render_template(
-        "choose_avatar.html",
         avatar_options=AVATAR_CHOICES,
         current_avatar=current_avatar,
+        user_name=user_name,
         is_logged_in=True,
     )
 
@@ -1312,6 +1343,7 @@ def register():
             )
             logging.debug(f"User document created in Firestore for uid: {user.uid}")
             session["user_id"] = user.uid
+            session["user_email"] = email
             flash("註冊成功！請上傳健康報告。", "success")
             return redirect(url_for("upload_health"))
         except FirebaseError as e:
@@ -1340,30 +1372,30 @@ def register():
 def login():
     is_logged_in = "user_id" in session
 
-    def _localized_login_error(message: str, email: str) -> str:
-        """Convert Firebase login error messages or codes to user-friendly Traditional Chinese."""
-        code = (message or "").upper()
-        msg = (message or "").lower()
-        if "EMAIL_NOT_FOUND" in code or "no user record" in msg:
-            return "帳號或密碼有誤，請重新輸入。"
-        if "INVALID_PASSWORD" in code or "password is invalid" in msg:
-            return "帳號或密碼有誤，請重新輸入。"
-        if "TOO_MANY_ATTEMPTS" in code or "too many attempts" in msg:
-            return "登入失敗：嘗試次數過多，請稍後再試。"
-        if "USER_DISABLED" in code or "user disabled" in msg:
-            return "登入失敗：此帳號已被停用，請聯絡管理員。"
-        if "AUTH_SERVICE_NOT_CONFIGURED" in code:
-            return "登入失敗：尚未設定身份驗證服務，請通知系統管理員。"
-        if "AUTH_NETWORK_ERROR" in code:
-            return "登入失敗：驗證服務暫時無法使用，請稍後再試。"
-        if "AUTH_RESPONSE_INVALID" in code:
-            return "登入失敗：驗證結果格式異常，請稍後再試。"
-        return "登入失敗：系統目前忙碌，請稍後再試。"
-
-
-
-
-
+    def _localized_login_error(message: str, email: str) -> str:
+        """Convert Firebase login error messages or codes to user-friendly Traditional Chinese."""
+        code = (message or "").upper()
+        msg = (message or "").lower()
+        if (
+            "EMAIL_NOT_FOUND" in code
+            or "INVALID_LOGIN_CREDENTIALS" in code
+            or "no user record" in msg
+            or "invalid_login_credentials" in msg
+        ):
+            return "登入失敗：帳號或密碼有誤，請重新輸入。"
+        if "INVALID_PASSWORD" in code or "password is invalid" in msg:
+            return "登入失敗：帳號或密碼有誤，請重新輸入。"
+        if "TOO_MANY_ATTEMPTS" in code or "too many attempts" in msg:
+            return "登入失敗：嘗試次數過多，請稍後再試。"
+        if "USER_DISABLED" in code or "user disabled" in msg:
+            return "登入失敗：此帳號已被停用，請聯絡管理員。"
+        if "AUTH_SERVICE_NOT_CONFIGURED" in code:
+            return "登入失敗：尚未設定身份驗證服務，請通知系統管理員。"
+        if "AUTH_NETWORK_ERROR" in code:
+            return "登入失敗：驗證服務暫時無法使用，請稍後再試。"
+        if "AUTH_RESPONSE_INVALID" in code:
+            return "登入失敗：驗證結果格式異常，請稍後再試。"
+        return "登入失敗：系統目前忙碌，請稍後再試。"
     if request.method == "GET":
         session.pop("_flashes", None)
 
@@ -1407,6 +1439,7 @@ def login():
                 points,
             )
             session["user_id"] = firebase_uid
+            session["user_email"] = email
             session["points"] = points
             session["avatar"] = user_data.get("avatar") or DEFAULT_AVATAR
             session["badge_thresholds"] = [
