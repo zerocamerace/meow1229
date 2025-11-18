@@ -1034,6 +1034,14 @@ app.config.update(
 )
 logging.basicConfig(level=logging.DEBUG)
 FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10MB
+ALLOWED_UPLOAD_EXTENSIONS = (".jpg", ".jpeg", ".png", ".pdf")
+ALLOWED_UPLOAD_MIMES = {
+    "image/jpeg",
+    "image/png",
+    "application/pdf",
+}
+app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
 app.before_request(_refresh_daily_points)
 
 # ?? 0929修改：設定圖卡輸出位置與備援資料
@@ -1662,12 +1670,22 @@ def upload_health():
             f"Received POST request with form data: {request.form}, files: {request.files}"
         )
 
-        # 檢查檔案類型
-        is_image = file.mimetype in ["image/jpeg", "image/png"]
-        is_pdf = file.mimetype == "application/pdf"
-        if not (is_image or is_pdf):
-            flash("僅支援 JPEG、PNG 或 PDF 檔案！", "error")
+        filename_lower = file.filename.lower()
+        if not filename_lower.endswith(ALLOWED_UPLOAD_EXTENSIONS):
+            flash("請上傳 JPEG、PNG 或 PDF 檔！", "error")
             return redirect(request.url)
+
+        mimetype = (file.mimetype or "").lower()
+        if mimetype not in ALLOWED_UPLOAD_MIMES:
+            flash("請上傳 JPEG、PNG 或 PDF 檔！", "error")
+            return redirect(request.url)
+
+        content_length = request.content_length
+        if content_length and content_length > MAX_UPLOAD_BYTES:
+            flash("檔案超過 10MB，請重新上傳！", "error")
+            return redirect(request.url)
+
+        is_image = mimetype in {"image/jpeg", "image/png"}
 
         # 11/12???????????????????
         logging.debug("Starting health report analysis...")
@@ -1676,6 +1694,9 @@ def upload_health():
             file.seek(0)  # ??????
             # 11/12??????????????????????
             file_data = file.read()
+            if len(file_data) > MAX_UPLOAD_BYTES:
+                flash("檔案超過 10MB，請重新上傳！", "error")
+                return redirect(request.url)
             file_type = "image" if is_image else "pdf"
             analysis_data, health_score, health_warnings, recognized_metric_count = analyze_health_report(
                 file_data, user_id, file_type, gender=user_gender  # ?? ?????????????
@@ -2225,3 +2246,4 @@ if __name__ == "__main__":
     # 若要列印路由表，可在這裡印出（避免 Flask 3 的 before_first_request）
     # logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
     app.run(debug=True, port=5001)
+
