@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ï»¿# -*- coding: utf-8 -*-
 from flask import (
     Flask,
     render_template,
@@ -20,14 +20,14 @@ import ipaddress
 from datetime import datetime, timezone
 import logging
 import time
-import requests  # ?? 0929­×§ï¡G©I¥s¥~³¡¿ß¹Ï¨Ó·½
-import random  # ?? 0929­×§ï¡G¿ß«}¹Ï¥d­·®æÀH¾÷»P³Æ´©¨Ï¥Î
-import textwrap  # ?? 0929­×§ï¡G¹Ï¥d¤å¦r´«¦æ³B²z
-import hashlib  # ?? 0929­×§ï¡G¹Ï¥d¿é¥XÁ×§KÀÉ¦W½Ä¬ğ
-import imghdr  # ?? 0929­×§ï¡GÅçÃÒ¤U¸ü¹Ï¤ù®æ¦¡
-from pathlib import Path  # ?? 0929­×§ï¡G³]©w¹Ï¥d¿é¥X¸ô®|
-from io import BytesIO  # ?? 0929­×§ï¡G³B²z¹Ï¤ù¦ì¤¸²Õ¸ê®Æ
-from urllib.parse import urlparse  # ?? 0929­×§ï¡GÅçÃÒ¹Ï¤ùºô§}¦w¥ş©Ê
+import requests  # ?? 0929ä¿®æ”¹ï¼šå‘¼å«å¤–éƒ¨è²“åœ–ä¾†æº
+import random  # ?? 0929ä¿®æ”¹ï¼šè²“å’ªåœ–å¡é¢¨æ ¼éš¨æ©Ÿèˆ‡å‚™æ´ä½¿ç”¨
+import textwrap  # ?? 0929ä¿®æ”¹ï¼šåœ–å¡æ–‡å­—æ›è¡Œè™•ç†
+import hashlib  # ?? 0929ä¿®æ”¹ï¼šåœ–å¡è¼¸å‡ºé¿å…æª”åè¡çª
+import imghdr  # ?? 0929ä¿®æ”¹ï¼šé©—è­‰ä¸‹è¼‰åœ–ç‰‡æ ¼å¼
+from pathlib import Path  # ?? 0929ä¿®æ”¹ï¼šè¨­å®šåœ–å¡è¼¸å‡ºè·¯å¾‘
+from io import BytesIO  # ?? 0929ä¿®æ”¹ï¼šè™•ç†åœ–ç‰‡ä½å…ƒçµ„è³‡æ–™
+from urllib.parse import urlparse  # ?? 0929ä¿®æ”¹ï¼šé©—è­‰åœ–ç‰‡ç¶²å€å®‰å…¨æ€§
 
 from PIL import (
     Image,
@@ -35,7 +35,7 @@ from PIL import (
     ImageFont,
     ImageOps,
     ImageFilter,
-)  # ?? 0929­×§ï¡GÃ¸»s¹Ï¥d
+)  # ?? 0929ä¿®æ”¹ï¼šç¹ªè£½åœ–å¡
 from health_report_module import analyze_health_report
 from google.cloud.firestore import SERVER_TIMESTAMP
 from google import genai
@@ -53,13 +53,13 @@ ALLOWED_UPLOAD_MIMES = {
     "application/pdf",
 }
 MAX_USER_TEXT_CHARS = 1000
-OVER_LIMIT_MESSAGE = "Oops...¦r¼Æ¶W¹L1000¦rµLªk¶Ç°e­ò"
+OVER_LIMIT_MESSAGE = "Oops...å­—æ•¸è¶…é1000å­—ç„¡æ³•å‚³é€å”·"
 MAX_DAILY_CARD_GENERATIONS = 10
-CARD_LIMIT_MESSAGE = "¤µ¤é¥Í¦¨¦¸¼Æ¤w¹F¤W­­¡A½Ğ©ú¤Ñ¦A¸Õ¡C"
+CARD_LIMIT_MESSAGE = "ä»Šæ—¥ç”Ÿæˆæ¬¡æ•¸å·²é”ä¸Šé™ï¼Œè«‹æ˜å¤©å†è©¦ã€‚"
 
 
 def extract_json_from_response(text: str) -> dict:
-    """©â¨ú²Ä¤@­Ó JSON ª«¥ó¨Ã¸ÑªR¡C"""  # 0929­×§ï03¡G±j¤Æ¸ÑªR®e¿ù
+    """æŠ½å–ç¬¬ä¸€å€‹ JSON ç‰©ä»¶ä¸¦è§£æã€‚"""  # 0929ä¿®æ”¹03ï¼šå¼·åŒ–è§£æå®¹éŒ¯
     if text is None:
         raise ValueError("LLM returned None")
 
@@ -73,7 +73,7 @@ def extract_json_from_response(text: str) -> dict:
         raise ValueError(f"No JSON object found in: {raw[:200]}")
 
     candidate = match.group(0)
-    candidate = candidate.replace("¡¨", '"').replace("¡¦", "'").replace("\ufeff", "")
+    candidate = candidate.replace("â€", '"').replace("â€™", "'").replace("\ufeff", "")
 
     return json.loads(candidate)
 
@@ -121,7 +121,7 @@ def _generate_with_retry(contents, generation_config=None):
     model_candidates = [
         "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
-    ]  # 0929­×§ï04¡G²¾°£ 1.5 ¨t¦C¡A§ï¥Î 2.5 ¼Ò«¬
+    ]  # 0929ä¿®æ”¹04ï¼šç§»é™¤ 1.5 ç³»åˆ—ï¼Œæ”¹ç”¨ 2.5 æ¨¡å‹
 
     last_error = None
 
@@ -293,7 +293,7 @@ def _refresh_daily_points():
     _maybe_award_daily_points()
 
 
-# ?? 0929­×§ï¡G¦@¥Î¤u¨ã
+# ?? 0929ä¿®æ”¹ï¼šå…±ç”¨å·¥å…·
 _DISALLOWED_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
 
@@ -467,7 +467,7 @@ def _to_datetime(value):
     return datetime.min
 
 
-def _cleanup_old_cards(max_files: int = 40):  # ?? 0929­×§ï¡G­­¨î¹Ï¥d¿é¥X¼Æ¶q
+def _cleanup_old_cards(max_files: int = 40):  # ?? 0929ä¿®æ”¹ï¼šé™åˆ¶åœ–å¡è¼¸å‡ºæ•¸é‡
     try:
         files = sorted(
             CAT_CARD_DIR.glob("catcard_*.png"),
@@ -481,7 +481,7 @@ def _cleanup_old_cards(max_files: int = 40):  # ?? 0929­×§ï¡G­­¨î¹Ï¥d¿é¥X¼Æ¶q
 
 
 def _normalize_health_data(report: dict):
-    """Collect warnings»P­«­n«ü¼Ğ¡A½T«O»PÂÂª©§e²{¤@­P¡C"""  # ?? 0929­×§ï¡G¾ã²z°·ÀË¸ê®Æµ¹«eºİÅã¥Ü
+    """Collect warningsèˆ‡é‡è¦æŒ‡æ¨™ï¼Œç¢ºä¿èˆ‡èˆŠç‰ˆå‘ˆç¾ä¸€è‡´ã€‚"""  # ?? 0929ä¿®æ”¹ï¼šæ•´ç†å¥æª¢è³‡æ–™çµ¦å‰ç«¯é¡¯ç¤º
     warnings = []
     for key in ("health_warnings", "warnings", "alert_list", "warning_details"):
         value = report.get(key)
@@ -518,16 +518,16 @@ def _normalize_health_data(report: dict):
 
 
 HEALTH_RECOMMENDATIONS = [
-    ("Áx©T¾J", "´î¤Öªo¬µ»P¥[¤u­¹«~¡A¼W¥[¥i·»©ÊÅÖºû»Pomega-3¯×ªÕ»ÄÄá¨ú¡C"),
-    ("¦å¿}", "±±¨îºë½o¿}Äá¨ú¡Aª`·N¤TÀ\©w®É¨Ã·f°t¾A¶q¹B°Ê¡C"),
-    ("¦åÀ£", "´î¤Ö¶uÄá¨ú¡A«O«ù§@®§»PÀ£¤OºŞ²z¡Aºû«ù¥R¨¬ºÎ¯v¡C"),
-    ("Åé­«", "³W«ß¹B°Ê¨Ã½Õ¾ã¶¼­¹¥÷¶q¡A´Â¦V°·±dÅé­«½d³ò¡C"),
-    ("¨x", "´î¤Ö°sºë»P°ª¯×¶¼­¹¡A¥²­n®É´M¨DÂå®vµû¦ô¡C"),
+    ("è†½å›ºé†‡", "æ¸›å°‘æ²¹ç‚¸èˆ‡åŠ å·¥é£Ÿå“ï¼Œå¢åŠ å¯æº¶æ€§çº–ç¶­èˆ‡omega-3è„‚è‚ªé…¸æ”å–ã€‚"),
+    ("è¡€ç³–", "æ§åˆ¶ç²¾ç·»ç³–æ”å–ï¼Œæ³¨æ„ä¸‰é¤å®šæ™‚ä¸¦æ­é…é©é‡é‹å‹•ã€‚"),
+    ("è¡€å£“", "æ¸›å°‘éˆ‰æ”å–ï¼Œä¿æŒä½œæ¯èˆ‡å£“åŠ›ç®¡ç†ï¼Œç¶­æŒå……è¶³ç¡çœ ã€‚"),
+    ("é«”é‡", "è¦å¾‹é‹å‹•ä¸¦èª¿æ•´é£²é£Ÿä»½é‡ï¼Œæœå‘å¥åº·é«”é‡ç¯„åœã€‚"),
+    ("è‚", "æ¸›å°‘é…’ç²¾èˆ‡é«˜è„‚é£²é£Ÿï¼Œå¿…è¦æ™‚å°‹æ±‚é†«å¸«è©•ä¼°ã€‚"),
 ]
 
 
 def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
-    """Create health tips based on warnings or vitals for the '¤F¸Ñ§ó¦h' section."""
+    """Create health tips based on warnings or vitals for the 'äº†è§£æ›´å¤š' section."""
     tips = []
     vitals = report.get("vital_stats") or {}
 
@@ -547,10 +547,10 @@ def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
         return None
 
     for warning in warnings:
-        recommendation = _get_recommendation(warning) or "«ùÄò½Õ¾ã¶¼­¹»P§@®§¡A¨Ã¿Ô¸ß±M·~Âå®v¡C"
+        recommendation = _get_recommendation(warning) or "æŒçºŒèª¿æ•´é£²é£Ÿèˆ‡ä½œæ¯ï¼Œä¸¦è«®è©¢å°ˆæ¥­é†«å¸«ã€‚"
         tips.append(
             {
-                "title": "°·±d´£¿ô",
+                "title": "å¥åº·æé†’",
                 "description": warning,
                 "recommendation": recommendation,
                 "value": None,
@@ -563,10 +563,10 @@ def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
 
     if len(tips) < limit:
         metrics = (
-            ("total_cholesterol", "Á`Áx©T¾J", 200),
-            ("ldl_cholesterol", "LDL ÃaÁx©T¾J", 130),
-            ("glucose", "ªÅ¸¡¦å¿}", 100),
-            ("triglycerides", "¤T»Ä¥Ìªo¯×", 150),
+            ("total_cholesterol", "ç¸½è†½å›ºé†‡", 200),
+            ("ldl_cholesterol", "LDL å£è†½å›ºé†‡", 130),
+            ("glucose", "ç©ºè…¹è¡€ç³–", 100),
+            ("triglycerides", "ä¸‰é…¸ç”˜æ²¹è„‚", 150),
             ("bmi", "BMI", 24),
         )
         for key, label, threshold in metrics:
@@ -581,8 +581,8 @@ def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
                 tips.append(
                     {
                         "title": label,
-                        "description": f"{label} ¥Ø«e¬° {numeric_value}",
-                        "recommendation": _get_recommendation(label) or "«O«ù³W«ß¹B°Ê¡B§¡¿Å¶¼­¹»P¥R¨¬ºÎ¯v¡C",
+                        "description": f"{label} ç›®å‰ç‚º {numeric_value}",
+                        "recommendation": _get_recommendation(label) or "ä¿æŒè¦å¾‹é‹å‹•ã€å‡è¡¡é£²é£Ÿèˆ‡å……è¶³ç¡çœ ã€‚",
                         "value": numeric_value,
                         "threshold": threshold,
                         "percent": percent,
@@ -592,9 +592,9 @@ def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
     if not tips:
         tips.append(
             {
-                "title": "«O«ù¨}¦n²ßºD",
-                "description": "¥Ø«e¨S¦³¬õ¦r¡A¦ı¤´«ØÄ³³W«ß§@®§¡B¾A¶q¹B°Ê¨Ã«ùÄò°lÂÜ°·±d¡C",
-                "recommendation": "«O«ù¨}¦n¥Í¬¡«¬ºA¡A¨Ã©w´Á¦^¶E°lÂÜ¦U¶µ«ü¼Ğ¡C",
+                "title": "ä¿æŒè‰¯å¥½ç¿’æ…£",
+                "description": "ç›®å‰æ²’æœ‰ç´…å­—ï¼Œä½†ä»å»ºè­°è¦å¾‹ä½œæ¯ã€é©é‡é‹å‹•ä¸¦æŒçºŒè¿½è¹¤å¥åº·ã€‚",
+                "recommendation": "ä¿æŒè‰¯å¥½ç”Ÿæ´»å‹æ…‹ï¼Œä¸¦å®šæœŸå›è¨ºè¿½è¹¤å„é …æŒ‡æ¨™ã€‚",
                 "value": None,
                 "threshold": None,
                 "percent": None,
@@ -603,9 +603,9 @@ def _build_health_tips(report: dict, warnings: list[str], limit: int = 3):
     return tips
 
 
-# ?? 0929­×§ï¡G¤E®c®æ¿ß«}¤À°Ï
+# ?? 0929ä¿®æ”¹ï¼šä¹å®®æ ¼è²“å’ªåˆ†å€
 def _score_to_interval(score) -> int | None:
-    """±N¼Æ­È¤À¼Æ´«¦¨ 1~3 °Ï¶¡¡C"""
+    """å°‡æ•¸å€¼åˆ†æ•¸æ›æˆ 1~3 å€é–“ã€‚"""
     if score is None:
         return None
     try:
@@ -622,7 +622,7 @@ def _score_to_interval(score) -> int | None:
 
 
 def _resolve_persona_key(health_score, mind_score) -> str | None:
-    """®Ú¾Ú¨­¤ß¤À¼Æ¬D¿ï¹ïÀ³ªº¬J¦³¿ß«}¹Ï¡C"""  # ?? 0929­×§ï¡G¨Ì¤À¼Æ¿ï¾Ü¿ß«}Ãş«¬
+    """æ ¹æ“šèº«å¿ƒåˆ†æ•¸æŒ‘é¸å°æ‡‰çš„æ—¢æœ‰è²“å’ªåœ–ã€‚"""  # ?? 0929ä¿®æ”¹ï¼šä¾åˆ†æ•¸é¸æ“‡è²“å’ªé¡å‹
     physical_zone = _score_to_interval(health_score)
     mental_zone = _score_to_interval(mind_score)
     if not physical_zone or not mental_zone:
@@ -634,7 +634,7 @@ def _resolve_persona_key(health_score, mind_score) -> str | None:
 
 
 def _validate_report_schema(payload: dict) -> dict:
-    """ÅçÃÒ Gemini ³ø§i JSON µ²ºc¡AÁ×§K«áÄò¾Ş§@¥¢±Ñ¡C"""  # ?? 0929­×§ï05¡G¸É¤W¿ò¥¢ªº schema ÀË¬d helper
+    """é©—è­‰ Gemini å ±å‘Š JSON çµæ§‹ï¼Œé¿å…å¾ŒçºŒæ“ä½œå¤±æ•—ã€‚"""  # ?? 0929ä¿®æ”¹05ï¼šè£œä¸Šéºå¤±çš„ schema æª¢æŸ¥ helper
     if not isinstance(payload, dict):
         raise TypeError("payload must be dict")
 
@@ -667,7 +667,7 @@ def _validate_report_schema(payload: dict) -> dict:
 def fetch_cat_image(
     max_retries: int = 3, timeout: int = 12, max_bytes: int = 8_000_000
 ):
-    """±q TheCatAPI ¨ú±o¿ß¹Ï¡A¥¢±Ñ®É§ï¥Î³Æ´©¹Ï®w¡C"""  # ?? 0929­×§ï¡G·s¼W¿ß¹Ï¨Ó·½
+    """å¾ TheCatAPI å–å¾—è²“åœ–ï¼Œå¤±æ•—æ™‚æ”¹ç”¨å‚™æ´åœ–åº«ã€‚"""  # ?? 0929ä¿®æ”¹ï¼šæ–°å¢è²“åœ–ä¾†æº
     api_url = "https://api.thecatapi.com/v1/images/search?size=med&mime_types=jpg,png"
     headers = {}
     api_key = os.getenv("CAT_API_KEY")
@@ -752,26 +752,26 @@ def _download_image(
 
 
 def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str):
-    """©I¥s Gemini ²£¥Í¿ß¥d±Ô­z»P¥Í¬¡±ÀÂË¡C"""  # ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z¡GÂX¥R¤å®×Äæ¦ì
+    """å‘¼å« Gemini ç”¢ç”Ÿè²“å¡æ•˜è¿°èˆ‡ç”Ÿæ´»æ¨è–¦ã€‚"""  # ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€ï¼šæ“´å……æ–‡æ¡ˆæ¬„ä½
     prompt = (
-        "§A¬O¤@¦ì¼Æ¦ì¿ß«}¹Ï¥dµ¦®i®v¡A·|¨Ì¾Ú¨Ï¥ÎªÌªº°·±d»P¤ß²z´úÅç¸ê®Æ´£¨Ñ³­¦ñ¸ê°T¡C\n"
-        "½Ğ¦^¶Ç JSON¡A¥²¶·¥]§t¤U¦CÄæ¦ì¡G\n"
-        "- styleKey: bright/steady/healer ¤§¤@¡C\n"
-        "- persona: ¨¤¦â©w¦ì¡C\n"
-        "- name: ¿ß«}¦WºÙ¡C\n"
-        "- speech: 15 ¦r¤º¡B·Å·x¦³°O¾ĞÂIªº¶}³õ¸Ü¡C\n"
-        "- summary: 60 ¦r¤º¡A¥H¬G¨Æ¤Æ»y®ğ´y­z·í«eª¬ºA¡A¤£¥i´£¨ì¥ô¦óºë½T¼Æ­È©ÎÀËÅç«ü¼Ğ¡C\n"
-        "- insight: 50 ¦r¤º¡Aµ¹¥X±¡ºü¬}¹î¡AÁ×§K¥X²{¨ãÅé¼Æ¦r©ÎÂåÀø«ü¼Ğ¦WºÙ¡C\n"
-        "- action: 40 ¦r¤º¡A´£¥X¹ê»Ú¥i¦æªº¤p´£¿ô¡A¦P¼Ë¤Å¥X²{¨ãÅéÀËÅç¼Æ­È¡C\n"
-        "- keywords: °}¦C¡A¥iªÅ¡C\n"
-        "- recommendations: ª«¥ó¡A¤º§t movie/music/activity ¤T­Ó¤lÄæ¦ì¡A¨C­Ó¤lÄæ¦ì»İ´£¨Ñ title »P reason¡C\n"
-        "  * movie: ±ÀÂË¤@³¡²Å¦X·í«e±¡ºü»İ¨Dªº¹q¼v©Î¼v¶°¡Areason »İÂI¥Xª^³ò©ÎÀøÂ¡­«ÂI¡C\n"
-        "  * music: ±ÀÂË¤@­ººq¦±©Î¼½©ñ²M³æ¡A»¡©ú¬°¦ó¾A¦X¦¹¨èªº¸`«µ¡C\n"
-        "  * activity: ±ÀÂË¤@­Ó©ñÃP©Î¥R¹qªº¤p¬¡°Ê¡A­n¨ãÅé¥B´I¦³«~¨ı¡C\n"
-        "©Ò¦³¤å¦r°È¥²¨Ï¥ÎÁcÅé¤¤¤å¡A«O«ù·Å¬X¥B¦³«~¨ı¡A¤£¥i¤Ş¥Îºë½Tªº¦åÀ£¡B¦å¯×µ¥¼Æ­È¡C\n"
-        f"«ØÄ³­·®æ¡G{preferred_style}\n"
-        f"°·±d¸ê®Æ¡G{json.dumps(report, ensure_ascii=False, default=str)}\n"
-        f"¤ß²z´úÅç¡G{json.dumps(psychology, ensure_ascii=False, default=str)}"
+        "ä½ æ˜¯ä¸€ä½æ•¸ä½è²“å’ªåœ–å¡ç­–å±•å¸«ï¼Œæœƒä¾æ“šä½¿ç”¨è€…çš„å¥åº·èˆ‡å¿ƒç†æ¸¬é©—è³‡æ–™æä¾›é™ªä¼´è³‡è¨Šã€‚\n"
+        "è«‹å›å‚³ JSONï¼Œå¿…é ˆåŒ…å«ä¸‹åˆ—æ¬„ä½ï¼š\n"
+        "- styleKey: bright/steady/healer ä¹‹ä¸€ã€‚\n"
+        "- persona: è§’è‰²å®šä½ã€‚\n"
+        "- name: è²“å’ªåç¨±ã€‚\n"
+        "- speech: 15 å­—å…§ã€æº«æš–æœ‰è¨˜æ†¶é»çš„é–‹å ´è©±ã€‚\n"
+        "- summary: 60 å­—å…§ï¼Œä»¥æ•…äº‹åŒ–èªæ°£æè¿°ç•¶å‰ç‹€æ…‹ï¼Œä¸å¯æåˆ°ä»»ä½•ç²¾ç¢ºæ•¸å€¼æˆ–æª¢é©—æŒ‡æ¨™ã€‚\n"
+        "- insight: 50 å­—å…§ï¼Œçµ¦å‡ºæƒ…ç·’æ´å¯Ÿï¼Œé¿å…å‡ºç¾å…·é«”æ•¸å­—æˆ–é†«ç™‚æŒ‡æ¨™åç¨±ã€‚\n"
+        "- action: 40 å­—å…§ï¼Œæå‡ºå¯¦éš›å¯è¡Œçš„å°æé†’ï¼ŒåŒæ¨£å‹¿å‡ºç¾å…·é«”æª¢é©—æ•¸å€¼ã€‚\n"
+        "- keywords: é™£åˆ—ï¼Œå¯ç©ºã€‚\n"
+        "- recommendations: ç‰©ä»¶ï¼Œå…§å« movie/music/activity ä¸‰å€‹å­æ¬„ä½ï¼Œæ¯å€‹å­æ¬„ä½éœ€æä¾› title èˆ‡ reasonã€‚\n"
+        "  * movie: æ¨è–¦ä¸€éƒ¨ç¬¦åˆç•¶å‰æƒ…ç·’éœ€æ±‚çš„é›»å½±æˆ–å½±é›†ï¼Œreason éœ€é»å‡ºæ°›åœæˆ–ç™‚ç™’é‡é»ã€‚\n"
+        "  * music: æ¨è–¦ä¸€é¦–æ­Œæ›²æˆ–æ’­æ”¾æ¸…å–®ï¼Œèªªæ˜ç‚ºä½•é©åˆæ­¤åˆ»çš„ç¯€å¥ã€‚\n"
+        "  * activity: æ¨è–¦ä¸€å€‹æ”¾é¬†æˆ–å……é›»çš„å°æ´»å‹•ï¼Œè¦å…·é«”ä¸”å¯Œæœ‰å“å‘³ã€‚\n"
+        "æ‰€æœ‰æ–‡å­—å‹™å¿…ä½¿ç”¨ç¹é«”ä¸­æ–‡ï¼Œä¿æŒæº«æŸ”ä¸”æœ‰å“å‘³ï¼Œä¸å¯å¼•ç”¨ç²¾ç¢ºçš„è¡€å£“ã€è¡€è„‚ç­‰æ•¸å€¼ã€‚\n"
+        f"å»ºè­°é¢¨æ ¼ï¼š{preferred_style}\n"
+        f"å¥åº·è³‡æ–™ï¼š{json.dumps(report, ensure_ascii=False, default=str)}\n"
+        f"å¿ƒç†æ¸¬é©—ï¼š{json.dumps(psychology, ensure_ascii=False, default=str)}"
     )
 
     contents = _build_genai_contents(prompt, [])
@@ -785,7 +785,7 @@ def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str)
         text = ""
         parts = (
             getattr(candidate.content, "parts", None) or []
-        )  # 0929­×§ï03¡Gparts ¥i¯à¬° None¡A§ï±ÄªÅ²M³æÁ×§K°j°é¿ù»~
+        )  # 0929ä¿®æ”¹03ï¼šparts å¯èƒ½ç‚º Noneï¼Œæ”¹æ¡ç©ºæ¸…å–®é¿å…è¿´åœˆéŒ¯èª¤
         for part in parts:
             if getattr(part, "text", None):
                 text += part.text
@@ -793,7 +793,7 @@ def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str)
             parsed = extract_json_from_response(text)
         except Exception:
             logging.exception(
-                "0929­×§ï03¡GCat card JSON parse failed; raw snippet=%r", text[:500]
+                "0929ä¿®æ”¹03ï¼šCat card JSON parse failed; raw snippet=%r", text[:500]
             )
             parsed = None
         if isinstance(parsed, dict):
@@ -806,68 +806,68 @@ def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str)
 
 CAT_STYLES = {
     "bright": {
-        "title": "¶§¥ú¦uÅ@ªÌ",
-        "names": ["¤p¾ï¥ú", "·x·x", "Sunny Øp"],
-        "speech": ["¤µ¤Ñ¤]­n¸É¥R¤ô¤ÀØp¡I", "«O«ù¯º®e¡A¬¡¤Oº¡¤À¡I"],
-        "description": "§Ú·P¨ü¨ì§A{mood}ªº¯à¶q¡AÅı§Ú­Ì§â³o¥÷Ä£²´·Å«×©µÄò¤U¥h¡C",
+        "title": "é™½å…‰å®ˆè­·è€…",
+        "names": ["å°æ©˜å…‰", "æš–æš–", "Sunny å–µ"],
+        "speech": ["ä»Šå¤©ä¹Ÿè¦è£œå……æ°´åˆ†å–µï¼", "ä¿æŒç¬‘å®¹ï¼Œæ´»åŠ›æ»¿åˆ†ï¼"],
+        "description": "æˆ‘æ„Ÿå—åˆ°ä½ {mood}çš„èƒ½é‡ï¼Œè®“æˆ‘å€‘æŠŠé€™ä»½è€€çœ¼æº«åº¦å»¶çºŒä¸‹å»ã€‚",
         "actions": [
-            "¤È¥ğ®É¶¡´²¨B 10 ¤ÀÄÁ¡AÅı¨­Åé¼ö°_¨Ó",
-            "¤µ¤Ñ±ßÀ\¸Õ¸Õ¦h±m½­µæ½L¡A¸É¥Rºû¥Í¯À",
+            "åˆä¼‘æ™‚é–“æ•£æ­¥ 10 åˆ†é˜ï¼Œè®“èº«é«”ç†±èµ·ä¾†",
+            "ä»Šå¤©æ™šé¤è©¦è©¦å¤šå½©è”¬èœç›¤ï¼Œè£œå……ç¶­ç”Ÿç´ ",
         ],
         "palette": ("#FFEAA7", "#FD79A8", "#FFAFCC", "#2d3436"),
         "curations": {
-            "movie": ("¡mÂ½ºu§a¡Iªü«H¡n", "¼ö¦å«o´I§tÅé¶KªºÀy§Ó¬G¨Æ¡A±a¨Ó¦V¤Wªº°Ê¤O"),
-            "music": ("City Pop ·x¶§ºq³æ", "»´§Ö«ß°Ê³ê¿ô¨­Åéªº¸`«µ·P"),
-            "activity": ("¤á¥~±á¶¡¦ù®i", "¦b¶§¥ú¤U¬¡°Êµ¬°©¡A§l¦¬¦ÛµM¯à¶q"),
-        },     # ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z
+            "movie": ("ã€Šç¿»æ»¾å§ï¼é˜¿ä¿¡ã€‹", "ç†±è¡€å»å¯Œå«é«”è²¼çš„å‹µå¿—æ•…äº‹ï¼Œå¸¶ä¾†å‘ä¸Šçš„å‹•åŠ›"),
+            "music": ("City Pop æš–é™½æ­Œå–®", "è¼•å¿«å¾‹å‹•å–šé†’èº«é«”çš„ç¯€å¥æ„Ÿ"),
+            "activity": ("æˆ¶å¤–æ™¨é–“ä¼¸å±•", "åœ¨é™½å…‰ä¸‹æ´»å‹•ç­‹éª¨ï¼Œå¸æ”¶è‡ªç„¶èƒ½é‡"),
+        },     # ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€
     },
     "steady": {
-        "title": "·Å¬X·ÓÅ@¶¤ªø",
-        "names": ["¤pÃú", "Cotton", "Á÷Á÷"],
-        "speech": ["©ñºC¸}¨B¡A§Ú³­µÛ§AØp¡C", "¤µ¤Ñ¤]°O±o²`©I§l¤T¦¸¡C"],
-        "description": "§AªºÃöÁä¦r¬O {mood}¡A§Ú·|¦b¤é±`´£¿ô§A«O«ù¸`«µ¡AÅı¨B½Õ§óÃ­©w¡C",
+        "title": "æº«æŸ”ç…§è­·éšŠé•·",
+        "names": ["å°éœ§", "Cotton", "éœœéœœ"],
+        "speech": ["æ”¾æ…¢è…³æ­¥ï¼Œæˆ‘é™ªè‘—ä½ å–µã€‚", "ä»Šå¤©ä¹Ÿè¨˜å¾—æ·±å‘¼å¸ä¸‰æ¬¡ã€‚"],
+        "description": "ä½ çš„é—œéµå­—æ˜¯ {mood}ï¼Œæˆ‘æœƒåœ¨æ—¥å¸¸æé†’ä½ ä¿æŒç¯€å¥ï¼Œè®“æ­¥èª¿æ›´ç©©å®šã€‚",
         "actions": [
-            "ºÎ«e°µ 5 ¤ÀÄÁ¦ù®i¡A©ñÃP¦Ù¦×",
-            "§â¤µ¤Ñªº±¡ºü¼g¦b¤â±b¡A¾ã²z¤@¤U¤ßºü",
+            "ç¡å‰åš 5 åˆ†é˜ä¼¸å±•ï¼Œæ”¾é¬†è‚Œè‚‰",
+            "æŠŠä»Šå¤©çš„æƒ…ç·’å¯«åœ¨æ‰‹å¸³ï¼Œæ•´ç†ä¸€ä¸‹å¿ƒç·’",
         ],
         "palette": ("#E0FBFC", "#98C1D9", "#3D5A80", "#2d3436"),
         "curations": {
-            "movie": ("¡m¤p´ËªL¡n", "¥|©u®Æ²z»P¥Ğ¶é¨B½Õ¡A¼¾¼¢±Ó·P¤ßºü"),
-            "music": ("Lo-fi ®Ñ¼g²M³æ", "¬X©M¸`©ç³­§A¾ã²z«äºü"),
-            "activity": ("¤â¼g¤@«ÊºC«H", "¥Î¤å¦r®Ş²z±¡ºü¡AÅı¤ß¦w©w¤U¨Ó"),
+            "movie": ("ã€Šå°æ£®æ—ã€‹", "å››å­£æ–™ç†èˆ‡ç”°åœ’æ­¥èª¿ï¼Œæ’«æ…°æ•æ„Ÿå¿ƒç·’"),
+            "music": ("Lo-fi æ›¸å¯«æ¸…å–®", "æŸ”å’Œç¯€æ‹é™ªä½ æ•´ç†æ€ç·’"),
+            "activity": ("æ‰‹å¯«ä¸€å°æ…¢ä¿¡", "ç”¨æ–‡å­—æ¢³ç†æƒ…ç·’ï¼Œè®“å¿ƒå®‰å®šä¸‹ä¾†"),
         },
     },
     "healer": {
-        "title": "ÀøÂ¡°V½m®v",
-        "names": ["¤p´ö¶ê", "Mochi", "ÅSÅS"],
-        "speech": ["§Ú­ÌºCºC¨Ó¡A¨SÃö«YªºØp¡C", "¥ı·ÓÅU¦n¦Û¤v¡A§Ú¦b®ÇÃä¡C"],
-        "description": "¬İ¨£§A»İ­n¥ğ®§ªº°T¸¹¡A§Ú·|·í§Aªº´£¿ô¤p¾xÄÁ¡A³­§A¤@°_ºCºC­×´_¡C",
+        "title": "ç™‚ç™’è¨“ç·´å¸«",
+        "names": ["å°æ¹¯åœ“", "Mochi", "éœ²éœ²"],
+        "speech": ["æˆ‘å€‘æ…¢æ…¢ä¾†ï¼Œæ²’é—œä¿‚çš„å–µã€‚", "å…ˆç…§é¡§å¥½è‡ªå·±ï¼Œæˆ‘åœ¨æ—é‚Šã€‚"],
+        "description": "çœ‹è¦‹ä½ éœ€è¦ä¼‘æ¯çš„è¨Šè™Ÿï¼Œæˆ‘æœƒç•¶ä½ çš„æé†’å°é¬§é˜ï¼Œé™ªä½ ä¸€èµ·æ…¢æ…¢ä¿®å¾©ã€‚",
         "actions": [
-            "¦w±Æ 15 ¤ÀÄÁªº©I§l½m²ß¡AµÎ½wÀ£¤O",
-            "¤µ¤Ñ¹ï¦Û¤v»¡Án¨¯­W¤F¡Aµ¹¦Û¤v¤@­Ó¾Ö©ê",
+            "å®‰æ’ 15 åˆ†é˜çš„å‘¼å¸ç·´ç¿’ï¼Œèˆ’ç·©å£“åŠ›",
+            "ä»Šå¤©å°è‡ªå·±èªªè²è¾›è‹¦äº†ï¼Œçµ¦è‡ªå·±ä¸€å€‹æ“æŠ±",
         ],
         "palette": ("#E8EAF6", "#C5CAE9", "#9FA8DA", "#2d3436"),
         "curations": {
-            "movie": ("¡m®üÃäªº°Ò¹ı´µ¯S¡n", "²Ó¿°´y¼g¥¢¸¨«áªº­×´_¡AÅı±¡ºü³Q¬İ¨£"),
-            "music": ("Neo Classical ­ß·Q¦±", "µÎ½w¿ûµ^ÁnÃ­©w©I§l¸`«µ"),
-            "activity": ("©~®a­»ª^­ß·Q", "ÂI¤W³ßÅwªº¨ı¹D¡A¸òµÛ¤Ş¾É­ß·Q©ñÃP"),
+            "movie": ("ã€Šæµ·é‚Šçš„æ›¼å¾¹æ–¯ç‰¹ã€‹", "ç´°è†©æå¯«å¤±è½å¾Œçš„ä¿®å¾©ï¼Œè®“æƒ…ç·’è¢«çœ‹è¦‹"),
+            "music": ("Neo Classical å†¥æƒ³æ›²", "èˆ’ç·©é‹¼ç´è²ç©©å®šå‘¼å¸ç¯€å¥"),
+            "activity": ("å±…å®¶é¦™æ°›å†¥æƒ³", "é»ä¸Šå–œæ­¡çš„å‘³é“ï¼Œè·Ÿè‘—å¼•å°å†¥æƒ³æ”¾é¬†"),
         },
     },
 }
 
-# ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z¡G¹w³]¼v­µ»P¬¡°Ê«ØÄ³
+# ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€ï¼šé è¨­å½±éŸ³èˆ‡æ´»å‹•å»ºè­°
 def _fallback_recommendations(style_key: str) -> list[dict[str, str]]:
     style = CAT_STYLES.get(style_key, {})
     curations = style.get("curations", {})
     defaults = {
-        "movie": ("¡m¦V¥ª¨«¦V¥k¨«¡n", "®öº©²L¹Áªº¸`«µ¡A³­§A®Ş²z¤ß±¡"),
-        "music": ("Bossa Nova ©@°ØÆU", "·Å¬X¸`©çÅı¤ßºCºC¨IÀR"),
-        "activity": ("³Ä±ß´²¨B", "´«­Ó³õ´º¡AÅı¸£³Uµu¼È©ñªÅ"),
+        "movie": ("ã€Šå‘å·¦èµ°å‘å³èµ°ã€‹", "æµªæ¼«æ·ºå˜—çš„ç¯€å¥ï¼Œé™ªä½ æ¢³ç†å¿ƒæƒ…"),
+        "music": ("Bossa Nova å’–å•¡å»³", "æº«æŸ”ç¯€æ‹è®“å¿ƒæ…¢æ…¢æ²‰éœ"),
+        "activity": ("å‚æ™šæ•£æ­¥", "æ›å€‹å ´æ™¯ï¼Œè®“è…¦è¢‹çŸ­æš«æ”¾ç©º"),
     }
     mapping = [
-        ("movie", "±ÀÂË¹q¼v"),
-        ("music", "±ÀÂË­µ¼Ö"),
-        ("activity", "±ÀÂË¬¡°Ê"),
+        ("movie", "æ¨è–¦é›»å½±"),
+        ("music", "æ¨è–¦éŸ³æ¨‚"),
+        ("activity", "æ¨è–¦æ´»å‹•"),
     ]
     recommendations = []
     for key, label in mapping:
@@ -875,14 +875,14 @@ def _fallback_recommendations(style_key: str) -> list[dict[str, str]]:
         recommendations.append({"label": label, "title": title, "reason": reason})
     return recommendations
 
-# ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z¡G¾ã¦X AI »P¹w³]±ÀÂË
+# ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€ï¼šæ•´åˆ AI èˆ‡é è¨­æ¨è–¦
 def _normalize_recommendations(ai_payload: dict | None, style_key: str) -> list[dict[str, str]]:
     payload = ai_payload or {}
     raw_recs = payload.get("recommendations") or {}
     mapping = [
-        ("movie", "±ÀÂË¹q¼v"),
-        ("music", "±ÀÂË­µ¼Ö"),
-        ("activity", "±ÀÂË¬¡°Ê"),
+        ("movie", "æ¨è–¦é›»å½±"),
+        ("music", "æ¨è–¦éŸ³æ¨‚"),
+        ("activity", "æ¨è–¦æ´»å‹•"),
     ]
     fallback_list = _fallback_recommendations(style_key)
     normalized = []
@@ -901,12 +901,12 @@ def _normalize_recommendations(ai_payload: dict | None, style_key: str) -> list[
         normalized.append({"label": label, "title": title, "reason": reason})
     if len(normalized) > 2:
         random.shuffle(normalized)
-        normalized = normalized[:2]  # ?? 1007 ­×§ï¹Ï¥d¡G¶È§e²{¨â«h«ØÄ³
+        normalized = normalized[:2]  # ?? 1007 ä¿®æ”¹åœ–å¡ï¼šåƒ…å‘ˆç¾å…©å‰‡å»ºè­°
     return normalized
 
 
 def build_cat_card(report: dict, psychology: dict):
-    """®Ú¾Ú°·±d»P¤ß²z´úÅç¸ê®Æ«Ø¥ß¿ß¥d¤º®e¡C"""  # ?? 0929­×§ï¡G²Õ¸Ë¿ß¥d¸ê®Æ
+    """æ ¹æ“šå¥åº·èˆ‡å¿ƒç†æ¸¬é©—è³‡æ–™å»ºç«‹è²“å¡å…§å®¹ã€‚"""  # ?? 0929ä¿®æ”¹ï¼šçµ„è£è²“å¡è³‡æ–™
     health_score = report.get("health_score")
     mood_score = (
         psychology.get("combined_score")
@@ -934,8 +934,8 @@ def build_cat_card(report: dict, psychology: dict):
     style = CAT_STYLES[style_key]
 
     # Finalize fields with AI payload or defaults
-    # ?? 0929­×§ï¡G¥ı¸Õ¹Ï§ì¹ïÀ³¹ÏÀÉ¡A¥¢±Ñ¦A°h¦^ TheCatAPI
-    # ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z
+    # ?? 0929ä¿®æ”¹ï¼šå…ˆè©¦åœ–æŠ“å°æ‡‰åœ–æª”ï¼Œå¤±æ•—å†é€€å› TheCatAPI
+    # ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€
     name = (ai_payload or {}).get("name") or random.choice(style["names"])
     persona_key = _resolve_persona_key(health_value, mood_value)
     persona_label = CAT_PERSONA_METADATA.get(persona_key)
@@ -945,9 +945,9 @@ def build_cat_card(report: dict, psychology: dict):
     model_keywords = (ai_payload or {}).get("keywords") or keywords
     if isinstance(model_keywords, str):
         model_keywords = [k.strip() for k in model_keywords.split(",") if k.strip()]
-    mood_label = "¡B".join(model_keywords[:3]) if model_keywords else "¥­¿Å"
+    mood_label = "ã€".join(model_keywords[:3]) if model_keywords else "å¹³è¡¡"
 
-    description_template = style.get("description", "{mood} ªº®ğ®§­È±o³Q¬Ã±¤¡C")
+    description_template = style.get("description", "{mood} çš„æ°£æ¯å€¼å¾—è¢«çæƒœã€‚")
     try:
         description = (ai_payload or {}).get("summary") or description_template.format(
             mood=mood_label
@@ -957,7 +957,7 @@ def build_cat_card(report: dict, psychology: dict):
     insight = (
         (ai_payload or {}).get("insight")
         or psychology.get("summary")
-        or f"·í¤U±¡ºü°¾¦V {mood_label}¡A°O±o·ÓÅU¦Û¤v¡C"
+        or f"ç•¶ä¸‹æƒ…ç·’åå‘ {mood_label}ï¼Œè¨˜å¾—ç…§é¡§è‡ªå·±ã€‚"
     )
     action = (ai_payload or {}).get("action") or random.choice(style["actions"])
 
@@ -975,11 +975,11 @@ def build_cat_card(report: dict, psychology: dict):
         "insight": insight,
         "action": action,
         "stats": [
-            {"label": "¬¡¤O«ü¼Æ", "value": f"{vitality}%"},
-            {"label": "³­¦ñ¤O", "value": f"{companionship}%"},
-            {"label": "Ã­©w«×", "value": f"{stability}%"},
-        ],  # «eºİ¤£¦AÅã¥Ü¤À¼Æ¡A¦ı«O¯dµ²ºc¥H§Q«áÄò½Õ¾ã
-        "recommendations": _normalize_recommendations(ai_payload, style_key),  # ?? 1007 ­×§ï¡y¹Ï¥d¥Í¦¨±ÀÂË¡z¡G¥[¤J¼v­µ»P¬¡°Ê«ØÄ³
+            {"label": "æ´»åŠ›æŒ‡æ•¸", "value": f"{vitality}%"},
+            {"label": "é™ªä¼´åŠ›", "value": f"{companionship}%"},
+            {"label": "ç©©å®šåº¦", "value": f"{stability}%"},
+        ],  # å‰ç«¯ä¸å†é¡¯ç¤ºåˆ†æ•¸ï¼Œä½†ä¿ç•™çµæ§‹ä»¥åˆ©å¾ŒçºŒèª¿æ•´
+        "recommendations": _normalize_recommendations(ai_payload, style_key),  # ?? 1007 ä¿®æ”¹ã€åœ–å¡ç”Ÿæˆæ¨è–¦ã€ï¼šåŠ å…¥å½±éŸ³èˆ‡æ´»å‹•å»ºè­°
         "style_key": style_key,
         "palette": style.get("palette"),
         "keywords_list": model_keywords,
@@ -1009,11 +1009,11 @@ def circle_crop_image(image_bytes, diameter: int = 260) -> Image.Image:
     output.paste(img, (0, 0), mask)
     return output
 
-    # ?? 0929­×§ï¡GÃ¸»s¹Ï¥d(¥ı¸Õ¹Ï§ì¹ïÀ³¹ÏÀÉ¡A¥¢±Ñ¦A°h¦^ TheCatAPI)
+    # ?? 0929ä¿®æ”¹ï¼šç¹ªè£½åœ–å¡(å…ˆè©¦åœ–æŠ“å°æ‡‰åœ–æª”ï¼Œå¤±æ•—å†é€€å› TheCatAPI)
 
 
 def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None):
-    """¥Í¦¨¹Ï¥d PNG¡A¨Ã¦^¶ÇÀÉ¦W»P¨Ó·½ URL¡C"""  # ?? 0929­×§ï¡G¹Ï¥dÃ¸»s
+    """ç”Ÿæˆåœ–å¡ PNGï¼Œä¸¦å›å‚³æª”åèˆ‡ä¾†æº URLã€‚"""  # ?? 0929ä¿®æ”¹ï¼šåœ–å¡ç¹ªè£½
     timeout = 12
     max_bytes = 8_000_000
     image_bytes = None
@@ -1087,11 +1087,11 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
     x_margin = 80
     y = 90
     draw.text(
-        (x_margin, y), card.get("persona", "ÀøÂ¡¨t¿ß«}"), font=title_font, fill=accent
+        (x_margin, y), card.get("persona", "ç™‚ç™’ç³»è²“å’ª"), font=title_font, fill=accent
     )
     y += 70
     draw.text(
-        (x_margin, y), card.get("name", "±MÄİ¿ß«}"), font=name_font, fill=text_color
+        (x_margin, y), card.get("name", "å°ˆå±¬è²“å’ª"), font=name_font, fill=text_color
     )
     y += 80
 
@@ -1107,7 +1107,7 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
     if insight_text:
         draw.text(
             (x_margin, y),
-            f"¤ß±¡µ²½×¡G\n{insight_text}",
+            f"å¿ƒæƒ…çµè«–ï¼š\n{insight_text}",
             font=small_font,
             fill=text_color,
         )
@@ -1125,7 +1125,7 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
     action_text = _wrap_text(card.get("action"), 18)
     if action_text:
         draw.text(
-            (x_margin, y), f"«ØÄ³¦æ°Ê¡G{action_text}", font=small_font, fill=text_color
+            (x_margin, y), f"å»ºè­°è¡Œå‹•ï¼š{action_text}", font=small_font, fill=text_color
         )
 
     circle_x = width - 320
@@ -1147,24 +1147,24 @@ def render_cat_card_image(card: dict, user_id: str, cache_key: str | None = None
     return filename, _safe_url(source_url)
 
 
-# ¸ü¤J .env ÀÉ®×
+# è¼‰å…¥ .env æª”æ¡ˆ
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv(
     "FLASK_SECRET_KEY", "your-secret-key"
-)  # ±q .env ¸ü¤J©Î¨Ï¥Î¹w³]­È
+)  # å¾ .env è¼‰å…¥æˆ–ä½¿ç”¨é è¨­å€¼
 app.config.update(
-    SESSION_COOKIE_SECURE=True, # ¥u¤¹³\ HTTPS
-    SESSION_COOKIE_HTTPONLY=True, # JS ¤£¯àÅª cookie
-    SESSION_COOKIE_SAMESITE="Strict", # ¨¾¤î¸ó¯¸½Ğ¨D±a cookie
+    SESSION_COOKIE_SECURE=True, # åªå…è¨± HTTPS
+    SESSION_COOKIE_HTTPONLY=True, # JS ä¸èƒ½è®€ cookie
+    SESSION_COOKIE_SAMESITE="Strict", # é˜²æ­¢è·¨ç«™è«‹æ±‚å¸¶ cookie
 )
 logging.basicConfig(level=logging.DEBUG)
 FIREBASE_WEB_API_KEY = os.getenv('FIREBASE_WEB_API_KEY')
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
 app.before_request(_refresh_daily_points)
 
-# ?? 0929­×§ï¡G³]©w¹Ï¥d¿é¥X¦ì¸m»P³Æ´©¸ê®Æ
+# ?? 0929ä¿®æ”¹ï¼šè¨­å®šåœ–å¡è¼¸å‡ºä½ç½®èˆ‡å‚™æ´è³‡æ–™
 BASE_DIR = Path(__file__).resolve().parent
 CAT_CARD_DIR = BASE_DIR / "static" / "cat_cards"
 CAT_CARD_DIR.mkdir(parents=True, exist_ok=True)
@@ -1176,7 +1176,7 @@ CAT_FALLBACK_IMAGES = [
     "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?auto=format&fit=crop&w=1000&q=80",
 ]
 
-# 0929­×§ï04¡G²Î¤@³]©w¼Ò«¬¦^¶Ç¯Â JSON
+# 0929ä¿®æ”¹04ï¼šçµ±ä¸€è¨­å®šæ¨¡å‹å›å‚³ç´” JSON
 JSON_RESPONSE_CONFIG = genai_types.GenerateContentConfig(
     response_mime_type="application/json",
     candidate_count=1,
@@ -1186,32 +1186,32 @@ JSON_RESPONSE_CONFIG = genai_types.GenerateContentConfig(
 REWARD_BADGES = [
     {
         "points": 5,
-        "name": "·s®Ê¿ß¥£",
-        "description": "Àò±o¿ß¬â¬Ö»P¿ß¬âÃê¡I",
+        "name": "æ–°æ™‰è²“å¥´",
+        "description": "ç²å¾—è²“ç ‚ç›†èˆ‡è²“ç ‚éŸï¼",
         "image": "5p.png",
     },
     {
         "points": 20,
-        "name": "¬ü­¹®a",
-        "description": "Àò±o¤¸®ğÅøÅø¡I",
+        "name": "ç¾é£Ÿå®¶",
+        "description": "ç²å¾—å…ƒæ°£ç½ç½ï¼",
         "image": "20p.png",
     },
     {
         "points": 30,
-        "name": "§Ö¼Ö»RªÌ",
-        "description": "Àò±o¿ß¯ó¬Ö®â¡I",
+        "name": "å¿«æ¨‚èˆè€…",
+        "description": "ç²å¾—è²“è‰ç›†æ ½ï¼",
         "image": "30p.png",
     },
     {
         "points": 50,
-        "name": "¬¡¤O«ü´§®a",
-        "description": "Àò±o³r¿ß´Î¡I",
+        "name": "æ´»åŠ›æŒ‡æ®å®¶",
+        "description": "ç²å¾—é€—è²“æ£’ï¼",
         "image": "50p.png",
     },
     {
         "points": 80,
-        "name": "±´ÀI®a",
-        "description": "Àò±o¿ß¸õ¥x¡I",
+        "name": "æ¢éšªå®¶",
+        "description": "ç²å¾—è²“è·³å°ï¼",
         "image": "80p.png",
     },
 ]
@@ -1224,7 +1224,7 @@ AVATAR_CHOICES = [
 ]
 DEFAULT_AVATAR = AVATAR_CHOICES[0]
 
-# ?? 0929­×§ï¡G¿ß«}¤E®c®æ¹ïÀ³¬J¦³¹Ï®w
+# ?? 0929ä¿®æ”¹ï¼šè²“å’ªä¹å®®æ ¼å°æ‡‰æ—¢æœ‰åœ–åº«
 _CAT_LOCAL_IMAGE_DIR = CAT_CARD_DIR / "images" / "cats"
 _CAT_LOCAL_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -1237,15 +1237,15 @@ CAT_PERSONA_IMAGES = {
 }
 
 CAT_PERSONA_METADATA = {
-    "A1": "¥¬°¸¿ß¡U¤ß²z¼ÖÆ[?¨­Åé«ü¼Ğ«İ¥[ªo",
-    "A2": "¾ï¿ß¡U±¡ºüÃ­©w?¥Í¬¡¸`«µ¨}¦n",
-    "A3": "«XÃ¹´µÂÅ¿ß¡U¬¡¤O§¡¿Å?¯à¶q¥R¨K",
-    "B1": "ªi´µ¿ß¡U¨­¤ß´£¿ô?¾A«×½Õ¾i",
-    "B2": "¤Tªá¿ß¡U¤é±`ªi°Ê?«ùÄò·ÓÅU",
-    "B3": "»Èº¥¼h¿ß¡U¥~±j¤º¬X?°O±oµÎÀ£",
-    "C1": "§é¦Õ¿ß¡UÂù­«­t¾á?¥ı¦n¦n¥ğ®§",
-    "C2": "¶Â¿ß¡U¤ß²z½Õ¾A¤¤?»İ­n³­¦ñ",
-    "C3": "¾æÃ¹¿ß¡U¤º¦bÀ£¤O¤j?¨­Åé¤´¦³¤O",
+    "A1": "å¸ƒå¶è²“ï½œå¿ƒç†æ¨‚è§€?èº«é«”æŒ‡æ¨™å¾…åŠ æ²¹",
+    "A2": "æ©˜è²“ï½œæƒ…ç·’ç©©å®š?ç”Ÿæ´»ç¯€å¥è‰¯å¥½",
+    "A3": "ä¿„ç¾…æ–¯è—è²“ï½œæ´»åŠ›å‡è¡¡?èƒ½é‡å……æ²›",
+    "B1": "æ³¢æ–¯è²“ï½œèº«å¿ƒæé†’?é©åº¦èª¿é¤Š",
+    "B2": "ä¸‰èŠ±è²“ï½œæ—¥å¸¸æ³¢å‹•?æŒçºŒç…§é¡§",
+    "B3": "éŠ€æ¼¸å±¤è²“ï½œå¤–å¼·å…§æŸ”?è¨˜å¾—èˆ’å£“",
+    "C1": "æŠ˜è€³è²“ï½œé›™é‡è² æ“”?å…ˆå¥½å¥½ä¼‘æ¯",
+    "C2": "é»‘è²“ï½œå¿ƒç†èª¿é©ä¸­?éœ€è¦é™ªä¼´",
+    "C3": "æš¹ç¾…è²“ï½œå…§åœ¨å£“åŠ›å¤§?èº«é«”ä»æœ‰åŠ›",
 }
 
 FONT_CANDIDATES = [
@@ -1256,7 +1256,7 @@ FONT_CANDIDATES = [
     "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
 ]
 
-# ªì©l¤Æ Firebase
+# åˆå§‹åŒ– Firebase
 firebase_credentials_env = os.getenv("FIREBASE_CREDENTIALS")
 firebase_storage_bucket = os.getenv(
     "FIREBASE_STORAGE_BUCKET", "gold-chassis-473807-j1.firebasestorage.app"
@@ -1308,13 +1308,13 @@ except Exception as e:
     logging.error(f"Failed to initialise google-genai client: {e}")
     raise
 
-# ?? ­×§ï¡G±Ò°Ê®É¦C¦L¸ô¥Ñªí¡]Flask 3 ¤£¤ä´© before_first_request¡A¬G«O¯dµù¸Ñ¡^
+# ?? ä¿®æ”¹ï¼šå•Ÿå‹•æ™‚åˆ—å°è·¯ç”±è¡¨ï¼ˆFlask 3 ä¸æ”¯æ´ before_first_requestï¼Œæ•…ä¿ç•™è¨»è§£ï¼‰
 # @app.before_first_request
 # def _print_url_map():
 #    logging.debug("URL Map:\n" + "\n".join([str(r) for r in app.url_map.iter_rules()]))
 
 
-# ¹Ï¤ù¥N²z¡GÁ×§K¸ó°ì­­¨î¼vÅT¤U¸ü¹Ï¥d
+# åœ–ç‰‡ä»£ç†ï¼šé¿å…è·¨åŸŸé™åˆ¶å½±éŸ¿ä¸‹è¼‰åœ–å¡
 @app.route("/proxy_image")
 def proxy_image():
     image_url = request.args.get("url", "")
@@ -1343,7 +1343,7 @@ def proxy_image():
     return response
 
 
-# ­º­¶
+# é¦–é 
 @app.route("/")
 def home():
     is_logged_in = "user_id" in session
@@ -1355,7 +1355,7 @@ def home():
 def profile():
     user_id = session.get("user_id")
     if not user_id:
-        flash("½Ğ¥ıµn¤J«á¦A¬d¬İ§ÚªºÀÉ®×­¶­±¡C", "error")
+        flash("è«‹å…ˆç™»å…¥å¾Œå†æŸ¥çœ‹æˆ‘çš„æª”æ¡ˆé é¢ã€‚", "error")
         return redirect(url_for("login"))
 
     current_avatar = session.get("avatar") or DEFAULT_AVATAR
@@ -1364,16 +1364,16 @@ def profile():
     if request.method == "POST":
         selected_avatar = request.form.get("avatar")
         if selected_avatar not in AVATAR_CHOICES:
-            flash("¿ï¾ÜªºÀY¹³µL®Ä¡A½Ğ­«·s¿ï¾Ü¡C", "error")
+            flash("é¸æ“‡çš„é ­åƒç„¡æ•ˆï¼Œè«‹é‡æ–°é¸æ“‡ã€‚", "error")
         else:
             try:
                 db.collection("users").document(user_id).set({"avatar": selected_avatar}, merge=True)
                 session["avatar"] = selected_avatar
                 current_avatar = selected_avatar
-                flash("ÀY¹³¤w§ó·s¡I", "success")
+                flash("é ­åƒå·²æ›´æ–°ï¼", "success")
             except Exception as exc:
                 logging.error("Failed to update avatar for %s: %s", user_id, exc)
-                flash("ÀY¹³§ó·s¥¢±Ñ¡A½Ğµy«á¦A¸Õ¡C", "error")
+                flash("é ­åƒæ›´æ–°å¤±æ•—ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚", "error")
         return redirect(url_for("profile"))
 
     user_points = session.get("points")
@@ -1416,7 +1416,7 @@ def profile():
     segment_start_label = (
         previous_badge["name"]
         if previous_badge
-        else (REWARD_BADGES[0]["name"] if REWARD_BADGES else "°_ÂI")
+        else (REWARD_BADGES[0]["name"] if REWARD_BADGES else "èµ·é»")
     )
     if next_badge:
         segment_end_points = next_badge["points"]
@@ -1424,7 +1424,7 @@ def profile():
     else:
         segment_end_points = max_points or segment_start_points or user_points
         segment_end_label = (
-            REWARD_BADGES[-1]["name"] if REWARD_BADGES else "¥Ø¼Ğ"
+            REWARD_BADGES[-1]["name"] if REWARD_BADGES else "ç›®æ¨™"
         )
     segment_range = max(segment_end_points - segment_start_points, 1)
     segment_percent = (
@@ -1449,9 +1449,9 @@ def profile():
         enriched_badges.append(enriched)
 
     if user_email and "@" in user_email:
-        user_name = user_email.split("@", 1)[0] or "ªB¤Í"
+        user_name = user_email.split("@", 1)[0] or "æœ‹å‹"
     else:
-        user_name = user_email or "ªB¤Í"
+        user_name = user_email or "æœ‹å‹"
 
     return render_template(
         "badges.html",
@@ -1473,7 +1473,7 @@ def profile():
     )
 
 
-# µù¥U
+# è¨»å†Š
 @app.route("/register", methods=["GET", "POST"])
 def register():
     is_logged_in = "user_id" in session
@@ -1485,7 +1485,7 @@ def register():
         logging.debug("Register submission fields: %s", _form_keys(request.form))
         email = request.form.get("email")
         password = request.form.get("password")
-        # ?? ­×§ï¶}©l¡G·s¼W¥Í²z©Ê§OÄæ¦ì
+        # ?? ä¿®æ”¹é–‹å§‹ï¼šæ–°å¢ç”Ÿç†æ€§åˆ¥æ¬„ä½
         gender = request.form.get("gender")
         logging.debug(
             "Parsed register data: email=%s, gender=%s",
@@ -1494,14 +1494,14 @@ def register():
         )
 
         if not email or not password or not gender:
-            flash("½Ğ¿é¤J¹q¤l¶l¥ó¡B±K½X©M¥Í²z©Ê§O¡I", "error")
+            flash("è«‹è¼¸å…¥é›»å­éƒµä»¶ã€å¯†ç¢¼å’Œç”Ÿç†æ€§åˆ¥ï¼", "error")
             logging.warning("Missing email, password, or gender in form submission")
             return render_template(
                 "register.html",
-                error="½Ğ¿é¤J¹q¤l¶l¥ó¡B±K½X©M¥Í²z©Ê§O",
+                error="è«‹è¼¸å…¥é›»å­éƒµä»¶ã€å¯†ç¢¼å’Œç”Ÿç†æ€§åˆ¥",
                 is_logged_in=is_logged_in,
             )
-        # ?? ­×§ïµ²§ô
+        # ?? ä¿®æ”¹çµæŸ
         try:
             user = auth.create_user(email=email, password=password)
             logging.debug(
@@ -1520,30 +1520,30 @@ def register():
             logging.debug(f"User document created in Firestore for uid: {user.uid}")
             session["user_id"] = user.uid
             session["user_email"] = email
-            flash("µù¥U¦¨¥\¡I½Ğ¤W¶Ç°·±d³ø§i¡C", "success")
+            flash("è¨»å†ŠæˆåŠŸï¼è«‹ä¸Šå‚³å¥åº·å ±å‘Šã€‚", "success")
             return redirect(url_for("upload_health"))
         except FirebaseError as e:
             error_message = str(e)
             logging.error(f"Firebase error during registration: {error_message}")
-            flash(f"µù¥U¥¢±Ñ¡G{error_message}", "error")
+            flash("è¨»å†Šå¤±æ•—ï¼šç³»çµ±å¿™ç¢Œï¼Œè«‹ç¨å¾Œå†è©¦ã€‚", "error")
             return render_template(
                 "register.html",
-                error=f"µù¥U¥¢±Ñ¡G{error_message}",
+                error=f"è¨»å†Šå¤±æ•—ï¼š{error_message}",
                 is_logged_in=is_logged_in,
             )
         except Exception as e:
             logging.error(f"Unexpected error during registration: {str(e)}")
-            flash(f"µù¥U¥¢±Ñ¡G{str(e)}", "error")
+            flash("è¨»å†Šå¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "error")
             return render_template(
                 "register.html",
-                error=f"µù¥U¥¢±Ñ¡G{str(e)}",
+                error=f"è¨»å†Šå¤±æ•—ï¼š{str(e)}",
                 is_logged_in=is_logged_in,
             )
 
     return render_template("register.html", is_logged_in=is_logged_in)
 
 
-# µn¤J
+# ç™»å…¥
 @app.route("/login", methods=["GET", "POST"])
 def login():
     is_logged_in = "user_id" in session
@@ -1568,33 +1568,33 @@ def login():
 
         ):
 
-            return "µn¤J¥¢±Ñ¡G±b¸¹©Î±K½X¦³»~¡A½Ğ­«·s¿é¤J¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šå¸³è™Ÿæˆ–å¯†ç¢¼æœ‰èª¤ï¼Œè«‹é‡æ–°è¼¸å…¥ã€‚"
 
         if "INVALID_PASSWORD" in code or "password is invalid" in msg:
 
-            return "µn¤J¥¢±Ñ¡G±b¸¹©Î±K½X¦³»~¡A½Ğ­«·s¿é¤J¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šå¸³è™Ÿæˆ–å¯†ç¢¼æœ‰èª¤ï¼Œè«‹é‡æ–°è¼¸å…¥ã€‚"
 
         if "TOO_MANY_ATTEMPTS" in code or "too many attempts" in msg:
 
-            return "µn¤J¥¢±Ñ¡G¹Á¸Õ¦¸¼Æ¹L¦h¡A½Ğµy«á¦A¸Õ¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šå˜—è©¦æ¬¡æ•¸éå¤šï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"
 
         if "USER_DISABLED" in code or "user disabled" in msg:
 
-            return "µn¤J¥¢±Ñ¡G¦¹±b¸¹¤w³Q°±¥Î¡A½ĞÁpµ¸ºŞ²z­û¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šæ­¤å¸³è™Ÿå·²è¢«åœç”¨ï¼Œè«‹è¯çµ¡ç®¡ç†å“¡ã€‚"
 
         if "AUTH_SERVICE_NOT_CONFIGURED" in code:
 
-            return "µn¤J¥¢±Ñ¡G©|¥¼³]©w¨­¥÷ÅçÃÒªA°È¡A½Ğ³qª¾¨t²ÎºŞ²z­û¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šå°šæœªè¨­å®šèº«ä»½é©—è­‰æœå‹™ï¼Œè«‹é€šçŸ¥ç³»çµ±ç®¡ç†å“¡ã€‚"
 
         if "AUTH_NETWORK_ERROR" in code:
 
-            return "µn¤J¥¢±Ñ¡GÅçÃÒªA°È¼È®ÉµLªk¨Ï¥Î¡A½Ğµy«á¦A¸Õ¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šé©—è­‰æœå‹™æš«æ™‚ç„¡æ³•ä½¿ç”¨ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"
 
         if "AUTH_RESPONSE_INVALID" in code:
 
-            return "µn¤J¥¢±Ñ¡GÅçÃÒµ²ªG®æ¦¡²§±`¡A½Ğµy«á¦A¸Õ¡C"
+            return "ç™»å…¥å¤±æ•—ï¼šé©—è­‰çµæœæ ¼å¼ç•°å¸¸ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"
 
-        return "µn¤J¥¢±Ñ¡G¨t²Î¥Ø«e¦£¸L¡A½Ğµy«á¦A¸Õ¡C"
+        return "ç™»å…¥å¤±æ•—ï¼šç³»çµ±ç›®å‰å¿™ç¢Œï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"
 
     if request.method == "GET":
         session.pop("_flashes", None)
@@ -1606,7 +1606,7 @@ def login():
         logging.debug("Login attempt: email=%s", _mask_email(email))
 
         if not email or not password:
-            flash("½Ğ¿é¤J¹q¤l¶l¥ó©M±K½X¡I", "error")
+            flash("è«‹è¼¸å…¥é›»å­éƒµä»¶å’Œå¯†ç¢¼ï¼", "error")
             logging.warning("Missing email or password in login submission")
             return render_template("login.html", is_logged_in=is_logged_in)
 
@@ -1645,7 +1645,7 @@ def login():
             ]
             if new_badges:
                 session["reward_unlocks"] = new_badges
-            flash("µn¤J¦¨¥\¡I", "success")
+            flash("ç™»å…¥æˆåŠŸï¼", "success")
             return redirect(url_for("home"))
         except ValueError as auth_error:
             error_code = str(auth_error)
@@ -1659,7 +1659,7 @@ def login():
             return render_template("login.html", is_logged_in=is_logged_in)
         except Exception as e:
             logging.error(f"Unexpected login error: {str(e)}")
-            flash("µn¤J¥¢±Ñ¡G¨t²Î¥Ø«e¦£¸L¡A½Ğµy«á¦A¸Õ¡C", "error")
+            flash("ç™»å…¥å¤±æ•—ï¼šç³»çµ±ç›®å‰å¿™ç¢Œï¼Œè«‹ç¨å¾Œå†è©¦ã€‚", "error")
             return render_template("login.html", is_logged_in=is_logged_in)
 
     return render_template("login.html", is_logged_in=is_logged_in)
@@ -1668,7 +1668,7 @@ def login():
 @app.route("/delete_account", methods=["GET", "POST"])
 def delete_account():
     if "user_id" not in session:
-        flash("½Ğ¥ıµn¤J¡C", "error")
+        flash("è«‹å…ˆç™»å…¥ã€‚", "error")
         return redirect(url_for("login"))
 
     user_id = session["user_id"]
@@ -1687,21 +1687,21 @@ def delete_account():
         confirm_delete = request.form.get("confirm_delete") == "yes"
 
         if not password:
-            flash("½Ğ¿é¤J±K½X¥H½T»{§R°£±b¸¹¡C", "error")
+            flash("è«‹è¼¸å…¥å¯†ç¢¼ä»¥ç¢ºèªåˆªé™¤å¸³è™Ÿã€‚", "error")
             return render_template(
                 "delete_account.html",
                 user_email=user_email,
                 is_logged_in=True,
             )
         if not confirm_delete:
-            flash("½Ğ¤Ä¿ï½T»{§R°£¡A§R°£«áµLªk´_­ì¡C", "error")
+            flash("è«‹å‹¾é¸ç¢ºèªåˆªé™¤ï¼Œåˆªé™¤å¾Œç„¡æ³•å¾©åŸã€‚", "error")
             return render_template(
                 "delete_account.html",
                 user_email=user_email,
                 is_logged_in=True,
             )
         if not user_email:
-            flash("µLªk½T»{¦¹±b¸¹ªº¹q¤l¶l¥ó¡A½ĞÁpµ¸«ÈªA¡C", "error")
+            flash("ç„¡æ³•ç¢ºèªæ­¤å¸³è™Ÿçš„é›»å­éƒµä»¶ï¼Œè«‹è¯çµ¡å®¢æœã€‚", "error")
             return render_template(
                 "delete_account.html",
                 user_email=user_email,
@@ -1740,7 +1740,7 @@ def delete_account():
             logging.warning("Failed to delete auth user %s: %s", user_id, exc)
 
         session.clear()
-        flash("±b¤á¤w§R°£¡C", "success")
+        flash("å¸³æˆ¶å·²åˆªé™¤ã€‚", "success")
         return redirect(url_for("home"))
 
     return render_template(
@@ -1748,54 +1748,54 @@ def delete_account():
     )
 
 
-# µn¥X
+# ç™»å‡º
 @app.route("/logout")
 def logout():
     session.pop("user_id", None)
     session.pop("_flashes", None)
-    flash("¤w¦¨¥\µn¥X¡I", "success")
+    flash("å·²æˆåŠŸç™»å‡ºï¼", "success")
     return redirect(url_for("home"))
 
 
-# ¤E®c®æ¿ß«}­¶­±
+# ä¹å®®æ ¼è²“å’ªé é¢
 @app.route("/featured_cats")
 def featured_cats():
     is_logged_in = "user_id" in session
     return render_template("featured_cats.html", is_logged_in=is_logged_in)
 
 
-# ¤W¶Ç°·±d³ø§i
+# ä¸Šå‚³å¥åº·å ±å‘Š
 @app.route("/upload_health", methods=["GET", "POST"])
 def upload_health():
     if "user_id" not in session:
-        flash("½Ğ¥ıµn¿ı¡I", "error")
+        flash("è«‹å…ˆç™»éŒ„ï¼", "error")
         return redirect(url_for("login"))
 
     user_id = session["user_id"]
     logging.debug(f"Current user_id from session: {user_id}")
 
-    # ?? ­×§ï¶}©l¡G¨ú±o¨Ï¥ÎªÌ¥Í²z©Ê§O
+    # ?? ä¿®æ”¹é–‹å§‹ï¼šå–å¾—ä½¿ç”¨è€…ç”Ÿç†æ€§åˆ¥
     user_gender = None
     try:
         user_doc = db.collection("users").document(user_id).get()
         if not user_doc.exists:
-            flash("§ä¤£¨ì¨Ï¥ÎªÌ¸ê®Æ¡I", "error")
+            flash("æ‰¾ä¸åˆ°ä½¿ç”¨è€…è³‡æ–™ï¼", "error")
             logging.warning(f"User document not found for uid: {user_id}")
             return redirect(url_for("register"))
         user_data = user_doc.to_dict()
         user_gender = user_data.get("gender")
         if not user_gender:
-            flash("½Ğ¥ı§¹¦¨µù¥U¨Ã´£¨Ñ¥Í²z©Ê§O¸ê®Æ¡I", "error")
+            flash("è«‹å…ˆå®Œæˆè¨»å†Šä¸¦æä¾›ç”Ÿç†æ€§åˆ¥è³‡æ–™ï¼", "error")
             logging.warning(f"User gender missing for uid: {user_id}")
             return redirect(url_for("register"))
         logging.debug(f"Retrieved user gender from Firestore: {user_gender}")
     except Exception as e:
         logging.error(f"Failed to retrieve user gender: {str(e)}")
-        flash(f"¨ú±o¨Ï¥ÎªÌ¸ê®Æ¥¢±Ñ¡G{str(e)}", "error")
+        flash("å–å¾—ä½¿ç”¨è€…è³‡æ–™å¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "error")
         return redirect(url_for("login"))
-    # ?? ­×§ïµ²§ô
+    # ?? ä¿®æ”¹çµæŸ
 
-    # ?? ­×§ï¶}©l¡G¤w¦³°·ÀË³ø§i®É¦Û°Ê¾É¦V¤ß²z´úÅç
+    # ?? ä¿®æ”¹é–‹å§‹ï¼šå·²æœ‰å¥æª¢å ±å‘Šæ™‚è‡ªå‹•å°å‘å¿ƒç†æ¸¬é©—
     reupload_requested = request.args.get("reupload") == "1"
     try:
         existing_reports = list(
@@ -1816,16 +1816,16 @@ def upload_health():
         auto_redirect = False
     elif request.method == "GET" and has_existing_report and not reupload_requested:
         auto_redirect = True
-    # ?? ­×§ïµ²§ô
+    # ?? ä¿®æ”¹çµæŸ
 
     if request.method == "POST":
         if "health_report" not in request.files:
-            flash("¥¼¿ï¾ÜÀÉ®×¡I", "error")
+            flash("æœªé¸æ“‡æª”æ¡ˆï¼", "error")
             return redirect(url_for("upload_health"))
 
         file = request.files["health_report"]
         if file.filename == "":
-            flash("¥¼¿ï¾ÜÀÉ®×¡I", "error")
+            flash("æœªé¸æ“‡æª”æ¡ˆï¼", "error")
             return redirect(url_for("upload_health"))
 
         logging.debug(
@@ -1836,17 +1836,17 @@ def upload_health():
 
         filename_lower = file.filename.lower()
         if not filename_lower.endswith(ALLOWED_UPLOAD_EXTENSIONS):
-            flash("½Ğ¤W¶Ç JPEG¡BPNG ©Î PDF ÀÉ¡I", "error")
+            flash("è«‹ä¸Šå‚³ JPEGã€PNG æˆ– PDF æª”ï¼", "error")
             return redirect(url_for("upload_health"))
 
         mimetype = (file.mimetype or "").lower()
         if mimetype not in ALLOWED_UPLOAD_MIMES:
-            flash("½Ğ¤W¶Ç JPEG¡BPNG ©Î PDF ÀÉ¡I", "error")
+            flash("è«‹ä¸Šå‚³ JPEGã€PNG æˆ– PDF æª”ï¼", "error")
             return redirect(url_for("upload_health"))
 
         content_length = request.content_length
         if content_length and content_length > MAX_UPLOAD_BYTES:
-            flash("ÀÉ®×¶W¹L 10MB¡A½Ğ­«·s¤W¶Ç¡I", "error")
+            flash("æª”æ¡ˆè¶…é 10MBï¼Œè«‹é‡æ–°ä¸Šå‚³ï¼", "error")
             return redirect(url_for("upload_health"))
 
         is_image = mimetype in {"image/jpeg", "image/png"}
@@ -1859,7 +1859,7 @@ def upload_health():
             # 11/12??????????????????????
             file_data = file.read()
             if len(file_data) > MAX_UPLOAD_BYTES:
-                flash("ÀÉ®×¶W¹L 10MB¡A½Ğ­«·s¤W¶Ç¡I", "error")
+                flash("æª”æ¡ˆè¶…é 10MBï¼Œè«‹é‡æ–°ä¸Šå‚³ï¼", "error")
                 return redirect(url_for("upload_health"))
             file_type = "image" if is_image else "pdf"
             analysis_data, health_score, health_warnings, recognized_metric_count = analyze_health_report(
@@ -1876,10 +1876,10 @@ def upload_health():
                 return redirect(url_for('upload_health'))
         except Exception as analysis_e:
             logging.error(f"Health report analysis failed: {str(analysis_e)}")
-            flash(f"°·±d³ø§i¤ÀªR¥¢±Ñ¡G{str(analysis_e)}", "warning")
+            flash("å¥åº·å ±å‘Šåˆ†æå¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "warning")
             analysis_data, health_score, health_warnings, recognized_metric_count = None, 0, [], 0
 
-        # ·Ç³Æ Firestore ¤åÀÉ
+        # æº–å‚™ Firestore æ–‡æª”
         # 11/12?????????Firestore ???????
         health_report_doc = {
             "user_uid": user_id,
@@ -1899,7 +1899,7 @@ def upload_health():
                 f"Adding analysis data to doc: score={health_score}, warnings={health_warnings}"
             )
 
-        # Àx¦s¨ì Firestore
+        # å„²å­˜åˆ° Firestore
         doc_ref = db.collection("health_reports").document()
         doc_ref.set(health_report_doc)
         report_id = doc_ref.id
@@ -1913,7 +1913,7 @@ def upload_health():
             len(health_warnings),
         )
 
-        # ÅçÃÒ¼g¤J
+        # é©—è­‰å¯«å…¥
         saved_doc = db.collection("health_reports").document(report_id).get()
         if saved_doc.exists:
             logging.debug(
@@ -1923,7 +1923,7 @@ def upload_health():
             logging.error("Firestore write failed - document does not exist")
 
         flash(
-            f"¤W¶Ç¦¨¥\¡I°·±d¤À¼Æ¡G{health_score}¡AÄµ§i¡G{'; '.join(health_warnings) if health_warnings else 'µL'}",
+            f"ä¸Šå‚³æˆåŠŸï¼å¥åº·åˆ†æ•¸ï¼š{health_score}ï¼Œè­¦å‘Šï¼š{'; '.join(health_warnings) if health_warnings else 'ç„¡'}",
             "success",
         )
         return redirect(url_for("psychology_test"))
@@ -1938,33 +1938,33 @@ def upload_health():
     )
 
 
-# ¤ß²z´úÅç
+# å¿ƒç†æ¸¬é©—
 @app.route(
     "/psychology_test", methods=["GET", "POST"]
-)  # ?? ­×§ï¡G¤¹³\ POST ¥H³B²z¤ß²z´úÅç´£¥æ
+)  # ?? ä¿®æ”¹ï¼šå…è¨± POST ä»¥è™•ç†å¿ƒç†æ¸¬é©—æäº¤
 def psychology_test():
     if "user_id" not in session:
-        flash("½Ğ¥ıµn¤J¡I", "error")
+        flash("è«‹å…ˆç™»å…¥ï¼", "error")
         return redirect(url_for("login"))
 
     user_id = session["user_id"]
     try:
-        # ?? ­×§ï¡G§ï¬°¬d¸ß³»¼h health_reports ¨Ã¨Ì user_uid ¹LÂo¡AÁ×§K§ä¤£¨ì¤å¥ó
+        # ?? ä¿®æ”¹ï¼šæ”¹ç‚ºæŸ¥è©¢é ‚å±¤ health_reports ä¸¦ä¾ user_uid éæ¿¾ï¼Œé¿å…æ‰¾ä¸åˆ°æ–‡ä»¶
         health_reports = list(
             db.collection("health_reports").where("user_uid", "==", user_id).stream()
-        )  # ?? ­×§ï¡G­ì¥»¬O users/{uid}/health_reports
+        )  # ?? ä¿®æ”¹ï¼šåŸæœ¬æ˜¯ users/{uid}/health_reports
         logging.debug(
             f"Psychology test check - existing reports: {len(health_reports)}"
         )
         if not health_reports:
-            flash("½Ğ¥ı¤W¶Ç°·±d³ø§i¡I", "error")
+            flash("è«‹å…ˆä¸Šå‚³å¥åº·å ±å‘Šï¼", "error")
             return redirect(url_for("upload_health"))
     except Exception as e:
         logging.error(f"Error checking health reports: {str(e)}")
-        flash(f"ÀË¬d°·±d³ø§i¥¢±Ñ¡G{str(e)}", "error")
+        flash("æª¢æŸ¥å¥åº·å ±å‘Šå¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "error")
         return redirect(url_for("upload_health"))
 
-    # ?? ­×§ï¶}©l¡G¤ä´©¤ß²z´úÅçªí³æ´£¥æ¬yµ{
+    # ?? ä¿®æ”¹é–‹å§‹ï¼šæ”¯æ´å¿ƒç†æ¸¬é©—è¡¨å–®æäº¤æµç¨‹
     if request.method == "GET":
         session.pop("_flashes", None)
 
@@ -1997,9 +1997,9 @@ def psychology_test():
     question1 = (request.form.get("question1") or "").strip()
     question2 = (request.form.get("question2") or "").strip()
     if not question1 or not question2:
-        flash("½Ğ¦^µª©Ò¦³°İÃD¡I", "error")
+        flash("è«‹å›ç­”æ‰€æœ‰å•é¡Œï¼", "error")
         return render_template(
-            "psychology_test.html", error="½Ğ¦^µª©Ò¦³°İÃD", is_logged_in=True
+            "psychology_test.html", error="è«‹å›ç­”æ‰€æœ‰å•é¡Œ", is_logged_in=True
         )
     if len(question1) > MAX_USER_TEXT_CHARS or len(question2) > MAX_USER_TEXT_CHARS:
         flash(OVER_LIMIT_MESSAGE, "error")
@@ -2016,32 +2016,32 @@ def psychology_test():
             }
         )
         logging.debug(f"Psychology test saved to Firestore for uid: {user_id}")
-        flash("ªí³æ¤w°e¥X¡IÅwªï«e©¹¥Í¦¨¿ß«}¹Ï¥d¡C", "success")
+        flash("è¡¨å–®å·²é€å‡ºï¼æ­¡è¿å‰å¾€ç”Ÿæˆè²“å’ªåœ–å¡ã€‚", "success")
         return redirect(url_for("generate_card"))
     except Exception as e:
         logging.error(f"Psychology test error: {str(e)}")
-        flash(f"´£¥æ¥¢±Ñ¡G{str(e)}", "error")
+        flash("æäº¤å¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "error")
         return render_template(
-            "psychology_test.html", error=f"´£¥æ¥¢±Ñ¡G{str(e)}", is_logged_in=True
+            "psychology_test.html", error=f"æäº¤å¤±æ•—ï¼š{str(e)}", is_logged_in=True
         )
-    # ?? ­×§ïµ²§ô
+    # ?? ä¿®æ”¹çµæŸ
 
 
-# ²á¤Ñ API ºİÂI¡]¥N²z Gemini API¡^
+# èŠå¤© API ç«¯é»ï¼ˆä»£ç† Gemini APIï¼‰
 @app.route("/chat_api", methods=["POST"])
 def chat_api():
     if "user_id" not in session:
-        return jsonify({"error": "¥¼µn¤J"}), 401
+        return jsonify({"error": "æœªç™»å…¥"}), 401
 
     data = request.get_json()
     if not data or "conversationHistory" not in data or "systemInstruction" not in data:
         logging.error("Invalid request payload for chat_api. Keys=%s", list(data.keys()) if isinstance(data, dict) else data)
-        return jsonify({"error": "¯Ê¤Ö¥²­nªº°Ñ¼Æ"}), 400
+        return jsonify({"error": "ç¼ºå°‘å¿…è¦çš„åƒæ•¸"}), 400
 
     try:
         conversation_history = data.get("conversationHistory")
         if not isinstance(conversation_history, list):
-            return jsonify({"error": "conversationHistory ®æ¦¡¤£¥¿½T"}), 400
+            return jsonify({"error": "conversationHistory æ ¼å¼ä¸æ­£ç¢º"}), 400
         if not _user_messages_within_limit(conversation_history):
             return jsonify({"error": OVER_LIMIT_MESSAGE}), 400
         logging.debug(
@@ -2053,7 +2053,7 @@ def chat_api():
         )
 
         if not contents:
-            return jsonify({"error": "conversationHistory ¬°ªÅ©Î®æ¦¡µL®Ä"}), 400
+            return jsonify({"error": "conversationHistory ç‚ºç©ºæˆ–æ ¼å¼ç„¡æ•ˆ"}), 400
 
         try:
             response = _generate_with_retry(
@@ -2061,24 +2061,24 @@ def chat_api():
             )
         except Exception as e:
             logging.error(f"Gemini generation failed: {e}")
-            return jsonify({"nextPrompt": "AI §U¤â¼È®ÉµLªk¦^À³¡A½Ğµy«á¦A¸Õ¡C"}), 200
+            return jsonify({"nextPrompt": "AI åŠ©æ‰‹æš«æ™‚ç„¡æ³•å›æ‡‰ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"}), 200
 
         if not response or not getattr(response, "candidates", None):
             logging.error("Gemini API returned no candidates")
-            return jsonify({"nextPrompt": "µLªk¨ú±o¦^À³¡A½Ğµy«á¦A¸Õ¡C"}), 200
+            return jsonify({"nextPrompt": "ç„¡æ³•å–å¾—å›æ‡‰ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"}), 200
 
         candidate = response.candidates[0]
         reply = ""
         parts = (
             getattr(candidate.content, "parts", None) or []
-        )  # 0929­×§ï03¡Gparts ¥i¯à¬° None¡A§ï±ÄªÅ²M³æÁ×§K°j°é¿ù»~
+        )  # 0929ä¿®æ”¹03ï¼šparts å¯èƒ½ç‚º Noneï¼Œæ”¹æ¡ç©ºæ¸…å–®é¿å…è¿´åœˆéŒ¯èª¤
         for part in parts:
             if getattr(part, "text", None):
                 reply += part.text
 
         if not reply:
             logging.error("Gemini candidate did not include textual content")
-            return jsonify({"nextPrompt": "µLªk¨ú±o¦^À³¡A½Ğµy«á¦A¸Õ¡C"}), 200
+            return jsonify({"nextPrompt": "ç„¡æ³•å–å¾—å›æ‡‰ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚"}), 200
 
         logging.debug("Raw reply length: %s characters", len(reply))
 
@@ -2087,7 +2087,7 @@ def chat_api():
             logging.debug(f"Successfully parsed JSON: {parsed_json}")
         except Exception:
             logging.exception(
-                "0929­×§ï03¡Gchat_api JSON parse failed; raw snippet=%r", reply[:500]
+                "0929ä¿®æ”¹03ï¼šchat_api JSON parse failed; raw snippet=%r", reply[:500]
             )
             parsed_json = None
 
@@ -2103,24 +2103,24 @@ def chat_api():
 
     except Exception as e:
         logging.error(f"Unexpected error in chat_api: {str(e)}, data: {data}")
-        return jsonify({"error": f"¦øªA¾¹¿ù»~¡G{str(e)}"}), 500
+        return jsonify({"error": f"ä¼ºæœå™¨éŒ¯èª¤ï¼š{str(e)}"}), 500
 
 
-# ³ø§i API ºİÂI¡]¥N²z Gemini API¡^
+# å ±å‘Š API ç«¯é»ï¼ˆä»£ç† Gemini APIï¼‰
 @app.route("/report_api", methods=["POST"])
 def report_api():
     if "user_id" not in session:
-        return jsonify({"error": "¥¼µn¤J"}), 401
+        return jsonify({"error": "æœªç™»å…¥"}), 401
 
     data = request.get_json()
     if not data or "conversationHistory" not in data or "systemInstruction" not in data:
         logging.error(f"Invalid request data: {data}")
-        return jsonify({"error": "¯Ê¤Ö¥²­nªº°Ñ¼Æ"}), 400
+        return jsonify({"error": "ç¼ºå°‘å¿…è¦çš„åƒæ•¸"}), 400
 
     try:
         conversation_history = data.get("conversationHistory")
         if not isinstance(conversation_history, list):
-            return jsonify({"error": "conversationHistory ®æ¦¡¤£¥¿½T"}), 400
+            return jsonify({"error": "conversationHistory æ ¼å¼ä¸æ­£ç¢º"}), 400
         if not _user_messages_within_limit(conversation_history):
             return jsonify({"error": OVER_LIMIT_MESSAGE}), 400
         logging.debug(
@@ -2132,7 +2132,7 @@ def report_api():
         )
 
         if not contents:
-            return jsonify({"error": "conversationHistory ¬°ªÅ©Î®æ¦¡µL®Ä"}), 400
+            return jsonify({"error": "conversationHistory ç‚ºç©ºæˆ–æ ¼å¼ç„¡æ•ˆ"}), 400
 
         try:
             response = _generate_with_retry(
@@ -2143,7 +2143,7 @@ def report_api():
             return (
                 jsonify(
                     {
-                        "summary": "¼Ò«¬¨S¦³²£¥Í³ø§i¤º®e¡A½Ğµy«á¦A¸Õ¡C",
+                        "summary": "æ¨¡å‹æ²’æœ‰ç”¢ç”Ÿå ±å‘Šå…§å®¹ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚",
                         "keywords": [],
                         "emotionVector": {
                             "valence": 50,
@@ -2158,7 +2158,7 @@ def report_api():
         if not response or not getattr(response, "candidates", None):
             logging.warning("Gemini report: no candidates, fallback to empty summary")
             report_json = {
-                "summary": "¼Ò«¬¨S¦³²£¥Í³ø§i¤º®e¡A½Ğµy«á¦A¸Õ¡C",
+                "summary": "æ¨¡å‹æ²’æœ‰ç”¢ç”Ÿå ±å‘Šå…§å®¹ï¼Œè«‹ç¨å¾Œå†è©¦ã€‚",
                 "keywords": [],
                 "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50},
             }
@@ -2168,7 +2168,7 @@ def report_api():
         summary_text = ""
         parts = (
             getattr(candidate.content, "parts", None) or []
-        )  # 0929­×§ï03¡Gparts ¥i¯à¬° None¡A§ï±ÄªÅ²M³æÁ×§K°j°é¿ù»~
+        )  # 0929ä¿®æ”¹03ï¼šparts å¯èƒ½ç‚º Noneï¼Œæ”¹æ¡ç©ºæ¸…å–®é¿å…è¿´åœˆéŒ¯èª¤
         for part in parts:
             if getattr(part, "text", None):
                 summary_text += part.text
@@ -2176,7 +2176,7 @@ def report_api():
         if not summary_text:
             logging.warning("Gemini report: candidate present but empty text")
             report_json = {
-                "summary": "¼Ò«¬¨S¦³´£¨Ñ§¹¾ã¤º®e¡C",
+                "summary": "æ¨¡å‹æ²’æœ‰æä¾›å®Œæ•´å…§å®¹ã€‚",
                 "keywords": [],
                 "emotionVector": {"valence": 50, "arousal": 50, "dominance": 50},
             }
@@ -2190,7 +2190,7 @@ def report_api():
             logging.debug(f"Successfully parsed report JSON: {parsed_json}")
             return jsonify(parsed_json)
         except Exception as exc:
-            logging.exception("0929­×§ï03¡Greport_api JSON/schema failed: %s", exc)
+            logging.exception("0929ä¿®æ”¹03ï¼šreport_api JSON/schema failed: %s", exc)
             return (
                 jsonify(
                     {
@@ -2204,23 +2204,23 @@ def report_api():
 
     except Exception as e:
         logging.error(f"Unexpected error in report_api: {str(e)}, data: {data}")
-        return jsonify({"error": f"¦øªA¾¹¿ù»~¡G{str(e)}"}), 500
+        return jsonify({"error": f"ä¼ºæœå™¨éŒ¯èª¤ï¼š{str(e)}"}), 500
 
 
-# Àx¦s¤ß²z´úÅç¤À¼Æ
-# ?? ­×§ï¡G©ú½T«ü©w endpoint ¦WºÙ¡AÁ×§K¦]¨ç¦¡¦W©Î¸ü¤J¶¶§Ç³y¦¨ªºµù¥U®t²§
+# å„²å­˜å¿ƒç†æ¸¬é©—åˆ†æ•¸
+# ?? ä¿®æ”¹ï¼šæ˜ç¢ºæŒ‡å®š endpoint åç¨±ï¼Œé¿å…å› å‡½å¼åæˆ–è¼‰å…¥é †åºé€ æˆçš„è¨»å†Šå·®ç•°
 @app.route(
     "/save_psychology_scores", methods=["POST"], endpoint="save_psychology_scores"
-)  # ?? ­×§ï
+)  # ?? ä¿®æ”¹
 def save_psychology_scores():
     if "user_id" not in session:
-        return jsonify({"error": "¥¼µn¤J"}), 401
+        return jsonify({"error": "æœªç™»å…¥"}), 401
 
     data = request.get_json()
     if not data or not all(
         key in data for key in ["mindScore", "bodyScore", "combinedScore"]
     ):
-        return jsonify({"error": "¯Ê¤Ö¥²­nªº¤À¼Æ°Ñ¼Æ"}), 400
+        return jsonify({"error": "ç¼ºå°‘å¿…è¦çš„åˆ†æ•¸åƒæ•¸"}), 400
 
     try:
         user_id = session["user_id"]
@@ -2241,7 +2241,7 @@ def save_psychology_scores():
                 "summary": data.get("summary", ""),
                 "keywords": data.get("keywords", []),
                 "emotion_vector": data.get("emotionVector", {}),
-                # 11/12¥u¦s¼Æ¾Ú¤£¦s¹ï¸Ü¡G¤£¦b Firestore ¯d¤U²á¤Ñ¤º®e
+                # 11/12åªå­˜æ•¸æ“šä¸å­˜å°è©±ï¼šä¸åœ¨ Firestore ç•™ä¸‹èŠå¤©å…§å®¹
                 "conversation_history": [],
                 "submit_time": SERVER_TIMESTAMP,
             }
@@ -2250,14 +2250,14 @@ def save_psychology_scores():
         return jsonify({"status": "success", "test_id": test_id})
     except Exception as e:
         logging.error(f"Error saving psychology scores: {str(e)}")
-        return jsonify({"error": f"Àx¦s¤À¼Æ¥¢±Ñ¡G{str(e)}"}), 500
+        return jsonify({"error": f"å„²å­˜åˆ†æ•¸å¤±æ•—ï¼š{str(e)}"}), 500
 
 
-# ¥Í¦¨¿ß«}¹Ï¥d
+# ç”Ÿæˆè²“å’ªåœ–å¡
 @app.route("/generate_card")
 def generate_card():
     if "user_id" not in session:
-        flash("½Ğ¥ıµn¤J¡I", "error")
+        flash("è«‹å…ˆç™»å…¥ï¼", "error")
         return redirect(url_for("login"))
 
     session.pop("_flashes", None)
@@ -2279,7 +2279,7 @@ def generate_card():
         if not allowed:
             flash(CARD_LIMIT_MESSAGE, "error")
             return redirect(url_for("home"))
-        # ?? ­×§ï¡G¦P¼Ë§ï¬°¬d¸ß³»¼h health_reports
+        # ?? ä¿®æ”¹ï¼šåŒæ¨£æ”¹ç‚ºæŸ¥è©¢é ‚å±¤ health_reports
         health_report_docs = (
             db.collection("health_reports").where("user_uid", "==", user_id).stream()
         )
@@ -2290,7 +2290,7 @@ def generate_card():
             reports.append(data)
         logging.debug(f"Generate card - reports found: {len(reports)}")
         if not reports:
-            flash("½Ğ¥ı¤W¶Ç°·±d³ø§i¡I", "error")
+            flash("è«‹å…ˆä¸Šå‚³å¥åº·å ±å‘Šï¼", "error")
             return redirect(url_for("upload_health"))
 
         psych_docs = (
@@ -2305,7 +2305,7 @@ def generate_card():
             data["id"] = doc.id
             tests.append(data)
         if not tests:
-            flash("½Ğ¥ı§¹¦¨¤ß²z´úÅç¡I", "error")  # ?? 0929­×§ï¡G­×¥¿´£¥Ü¦r¦ê
+            flash("è«‹å…ˆå®Œæˆå¿ƒç†æ¸¬é©—ï¼", "error")  # ?? 0929ä¿®æ”¹ï¼šä¿®æ­£æç¤ºå­—ä¸²
             return redirect(url_for("psychology_test"))
 
         sorted_reports = sorted(
@@ -2315,7 +2315,7 @@ def generate_card():
         latest_report = sorted_reports[-1]
         warnings, vitals_display = _normalize_health_data(
             latest_report
-        )  # ?? 0929­×§ï¡G¾ã²z°·ÀË´£¿ô»P«ü¼Ğ
+        )  # ?? 0929ä¿®æ”¹ï¼šæ•´ç†å¥æª¢æé†’èˆ‡æŒ‡æ¨™
         latest_report["_display_warnings"] = warnings
         latest_report["_display_vitals"] = vitals_display
         health_tips = _build_health_tips(latest_report, warnings)
@@ -2350,7 +2350,7 @@ def generate_card():
             cache_age = time.time() - cache_entry.get("timestamp", 0)
             cache_key_match = (
                 cache_entry.get("cache_key") == cache_key_current
-            )  # ?? 1001­×§ï01¡G¶È·í³Ì·s³ø§i/´úÅç»P§Ö¨ú¤@­P®É¤~ªu¥Î
+            )  # ?? 1001ä¿®æ”¹01ï¼šåƒ…ç•¶æœ€æ–°å ±å‘Š/æ¸¬é©—èˆ‡å¿«å–ä¸€è‡´æ™‚æ‰æ²¿ç”¨
             if cache_path.exists() and cache_age < 3600 and cache_key_match:
                 logging.debug("Using cached cat card for user %s", user_id)
                 card_payload = cache_entry.get("card", {})
@@ -2370,7 +2370,7 @@ def generate_card():
                 "filename": image_filename,
                 "cat_source": cat_source,
                 "card": card_payload,
-                "cache_key": cache_key,  # ?? 1001­×§ï01¡G°O¿ı¥»¦¸¨Ï¥Îªº³ø§i/´úÅç²Õ¦XÁ×§K¨ú¥Î¹L´Á¹Ï¥d
+                "cache_key": cache_key,  # ?? 1001ä¿®æ”¹01ï¼šè¨˜éŒ„æœ¬æ¬¡ä½¿ç”¨çš„å ±å‘Š/æ¸¬é©—çµ„åˆé¿å…å–ç”¨éæœŸåœ–å¡
             }
 
         card_image_url = url_for("static", filename=f"cat_cards/{image_filename}")
@@ -2402,9 +2402,9 @@ def generate_card():
         )
     except Exception as e:
         logging.error(f"Generate card error: {str(e)}")
-        flash(f"¥Í¦¨¹Ï¥d¥¢±Ñ¡G{str(e)}", "error")
+        flash("ç”Ÿæˆåœ–å¡å¤±æ•—ï¼šè«‹ç¨å¾Œå†è©¦ã€‚", "error")
         return render_template(
-            "generate_card.html", error=f"¥Í¦¨¹Ï¥d¥¢±Ñ¡G{str(e)}", is_logged_in=True
+            "generate_card.html", error=f"ç”Ÿæˆåœ–å¡å¤±æ•—ï¼š{str(e)}", is_logged_in=True
         )
 
 
@@ -2455,7 +2455,7 @@ def inject_badge_context():
 
 
 if __name__ == "__main__":
-    # ­Y­n¦C¥X¸ô¥Ñ¥i¦b¦¹¬ö¿ı
+    # è‹¥è¦åˆ—å‡ºè·¯ç”±å¯åœ¨æ­¤ç´€éŒ„
     debug_enabled = str(os.getenv("FLASK_DEBUG", "0")).lower() in {"1", "true", "yes", "on"}
     port = int(os.getenv("FLASK_PORT", "5001"))
     app.run(debug=debug_enabled, port=port)
