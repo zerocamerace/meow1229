@@ -351,6 +351,29 @@ def _safe_url(url: str | None) -> str | None:
     return parsed.geturl()
 
 
+def _mask_email(email: str | None) -> str:
+    if not email:
+        return ""
+    email = str(email)
+    if "@" not in email:
+        return (email[:1] or "") + "***"
+    local_part, domain_part = email.split("@", 1)
+    if len(local_part) <= 1:
+        masked_local = (local_part[:1] or "") + "***"
+    elif len(local_part) == 2:
+        masked_local = local_part[0] + "***"
+    else:
+        masked_local = f"{local_part[0]}***{local_part[-1]}"
+    return f"{masked_local}@{domain_part}"
+
+
+def _form_keys(form_data) -> list[str]:
+    try:
+        return list(form_data.keys())
+    except AttributeError:
+        return []
+
+
 def _is_text_within_limit(text: str | None, limit: int = MAX_USER_TEXT_CHARS) -> bool:
     if text is None:
         return True
@@ -1459,13 +1482,15 @@ def register():
         session.pop("_flashes", None)
 
     if request.method == "POST":
-        logging.debug(f"Received POST request with form data: {request.form}")
+        logging.debug("Register submission fields: %s", _form_keys(request.form))
         email = request.form.get("email")
         password = request.form.get("password")
         # ?? 修改開始：新增生理性別欄位
         gender = request.form.get("gender")
         logging.debug(
-            f"Parsed form data: email={email}, password={'*' * len(password) if password else None}, gender={gender}"
+            "Parsed register data: email=%s, gender=%s",
+            _mask_email(email),
+            gender,
         )
 
         if not email or not password or not gender:
@@ -1479,7 +1504,9 @@ def register():
         # ?? 修改結束
         try:
             user = auth.create_user(email=email, password=password)
-            logging.debug(f"User created: uid={user.uid}, email={email}")
+            logging.debug(
+                "User created: uid=%s, email=%s", user.uid, _mask_email(email)
+            )
             db.collection("users").document(user.uid).set(
                 {
                     "email": email,
@@ -1573,12 +1600,10 @@ def login():
         session.pop("_flashes", None)
 
     if request.method == "POST":
-        logging.debug(f"Received POST request with form data: {request.form}")
+        logging.debug("Login submission fields: %s", _form_keys(request.form))
         email = request.form.get("email")
         password = request.form.get("password")
-        logging.debug(
-            f"Login attempt: email={email}, password={'*' * len(password) if password else None}"
-        )
+        logging.debug("Login attempt: email=%s", _mask_email(email))
 
         if not email or not password:
             flash("請輸入電子郵件和密碼！", "error")
@@ -1804,7 +1829,9 @@ def upload_health():
             return redirect(request.url)
 
         logging.debug(
-            f"Received POST request with form data: {request.form}, files: {request.files}"
+            "Upload request fields=%s, files=%s",
+            _form_keys(request.form),
+            list(request.files.keys()),
         )
 
         filename_lower = file.filename.lower()
@@ -1879,7 +1906,12 @@ def upload_health():
         logging.debug(
             f"Health report SAVED to Firestore for user: {user_id}, report_id: {report_id}"
         )
-        logging.debug(f"Saved document content: {health_report_doc}")
+        logging.debug(
+            "Health report saved for user %s with score=%s and %d warnings",
+            user_id,
+            health_score,
+            len(health_warnings),
+        )
 
         # 驗證寫入
         saved_doc = db.collection("health_reports").document(report_id).get()
@@ -2003,7 +2035,7 @@ def chat_api():
 
     data = request.get_json()
     if not data or "conversationHistory" not in data or "systemInstruction" not in data:
-        logging.error(f"Invalid request data: {data}")
+        logging.error("Invalid request payload for chat_api. Keys=%s", list(data.keys()) if isinstance(data, dict) else data)
         return jsonify({"error": "缺少必要的參數"}), 400
 
     try:
@@ -2012,7 +2044,9 @@ def chat_api():
             return jsonify({"error": "conversationHistory 格式不正確"}), 400
         if not _user_messages_within_limit(conversation_history):
             return jsonify({"error": OVER_LIMIT_MESSAGE}), 400
-        logging.debug(f"Received conversationHistory: {conversation_history}")
+        logging.debug(
+            "Received conversation history entries: %d", len(conversation_history)
+        )
 
         contents = _build_genai_contents(
             data.get("systemInstruction"), conversation_history
@@ -2046,7 +2080,7 @@ def chat_api():
             logging.error("Gemini candidate did not include textual content")
             return jsonify({"nextPrompt": "無法取得回應，請稍後再試。"}), 200
 
-        logging.debug(f"Raw reply: {reply}")
+        logging.debug("Raw reply length: %s characters", len(reply))
 
         try:
             parsed_json = extract_json_from_response(reply)
@@ -2148,7 +2182,7 @@ def report_api():
             }
             return jsonify(report_json), 200
 
-        logging.debug(f"Raw report summary: {summary_text}")
+        logging.debug("Raw report summary length: %s", len(summary_text))
 
         try:
             parsed_json = extract_json_from_response(summary_text)
