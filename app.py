@@ -1334,6 +1334,40 @@ def profile():
     next_badge = next((badge for badge in REWARD_BADGES if badge["points"] > user_points), None)
     points_to_next = next_badge["points"] - user_points if next_badge else 0
 
+    previous_badge = None
+    for badge in REWARD_BADGES:
+        if badge["points"] <= user_points:
+            previous_badge = badge
+        else:
+            break
+
+    segment_start_points = previous_badge["points"] if previous_badge else 0
+    segment_start_label = (
+        previous_badge["name"]
+        if previous_badge
+        else (REWARD_BADGES[0]["name"] if REWARD_BADGES else "起點")
+    )
+    if next_badge:
+        segment_end_points = next_badge["points"]
+        segment_end_label = next_badge["name"]
+    else:
+        segment_end_points = max_points or segment_start_points or user_points
+        segment_end_label = (
+            REWARD_BADGES[-1]["name"] if REWARD_BADGES else "目標"
+        )
+    segment_range = max(segment_end_points - segment_start_points, 1)
+    segment_percent = (
+        100.0
+        if user_points >= segment_end_points
+        else max(
+            0.0,
+            min(
+                100.0,
+                ((user_points - segment_start_points) / segment_range) * 100.0,
+            ),
+        )
+    )
+
     enriched_badges = []
     for badge in REWARD_BADGES:
         enriched = dict(badge)
@@ -1353,6 +1387,11 @@ def profile():
         reward_badges=enriched_badges,
         user_points=user_points,
         progress_percent=progress_percent,
+        progress_segment_percent=segment_percent,
+        progress_segment_start_points=segment_start_points,
+        progress_segment_end_points=segment_end_points,
+        progress_segment_start_label=segment_start_label,
+        progress_segment_end_label=segment_end_label,
         next_badge=next_badge,
         points_to_next=points_to_next,
         max_badge_points=max_points,

@@ -39,6 +39,11 @@
                 color: #5c2f80;
                 font-weight: 600;
             }
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
             .main-nav {
                 display: flex;
                 align-items: center;
@@ -90,6 +95,30 @@
                 color: #4b2b1f;
                 margin-left: 0.35rem;
             }
+            .progress-visual {
+                margin-top: 1rem;
+            }
+            .progress-track {
+                width: 100%;
+                height: 12px;
+                background: rgba(248, 225, 200, 0.7);
+                border-radius: 999px;
+                overflow: hidden;
+                position: relative;
+            }
+            .progress-fill {
+                height: 100%;
+                background: linear-gradient(120deg, #f0b795, #fbd499);
+                border-radius: 999px;
+                transition: width 0.3s ease;
+            }
+            .progress-labels {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.85rem;
+                color: #8c6a5a;
+                margin-top: 0.4rem;
+            }
             .avatar-grid {
                 margin-top: 1.25rem;
                 display: grid;
@@ -104,9 +133,10 @@
                 background: #fffdf8;
                 transition: border 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
                 cursor: pointer;
+                position: relative;
             }
             .avatar-option.selected {
-                border-color: #f0b795;
+                border: 3px solid #f0b795;
                 box-shadow: 0 10px 25px rgba(240, 183, 149, 0.35);
                 transform: translateY(-2px);
             }
@@ -114,13 +144,33 @@
                 display: none;
             }
             .avatar-option img {
-                width: 172px;
-                height: 172px;
+                width: 100%;
+                max-width: 172px;
+                height: auto;
+                aspect-ratio: 1 / 1;
                 border-radius: 999px;
                 object-fit: cover;
                 border: 1px solid rgba(161, 130, 110, 0.35);
                 background: #fff;
                 padding: 0.3rem;
+            }
+            .avatar-option .checkmark {
+                position: absolute;
+                top: 0.6rem;
+                right: 0.6rem;
+                width: 24px;
+                height: 24px;
+                border-radius: 999px;
+                background: #f0b795;
+                color: white;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                box-shadow: 0 4px 8px rgba(240, 183, 149, 0.4);
+            }
+            .avatar-option.selected .checkmark {
+                display: flex;
             }
             .section-title {
                 font-size: 1.25rem;
@@ -138,9 +188,11 @@
                 border: 1px solid rgba(221, 199, 184, 0.7);
                 border-radius: 1rem;
                 padding: 1rem;
-                background: #fffdf8;
+                background: #ffffff;
                 text-align: center;
                 box-shadow: 0 10px 25px rgba(236, 205, 189, 0.25);
+                position: relative;
+                overflow: hidden;
             }
             .badge-card img {
                 width: 150px;
@@ -148,8 +200,34 @@
                 object-fit: contain;
                 margin-bottom: 0.6rem;
             }
+            .badge-card.unlocked {
+                animation: glowPulse 2s ease-in-out infinite;
+                box-shadow: 0 12px 30px rgba(249, 211, 150, 0.5);
+            }
             .badge-card.locked {
-                opacity: 0.45;
+                opacity: 0.5;
+                filter: none;
+                border-style: dashed;
+                background: rgba(255, 255, 255, 0.65);
+            }
+            .badge-card.locked .lock-icon {
+                position: absolute;
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 28px;
+                height: 28px;
+                border-radius: 999px;
+                background: rgba(153, 133, 118, 0.85);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1rem;
+                box-shadow: 0 4px 10px rgba(153, 133, 118, 0.35);
+            }
+            .badge-card.next-target {
+                border: 2px solid rgba(249, 211, 150, 0.8);
+                background: linear-gradient(180deg, rgba(249, 211, 150, 0.18), rgba(255, 255, 255, 1));
             }
             .actions-row {
                 margin-top: 2.5rem;
@@ -174,10 +252,29 @@
                 transform: translateY(-2px);
                 box-shadow: 0 12px 24px rgba(244, 189, 152, 0.35);
             }
+            @keyframes glowPulse {
+                0% {
+                    box-shadow: 0 10px 25px rgba(249, 211, 150, 0.4);
+                }
+                50% {
+                    box-shadow: 0 12px 36px rgba(249, 211, 150, 0.9);
+                }
+                100% {
+                    box-shadow: 0 10px 25px rgba(249, 211, 150, 0.4);
+                }
+            }
             .avatar-actions {
-                margin-top: 1.25rem;
+                margin-top: 1.5rem;
                 display: flex;
                 justify-content: center;
+            }
+            .section-divider {
+                margin: 2.5rem auto 2rem;
+                border: none;
+                height: 1px;
+                background: rgba(203, 164, 140, 0.35);
+                width: 100%;
+                max-width: 900px;
             }
             .flash {
                 margin-top: 1rem;
@@ -197,6 +294,14 @@
                 display: flex;
                 align-items: center;
                 gap: 0.75rem;
+            }
+            .simple-profile-avatar {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 999px;
+                object-fit: cover;
+                border: 1px solid rgba(164, 145, 211, 0.35);
+                box-shadow: 0 4px 12px rgba(164, 145, 211, 0.2);
             }
             details.profile-actions {
                 position: relative;
@@ -261,6 +366,16 @@
                 .app-header {
                     align-items: flex-start;
                 }
+                .header-actions {
+                    width: 100%;
+                    justify-content: flex-start;
+                    order: 3;
+                }
+                .profile-controls {
+                    order: 2;
+                    align-self: flex-end;
+                    margin-top: 0.5rem;
+                }
             }
             @media (max-width: 600px) {
                 .page-shell {
@@ -272,6 +387,9 @@
                 .avatar-grid {
                     grid-template-columns: repeat(2, minmax(0, 1fr));
                 }
+                .avatar-option img {
+                    max-width: 140px;
+                }
             }
         </style>
     </head>
@@ -282,38 +400,26 @@
                     <div class="flex items-center">
                         <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
                     </div>
-                    <button id="profile-nav-toggle" class="nav-toggle" type="button" aria-label="切換選單">
-                        <span class="material-symbols-outlined">menu</span>
-                    </button>
-                    <nav id="profile-nav-links" class="main-nav">
-                        <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span> 首頁</a>
-                        <a href="{{ url_for('featured_cats') }}"><span class="material-symbols-outlined">pets</span> 探索我們的九宮格貓咪</a>
-                    </nav>
+                    <div class="header-actions">
+                        <button id="profile-nav-toggle" class="nav-toggle" type="button" aria-label="切換選單">
+                            <span class="material-symbols-outlined">menu</span>
+                        </button>
+                        <nav id="profile-nav-links" class="main-nav">
+                            <a href="{{ url_for('home') }}"><span class="material-symbols-outlined">home</span> 首頁</a>
+                            <a href="{{ url_for('featured_cats') }}"><span class="material-symbols-outlined">pets</span> 九宮格貓咪</a>
+                        </nav>
+                    </div>
                     <div class="profile-controls">
-                        <details class="profile-actions">
-                            <summary class="profile-trigger">
-                                {% if is_logged_in %}
-                                <img src="{{ url_for('static', filename=user_avatar) }}" alt="目前頭像" />
-                                {% else %}
-                                <span class="guest-avatar" aria-hidden="true">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-                                        <circle cx="12" cy="8" r="4"></circle>
-                                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
-                                    </svg>
-                                </span>
-                                {% endif %}
-                            </summary>
-                            <div id="profile-menu" class="absolute right-0 mt-2 w-44 rounded shadow-sm py-1 z-10 border border-gray-100 warm-surface warm-menu bg-white profile-menu-links">
-                                {% if is_logged_in %}
-                                <a href="{{ url_for('profile') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">我的檔案</a>
-                                <div class="border-t border-gray-100 my-1"></div>
-                                <a href="{{ url_for('delete_account') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link text-red-600">刪除帳號</a>
-                                <a href="{{ url_for('logout') }}" class="px-4 py-2 text-sm transition-colors	duration-200 warm-menu-link">登出</a>
-                                {% else %}
-                                <a href="{{ url_for('login') }}" class="px-4 py-2 text-sm transition-colors duration-200 warm-menu-link">登入</a>
-                                {% endif %}
-                            </div>
-                        </details>
+                        {% if is_logged_in %}
+                        <img src="{{ url_for('static', filename=user_avatar) }}" alt="目前頭像" class="simple-profile-avatar" />
+                        {% else %}
+                        <span class="guest-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+                                <circle cx="12" cy="8" r="4"></circle>
+                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+                            </svg>
+                        </span>
+                        {% endif %}
                     </div>
                 </header>
 
@@ -326,13 +432,15 @@
                                     {% for option in avatar_options %}
                                     <label class="avatar-option {{ 'selected' if option == current_avatar else '' }}">
                                         <input type="radio" name="avatar" value="{{ option }}" {% if option == current_avatar %}checked{% endif %} />
-                                        <img src="{{ url_for('static', filename=option) }}" alt="頭像選項 {{ loop.index }}" />
+                                        <span class="checkmark">&#10003;</span>
+                                        <img src="{{ url_for('static', filename=option) }}" alt="目前頭像 {{ loop.index }}" />
                                     </label>
                                     {% endfor %}
                                 </div>
                                 <div class="avatar-actions">
                                     <button type="submit" class="btn-primary">更換大頭貼</button>
                                 </div>
+                                <hr class="section-divider" />
                             </form>
 
                         <div class="profile-card">
@@ -347,15 +455,30 @@
                                 {% endif %}
                             </div>
 
+                            <div class="progress-visual">
+                                <div class="progress-track">
+                                    <div class="progress-fill" style="width: {{ progress_segment_percent|round(2) }}%;"></div>
+                                </div>
+                                <div class="progress-labels">
+                                    <span>{{ progress_segment_start_label }} {{ progress_segment_start_points }} 點</span>
+                                    <span>{{ progress_segment_end_label }} {{ progress_segment_end_points }} 點</span>
+                                </div>
+                            </div>
+
                             
                             <div class="section-title">徽章一覽</div>
                             <div class="badge-grid">
                                 {% for badge in reward_badges %}
-                                <div class="badge-card {{ '' if badge.unlocked else 'locked' }}">
+                                <div class="badge-card {{ 'unlocked' if badge.unlocked else 'locked' }} {% if next_badge and badge.points == next_badge.points %}next-target{% endif %}">
+                                    {% if not badge.unlocked %}
+                                    <span class="lock-icon">
+                                        <span class="material-symbols-outlined" style="font-size: 18px;">lock</span>
+                                    </span>
+                                    {% endif %}
                                     <img src="{{ url_for('static', filename=badge.image) }}" alt="{{ badge.name }}" />
                                     <h4>{{ badge.name }}</h4>
                                     <p>達到 {{ badge.points }} 點</p>
-                                    <p class="text-sm text-gray-500 mt-2">{{ badge.description }}</p>
+                                    <p class="text-sm text-gray-600 mt-2 font-semibold">{{ badge.description }}</p>
                                 </div>
                                 {% endfor %}
                             </div>
