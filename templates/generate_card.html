@@ -654,7 +654,7 @@
 <body>
     {% set c = card or {} %}
     {% set default_image = 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg' %}
-    {% set card_url = c.get('cat_image_source') or card_image_url or c.get('image_url') or default_image %} <!-- 🟡 0929修改：優先使用資料庫圖卡來源 -->
+    {% set card_url = c.get('cat_image_source') or c.get('image_url') or card_image_url or default_image %} <!-- 🟡 優先使用原始貓咪圖片，無檔時才退回圖卡 -->
     {% set proxy_card_url = card_url and url_for('proxy_image') ~ '?url=' ~ (card_url | urlencode) %}
     {% set palette = c.get('palette') or ['#F6E4D3', '#E2D1C3', '#D5B79A', '#3F2B1E'] %}
     {% set gradient = 'linear-gradient(135deg, ' ~ palette[0] ~ ', ' ~ palette[1] ~ ', ' ~ palette[2] ~ ')' %}

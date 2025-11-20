@@ -335,7 +335,11 @@ def _safe_url(url: str | None) -> str | None:
     except ValueError:
         return None
 
+    path = parsed.path or ""
     if parsed.scheme not in {"http", "https"}:
+        # allow internal static assets (e.g., "/static/...") even without scheme/netloc
+        if parsed.scheme == "" and parsed.netloc == "" and path.startswith("/static/"):
+            return path
         return None
 
     host = parsed.hostname
@@ -343,6 +347,8 @@ def _safe_url(url: str | None) -> str | None:
         return None
 
     if host.lower() in _DISALLOWED_HOSTS:
+        if path.startswith("/static/"):
+            return path
         return None
 
     if not _is_public_host(host):
@@ -2376,6 +2382,7 @@ def generate_card():
         card_image_url = url_for("static", filename=f"cat_cards/{image_filename}")
         card_payload["image_url"] = card_image_url
         card_payload["cat_image_source"] = cat_source
+        logging.debug("cat image source selected: %s", cat_source)
         card_payload.setdefault("warnings", warnings)
 
         try:
