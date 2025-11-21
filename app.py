@@ -205,10 +205,12 @@ def _authenticate_with_password(email: str, password: str) -> str:
     firebase_uid = data.get("localId")
     if not firebase_uid:
         logging.error(
-            "Firebase auth response missing localId; keys=%s",
+            "Firebase auth response missing localId for email %s; keys=%s",
+            _mask_email(email),
             list(data.keys()) if isinstance(data, dict) else type(data).__name__,
         )
         raise RuntimeError("AUTH_RESPONSE_INVALID")
+    logging.debug("Firebase auth succeeded for email=%s", _mask_email(email))
     return firebase_uid
 
 
@@ -1991,11 +1993,7 @@ def login():
                 user_data["avatar"] = DEFAULT_AVATAR
                 user_ref.set({"avatar": DEFAULT_AVATAR}, merge=True)
             points, new_badges = _award_login_points(user_ref)
-            logging.debug(
-                "User login updated in Firestore for uid: %s, points=%s",
-                firebase_uid,
-                points,
-            )
+            logging.debug("User login updated in Firestore for uid: %s", _mask_uid(firebase_uid))
             session["user_id"] = firebase_uid
             session["user_email"] = email
             session["points"] = points
@@ -2009,7 +2007,7 @@ def login():
             return redirect(url_for("home"))
         except ValueError as auth_error:
             error_code = str(auth_error)
-            logging.warning(f"Login failed: {error_code}")
+            logging.warning("Login failed: %s", error_code)
             flash(_localized_login_error(error_code, email), "error")
             return render_template("login.html", is_logged_in=is_logged_in)
         except RuntimeError as auth_runtime:
