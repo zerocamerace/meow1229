@@ -199,8 +199,8 @@ def _authenticate_with_password(email: str, password: str) -> str:
 
     if resp.status_code != 200:
         error_code = ((data.get("error") or {}).get("message") or "UNKNOWN_ERROR").upper()
-        logging.warning("Firebase password auth failed: %s", error_code)
-        raise ValueError(error_code)
+        logging.warning("Firebase password auth failed with error code")
+        raise ValueError("AUTH_FAILED")
 
     firebase_uid = data.get("localId")
     if not firebase_uid:
