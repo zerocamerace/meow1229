@@ -205,9 +205,8 @@ def _authenticate_with_password(email: str, password: str) -> str:
     firebase_uid = data.get("localId")
     if not firebase_uid:
         logging.error(
-            "Firebase auth response missing localId for email %s; keys=%s",
+            "Firebase auth response missing localId for email %s",
             _mask_email(email),
-            list(data.keys()) if isinstance(data, dict) else type(data).__name__,
         )
         raise RuntimeError("AUTH_RESPONSE_INVALID")
     logging.debug("Firebase auth succeeded for email=%s", _mask_email(email))
@@ -1962,7 +1961,6 @@ def login():
         session.pop("_flashes", None)
 
     if request.method == "POST":
-        logging.debug("Login submission fields: %s", _form_keys(request.form))
         email = request.form.get("email")
         password = request.form.get("password")
         logging.debug("Login attempt: email=%s", _mask_email(email))
@@ -1993,7 +1991,6 @@ def login():
                 user_data["avatar"] = DEFAULT_AVATAR
                 user_ref.set({"avatar": DEFAULT_AVATAR}, merge=True)
             points, new_badges = _award_login_points(user_ref)
-            logging.debug("User login updated in Firestore for uid: %s", _mask_uid(firebase_uid))
             session["user_id"] = firebase_uid
             session["user_email"] = email
             session["points"] = points
@@ -2476,7 +2473,10 @@ def report_api():
 
     data = request.get_json()
     if not data or "conversationHistory" not in data or "systemInstruction" not in data:
-        logging.error(f"Invalid request data: {data}")
+        logging.error(
+            "Invalid report request payload; keys=%s",
+            list(data.keys()) if isinstance(data, dict) else type(data).__name__,
+        )
         return jsonify({"error": "缺少必要的參數"}), 400
 
     try:
@@ -2552,21 +2552,19 @@ def report_api():
             logging.debug(f"Successfully parsed report JSON: {parsed_json}")
             return jsonify(parsed_json)
         except Exception as exc:
-            logging.exception("0929修改03：report_api JSON/schema failed: %s", exc)
+            logging.exception("0929修改03：report_api JSON/schema failed")
             return (
                 jsonify(
                     {
                         "error": "LLM returned invalid JSON",
-                        "detail": str(exc),
-                        "raw": summary_text[:500],
                     }
                 ),
                 502,
             )
 
-    except Exception as e:
-        logging.error(f"Unexpected error in report_api: {str(e)}, data: {data}")
-        return jsonify({"error": f"伺服器錯誤：{str(e)}"}), 500
+    except Exception:
+        logging.exception("Unexpected error in report_api for user %s", _mask_uid(session.get("user_id")))
+        return jsonify({"error": "伺服器暫時忙碌，請稍後再試"}), 500
 
 
 # 儲存心理測驗分數
@@ -2838,4 +2836,3 @@ if __name__ == "__main__":
     debug_enabled = str(os.getenv("FLASK_DEBUG", "0")).lower() in {"1", "true", "yes", "on"}
     port = int(os.getenv("FLASK_PORT", "5001"))
     app.run(debug=debug_enabled, port=port)
-
