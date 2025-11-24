@@ -664,8 +664,14 @@
     {% set speech_display = speech_clean if speech_clean else speech_raw %}
     <div class="container">
         <header class="header">
-            <div class="logo">
-                <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+            <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
+                <a href="{{ url_for('home') }}" class="flex items-center">
+                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                </a>
+                <span
+                    style="display: block; width: 100%; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap;"
+                    >AI陪你讀懂身心</span
+                >
             </div>
             <nav class="nav">
                 <!-- 🟢 修改：首頁按鈕導向首頁路由 -->

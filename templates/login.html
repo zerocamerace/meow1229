@@ -272,8 +272,15 @@
         <div id="webcrumbs">
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
-                    <div class="flex items-center">
-                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                    <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
+                        <a href="{{ url_for('home') }}" class="flex items-center">
+                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                        </a>
+                        <span
+                            class="text-gray-600 font-medium text-center"
+                            style="display: block; width: 100%; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap;"
+                            >AI陪你讀懂身心</span
+                        >
                     </div>
                     <nav class="hidden md:flex space-x-6">
                         <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">

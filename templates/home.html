@@ -205,6 +205,81 @@
             .limit-modal-action:hover {
                 background: linear-gradient(135deg, #ebcdb7 0%, #dfb49a 100%);
             }
+            .browser-reminder-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(44, 35, 28, 0.55);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+                z-index: 10000;
+                transition: opacity 0.25s ease;
+            }
+            .browser-reminder-backdrop.browser-reminder-leave {
+                opacity: 0;
+                pointer-events: none;
+            }
+            .browser-reminder-card {
+                width: min(420px, 90vw);
+                background: linear-gradient(160deg, #fffdfb 0%, #ffe7d5 100%);
+                border-radius: 24px;
+                padding: 44px 32px 32px;
+                text-align: center;
+                position: relative;
+                box-shadow: 0 18px 40px rgba(47, 33, 23, 0.25);
+                border: 1px solid rgba(255, 184, 133, 0.5);
+            }
+            .browser-reminder-text {
+                margin: 0 0 20px;
+                color: #4a3426;
+                line-height: 1.7;
+                font-size: 18px;
+                text-align: center;
+                text-wrap: pretty;
+                word-break: break-word;
+            }
+            .browser-reminder-text p {
+                margin: 0;
+            }
+            .browser-reminder-text p + p {
+                margin-top: 10px;
+            }
+            .browser-reminder-close {
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 36px;
+                height: 36px;
+                border-radius: 9999px;
+                border: none;
+                background: rgba(255, 255, 255, 0.8);
+                color: #a26a3f;
+                font-size: 20px;
+                cursor: pointer;
+                box-shadow: 0 6px 18px rgba(47, 33, 23, 0.15);
+            }
+            .browser-reminder-close:focus-visible {
+                outline: 2px solid #ffb67a;
+                outline-offset: 2px;
+            }
+            .browser-reminder-action {
+                width: 100%;
+                border: none;
+                border-radius: 9999px;
+                padding: 12px 20px;
+                font-size: 18px;
+                font-weight: 600;
+                color: #fff7f0;
+                background: linear-gradient(135deg, #ff8c3b 0%, #ffb347 100%);
+                cursor: pointer;
+                box-shadow: 0 14px 30px rgba(255, 140, 59, 0.35);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .browser-reminder-action:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 18px 34px rgba(255, 140, 59, 0.45);
+            }
             .material-symbols-outlined {
                 font-family: 'Material Symbols Outlined';
                 font-weight: normal;
@@ -452,8 +527,21 @@
         <div id="webcrumbs">
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
-                    <div class="flex items-center">
-                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                    <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
+                        <a href="{{ url_for('home') }}" class="flex items-center">
+                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
+                        </a>
+                        <span
+                            class="text-gray-600 font-medium text-center"
+                            style="
+                                display: block;
+                                width: 100%;
+                                font-size: 1rem;
+                                letter-spacing: 0.18em;
+                                white-space: nowrap;
+                            "
+                            >AI陪你讀懂身心</span
+                        >
                     </div>
                     <nav class="hidden md:flex space-x-6">
                         <a href="{{ url_for('home') }}" class="hover:text-gray-700 transition-colors duration-200 flex items-center">
@@ -486,8 +574,9 @@
                 <main class="p-6 sm:p-4">
                     <div class="flex flex-col items-center justify-center w-full max-w-4xl sm:max-w-full mx-auto px-4">
                         <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">Meow Yourself</h1>
-                        <p class="text-lg sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
-                            探索專屬於你的貓咪形象，了解你獨特的個性特質與健康狀態的趣味表達方式
+                        <p class="text-lg sm:text-lg text-gray-700 mb-8 text-center max-w-2xl sm:max-w-full">
+                            你的健康，不只是一份報告；<br />
+                            讓AI幫你看懂壓力與能量平衡！
                         </p>
                         <div class="cat-carousel w-full mb-10" data-carousel="home">
                             <div class="carousel-track">
@@ -531,24 +620,18 @@
                                 <button type="button" class="carousel-dot" aria-label="靜心貓（暹羅貓）"></button>
                             </div>
                         </div>
+                        <div class="w-full max-w-md sm:max-w-full">
+                            <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                                <span class="material-symbols-outlined mr-2">pets</span> 開啟你的專屬旅程
+                            </a>
+                        </div>
                         <!-- 🟢 修改開始：首頁免責聲明 -->
-                        <div class="w-full">
+                        <div class="w-full cta-offset">
                             <div class="bg-amber-100 warm-outline text-amber-900 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
                                 <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
                             </div>
                         </div>
                         <!-- 🟢 修改結束 -->
-                        <div class="w-full mt-6">
-                            <div class="warm-note warm-border text-gray-800 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
-                                <strong>為確保最佳瀏覽體驗</strong>，請使用 Google Chrome 或 Safari 瀏覽器開啟本網站。<br />
-                                ⚠️ 請避免透過 LINE Messenger 內建瀏覽器開啟，以免因安全限制導致下載或連結被阻擋。
-                            </div>
-                        </div>
-                        <div class="w-full max-w-md sm:max-w-full cta-offset">
-                            <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
-                                <span class="material-symbols-outlined mr-2">pets</span> 開啟你的專屬旅程
-                            </a>
-                        </div>
                     </div>
                     <div class="mobile-only mobile-cat-section px-4">
                         <div class="mobile-cat-card">
@@ -578,21 +661,21 @@
                                     <span class="material-symbols-outlined text-gray-700 text-2xl">upload_file</span>
                                 </div>
                                 <h3 class="font-medium text-lg mb-2">上傳健康檢查報告</h3>
-                                <p class="text-gray-600">安全上傳您的健康檢查報告，我們將分析關鍵數據</p>
+                                <p class="text-gray-600">AI智能判讀健檢報告，<br />給予健康分數與建議</p>
                             </div>
                             <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
                                 <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                                     <span class="material-symbols-outlined text-gray-700 text-2xl">psychology</span>
                                 </div>
-                                <h3 class="font-medium text-lg mb-2">完成心理測驗</h3>
-                                <p class="text-gray-600">回答簡短的心理測驗，幫助我們了解你的性格特質</p>
+                                <h3 class="font-medium text-lg mb-2">貓咪談心室</h3>
+                                <p class="text-gray-600">跟療癒貓咪談心吧！我們只會留下重點摘要，不會保存完整對話</p>
                             </div>
                             <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
                                 <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                                     <span class="material-symbols-outlined text-gray-700 text-2xl">pets</span>
                                 </div>
-                                <h3 class="font-medium text-lg mb-2">獲得專屬貓咪圖卡</h3>
-                                <p class="text-gray-600">獲取獨一無二的專屬貓咪圖卡，展現你的健康與個性</p>
+                                <h3 class="font-medium text-lg mb-2">AI生成你的專屬圖卡</h3>
+                                <p class="text-gray-600">推薦適合您的音樂或活動<br />以及一部您也許會喜歡的電影</p>
                             </div>
                         </div>
                     </div>
@@ -605,25 +688,31 @@
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    所有資料僅用於生成您的專屬貓咪圖卡，不會儲存或分享給第三方。
+                                    服務會將你的AI對話內容整理成主題摘要，並不會儲存完整的對話紀錄。<br />
+                                    摘要也會經過去識別化處理，確保無法被回推到特定個人。<br />
+                                    使用AI進行並保留摘要，不保存完整對話，且「去個人化」。看不出是誰說的，請放心使用。
                                 </div>
                             </details>
                             <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
                                 <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between">
-                                    心理測驗需要花多少時間？
+                                    貓咪談心室要花多久時間？
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    我們的心理測驗簡短有趣，通常只需5-10分鐘即可完成。測驗結果將幫助我們創建更符合您個性的貓咪圖卡。
+                                    目前有兩種模式，如果時間較趕可以選擇時間較短的「焦點訪談」，<br />
+                                    若是需要更進一步的聊心則可以點選「深度聊聊」，時間取決於您。<br />
+                                    若感覺聊夠了，可以按「悄悄話總結」這個按鈕來結束對話喔！
                                 </div>
                             </details>
                             <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
                                 <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between text-gray-800">
-                                    可以更改我的貓咪圖卡嗎？
+                                    什麼是專屬圖卡？
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    當然可以！您可以隨時更新健康資料或重新進行心理測驗，系統將生成新的貓咪圖卡。您還可以保存多個不同版本的圖卡。
+                                    我們根據您的情緒與需求，推薦適合您的活動或音樂，<br />
+                                    並串接自建的電影知識庫進行RAG推薦，挑選一部你也許會喜歡的電影。<br />
+                                    您可以下載這張圖卡，跟朋友分享。
                                 </div>
                             </details>
                         </div>
@@ -640,6 +729,16 @@
                     </div>
                     <p class="text-sm text-gray-600 mt-6">© 2025 Meow Yourself. All rights reserved.</p>
                 </footer>
+            </div>
+        </div>
+        <div class="browser-reminder-backdrop" id="browser-reminder-modal" role="dialog" aria-modal="true" aria-label="瀏覽器使用提醒">
+            <div class="browser-reminder-card">
+                <button type="button" class="browser-reminder-close" aria-label="關閉提醒" data-browser-reminder-dismiss>×</button>
+                <div class="browser-reminder-text">
+                    <p>建議您使用 Chrome 或 Safari 瀏覽器，以獲得最流暢的體驗。</p>
+                    <p>若透過 LINE 或 Messenger 內建瀏覽器開啟，可能導致頁面跳轉失敗或內容顯示不完整。</p>
+                </div>
+                <button type="button" class="browser-reminder-action" data-browser-reminder-dismiss>好的，我了解囉！</button>
             </div>
         </div>
         {% if show_card_limit_modal and card_limit_modal_text %}
@@ -677,6 +776,30 @@
             })();
         </script>
         {% endif %}
+        <script>
+            (function () {
+                const modal = document.getElementById('browser-reminder-modal');
+                if (!modal) {
+                    return;
+                }
+                const closeModal = () => {
+                    modal.classList.add('browser-reminder-leave');
+                    setTimeout(() => {
+                        if (modal && modal.parentNode) {
+                            modal.parentNode.removeChild(modal);
+                        }
+                    }, 220);
+                };
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        closeModal();
+                    }
+                });
+                modal.querySelectorAll('[data-browser-reminder-dismiss]').forEach((btn) => {
+                    btn.addEventListener('click', closeModal);
+                });
+            })();
+        </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const carousel = document.querySelector('[data-carousel="home"]');

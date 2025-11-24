@@ -368,9 +368,16 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <a href="/" class="logo">
-                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
-                </a>
+                <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
+                    <a href="{{ url_for('home') }}" class="flex items-center">
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                    </a>
+                    <span
+                        class="text-gray-600 font-medium text-center"
+                        style="display: block; width: 100%; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap; color: #4b5563; font-weight: 600; text-align: center;"
+                        >AI陪你讀懂身心</span
+                    >
+                </div>
                 <nav class="nav">
                     <a href="/" class="nav-item">
                         <span class="material-symbols-outlined">home</span> 首頁
