@@ -29,6 +29,8 @@ import numpy as np
 from pathlib import Path  # ?? 0929修改：設定圖卡輸出路徑
 from io import BytesIO  # ?? 0929修改：處理圖片位元組資料
 from urllib.parse import urlparse  # ?? 0929修改：驗證圖片網址安全性
+import math
+import random 
 
 try:
     from sentence_transformers import SentenceTransformer
@@ -426,9 +428,11 @@ def _semantic_movie_recommendations(
         _rebuild_movie_embedding_index()
     if not MOVIE_EMBEDDING_INDEX:
         return []
+
     embedder = _get_sentence_embedder()
     if not embedder:
         return []
+
     psychology = psychology or {}
     components = []
     summary = psychology.get("summary") or psychology.get("description") or ""
@@ -440,19 +444,24 @@ def _semantic_movie_recommendations(
     scenario_tags = DEFAULT_SCENARIOS.get(style_key) or STYLE_HINT_TAGS.get(style_key) or []
     if scenario_tags:
         components.append("希望獲得：" + "、".join(scenario_tags))
+
     if not components:
         return []
+
     query_text = " ".join(components)
     try:
         query_vec = embedder.encode([query_text], normalize_embeddings=True)[0]
     except Exception as exc:
         logging.error("Failed to encode movie query embedding: %s", exc)
         return []
+
     scored = []
     for vec, movie in MOVIE_EMBEDDING_INDEX:
         score = float(np.dot(query_vec, vec))
         scored.append((score, movie))
+
     scored.sort(key=lambda item: item[0], reverse=True)
+
     if scored:
         logging.debug(
             "Semantic movie RAG top candidates: %s",
@@ -461,24 +470,29 @@ def _semantic_movie_recommendations(
                 for score, movie in scored[:5]
             ],
         )
-    selected = [
-        {"title": movie["title"], "reason": movie.get("reason", "")}
-        for score, movie in scored[:top_n]
-        if score > 0 and movie
-    ]
-    if selected:
-        logging.debug(
-            "Semantic movie RAG selected for style=%s: %s",
-            style_key,
-            [movie["title"] for movie in selected],
-        )
+
+    if not scored:
+        return []
+
+    # Softmax 權重抽選
+    top_candidates = scored[:top_n]
+    scores = [s for s, _ in top_candidates]
+    exp_scores = [math.exp(s) for s in scores]
+    total = sum(exp_scores)
+    weights = [e / total for e in exp_scores]
+    logging.debug(f"Semantic top {top_n} weights: {weights}")
+
+    selected_item = random.choices(top_candidates, weights=weights, k=1)[0]
+    selected = [{"title": selected_item[1]["title"], "reason": selected_item[1].get("reason", "")}]
+    logging.debug(f"Semantic weighted selection: {selected_item[1]['title']}")
+
     return selected
 
 
 def _rag_movie_recommendations(
     psychology: dict | None, style_key: str, top_n: int = 2
 ) -> list[dict[str, str]]:
-    semantic = _semantic_movie_recommendations(psychology, style_key, top_n)
+    semantic = _semantic_movie_recommendations(psychology, style_key, top_n=5)
     if semantic:
         return semantic
     return _keyword_movie_recommendations(psychology, style_key, top_n)
@@ -574,21 +588,36 @@ def _keyword_movie_recommendations(
             )
         )
     results.sort(key=lambda item: item[0], reverse=True)
+
     if results:
+        # 顯示前 5 名候選
+        top_k = 5
+        candidates = results[:top_k]
         logging.debug(
-            "Movie RAG top candidates: %s",
-            [
-                {"title": entry[1]["title"], "score": round(entry[0], 2)}
-                for entry in results[:5]
-            ],
+            "Movie RAG top 5 candidates for style=%s: %s",
+            style_key,
+            [{"title": entry[1]["title"], "score": round(entry[0], 2)} for entry in candidates],
         )
-    selected = [item[1] for item in results[:top_n]]
-    logging.debug(
-        "Movie RAG selected titles for style=%s tokens=%s: %s",
-        style_key,
-        sorted(tokens),
-        [movie["title"] for movie in selected],
-    )
+
+        # 取分數做 softmax 權重
+        scores = [item[0] for item in candidates]
+        exp_scores = [math.exp(s) for s in scores]
+        total = sum(exp_scores)
+        weights = [e / total for e in exp_scores]
+        logging.debug(f"Weights: {weights}")
+
+        # 加權抽選 1 部
+        selected_item = random.choices(candidates, weights=weights, k=1)[0]
+        selected = [selected_item[1]]  # 保持原本回傳格式 list 包 movie_dict
+
+        logging.debug(
+            "Movie RAG weighted selection for style=%s: %s",
+            style_key,
+            selected_item[1]["title"],
+        )
+    else:
+        selected = []
+
     return selected
 
 
@@ -1129,7 +1158,7 @@ def _normalize_recommendations(
     payload = ai_payload or {}
     raw_recs = payload.get("recommendations") or {}
     fallback_map = _fallback_recommendations(style_key)
-    movie_candidates = _rag_movie_recommendations(psychology, style_key, top_n=2)
+    movie_candidates = _rag_movie_recommendations(psychology, style_key, top_n=5)
     normalized = []
     for key in ("movie", "music", "activity"):
         label = RECOMMENDATION_LABELS[key]
