@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-K2VQTGFM');</script>
+        
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Upload Health Report - Meow Yourself</title>
@@ -47,15 +55,15 @@
                 background-color: rgba(210, 171, 148, 0.9);
                 border: none;
                 box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
-                width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
-                min-width: 88px; /* 預留基本寬度以避免字太擠 */
-                border-radius: 9999px; /* 改成橢圓 pill 造型 */
-                padding: 4px 12px; /* 收緊上下左右空間 */
+                width: auto !important; 
+                min-width: 88px;
+                border-radius: 9999px;
+                padding: 4px 12px;
             }
             #webcrumbs .warm-menu-link {
                 color: #4d3528;
-                text-align: center; /* 讓文字置中與膠囊對齊 */
-                padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+                text-align: center; 
+                padding: 4px 0 !important;
                 font-weight: 600;
             }
             #webcrumbs .warm-menu-link:hover {
@@ -225,7 +233,6 @@
                 text-decoration: none;
             }
             
-            /* 自定義上傳按鈕樣式 */
             .upload-section {
                 border: 2px dashed #d1d5db;
                 border-radius: 12px;
@@ -244,7 +251,6 @@
                 background-color: #f3f4f6;
             }
 
-            /* GALING 避免傳非健檢報告 10/5 */
             .invalid-report-card {
                 background-color: #fff7ed;
                 border: 1px solid #fdba74;
@@ -254,13 +260,13 @@
                 box-shadow: 0 8px 16px rgba(253, 186, 116, 0.15);
                 text-align: center;
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .invalid-report-message {
                 font-size: 1.15rem;
                 font-weight: 600;
                 color: #a16207;
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .invalid-report-actions {
                 display: flex;
                 justify-content: center;
@@ -268,7 +274,7 @@
                 margin-top: 18px;
                 flex-wrap: wrap;
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .btn-invalid-primary, .btn-invalid-secondary {
                 padding: 10px 18px;
                 border-radius: 999px;
@@ -280,23 +286,23 @@
                 justify-content: center;
                 text-decoration: none;
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .btn-invalid-primary {
                 background: linear-gradient(90deg, #4b5563, #1f2937);
                 color: #ffffff;
                 box-shadow: 0 4px 10px rgba(31, 41, 55, 0.2);
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .btn-invalid-primary:hover {
                 background: linear-gradient(90deg, #1f2937, #111827);
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .btn-invalid-secondary {
                 background-color: #fff;
                 color: #374151;
                 border: 1px solid #d1d5db;
             }
-            /* GALING 避免傳非健檢報告 10/5 */
+
             .btn-invalid-secondary:hover {
                 border-color: #9ca3af;
                 color: #1f2937;
@@ -490,12 +496,17 @@
         <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
     </head>
     <body>
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2VQTGFM"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+
         <div id="webcrumbs">
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                         <a href="{{ url_for('home') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
                         </a>
                         <span
                             class="text-gray-600 font-medium text-center"
@@ -539,7 +550,7 @@
                             請上傳您的健康報告（PDF 或 JPG/PNG 格式，最大 10MB）
                         </p>
                         
-                        <!-- 上傳頁免責聲明 -->
+                        
                         <div class="w-full max-w-4xl sm:max-w-full mb-6">
                             <div class="bg-amber-100 warm-border text-amber-900 rounded-xl px-5 py-3 text-sm text-center leading-relaxed">
                                 <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
@@ -564,7 +575,7 @@
                         </script>
                         {% endif %}
                         {% if force_reupload %}
-                        <!-- 提醒使用者正在重新上傳 -->
+                        
                         <div class="w-full max-w-3xl sm:max-w-full mb-6">
                             <div class="bg-white/80 border border-gray-200 text-gray-700 rounded-xl px-5 py-3 text-sm text-center">
                                 您選擇重新上傳健檢報告，提交後將覆蓋最新紀錄。
@@ -582,7 +593,7 @@
                             {% endif %}
                         {% endfor %}
                         {% if invalid_report_prompt %}
-                        <!-- GALING 避免傳非健檢報告 10/5 -->
+                        
                         <div class="invalid-report-card" role="alert">
                             <p class="invalid-report-message">{{ msg_ns.invalid_message or 'Sorry喵，系統未讀取到健檢報告相關數據' }}</p>
                             <div class="invalid-report-actions">
@@ -602,7 +613,7 @@
                                 <div>
                                     <label class="block text-sm font-medium mb-2 text-center">選擇檔案或拍照上傳</label>
                                     
-                                    <!-- 上傳區域 -->
+                                    
                                     <div class="upload-section" onclick="triggerFileInput()">
                                         <div class="mb-4">
                                             <span class="material-symbols-outlined text-gray-400" style="font-size: 48px;">upload_file</span>
@@ -610,7 +621,7 @@
                                         <p class="text-sm text-gray-600 mb-2">點擊此處或拖曳檔案到這裡</p>
                                         <p class="text-sm text-gray-500">支援 PDF、JPG、PNG 格式，最大 10MB</p>
                                         <p class="text-sm text-gray-500 mt-1">小提醒：上傳前請先遮住您的個資（例如姓名、身分證字號、病歷號碼等），確保資訊安全💡</p>
-                                        <!-- 上傳按鈕組 -->
+                                        
                                         <div class="upload-buttons">
                                             <button type="button" class="btn-upload" onclick="event.stopPropagation(); triggerFileInput()">
                                                 <span class="material-symbols-outlined">folder_open</span>
@@ -623,13 +634,13 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- 只需要一個主要的檔案輸入 -->
+                                    
                                     <input type="file" id="health_report" name="health_report" accept="image/jpeg,image/png,application/pdf" class="file-input" onchange="showFileInfo(this)">
                                     
-                                    <!-- 拍照專用的輸入（隱藏） -->
+                                    
                                     <input type="file" id="camera_input" accept="image/jpeg,image/png" capture="camera" class="file-input" onchange="syncCameraFile(this)">
                                     
-                                    <!-- 檔案資訊顯示 -->
+                                    
                                     <div id="file-info" class="file-info">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
@@ -692,22 +703,18 @@
                 });
             }
             
-            // 觸發檔案選擇
             function triggerFileInput() {
                 document.getElementById('health_report').click();
             }
             
-            // 觸發拍照
             function triggerCameraInput() {
                 document.getElementById('camera_input').click();
             }
             
-            // 同步拍照檔案到主輸入
             function syncCameraFile(cameraInput) {
                 if (cameraInput.files && cameraInput.files[0]) {
                     const mainInput = document.getElementById('health_report');
                     
-                    // 創建 FileList 物件並賦值給主輸入
                     const dt = new DataTransfer();
                     dt.items.add(cameraInput.files[0]);
                     mainInput.files = dt.files;
@@ -716,7 +723,6 @@
                 }
             }
 
-            // 顯示檔案資訊
             function showFileInfo(input) {
                 const fileInfo = document.getElementById('file-info');
                 const fileName = document.getElementById('file-name');
@@ -730,7 +736,6 @@
                     fileSize.textContent = `${sizeInMB} MB`;
                     fileInfo.style.display = 'block';
                     
-                    // 檢查檔案大小
                     if (file.size > 10 * 1024 * 1024) {
                         fileInfo.style.backgroundColor = '#fee2e2';
                         fileName.style.color = '#dc2626';
@@ -754,7 +759,6 @@
                     loadingMessage.innerHTML = message;
                 }
                 loadingOverlay.classList.remove('hidden');
-                // 禁止背景滾動
                 document.body.style.overflow = 'hidden';
             }
 
@@ -763,11 +767,9 @@
                 document.body.style.overflow = '';
             }
 
-            // 監聽表單提交
             const uploadForm = document.getElementById('health-upload-form');
             if (uploadForm) {
                 uploadForm.addEventListener('submit', (e) => {
-                    // 檢查是否有選擇檔案
                     const fileInput = document.getElementById('health_report');
                     if (!fileInput.files || fileInput.files.length === 0) {
                         e.preventDefault();
@@ -775,7 +777,6 @@
                         return false;
                     }
                     
-                    // 檢查檔案大小
                     const file = fileInput.files[0];
                     if (file.size > 10 * 1024 * 1024) {
                         e.preventDefault();
@@ -783,12 +784,10 @@
                         return false;
                     }
                     
-                    // 顯示 loading
                     showLoading('報告上傳中，請稍候...');
                 });
             }
 
-            // 頁面載入完成後，隱藏可能殘留的 loading
             window.addEventListener('load', () => {
                 hideLoading();
             });

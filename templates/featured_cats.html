@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+        
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-K2VQTGFM');</script>
+        
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>我們的九宮格貓咪 - Meow Yourself</title>
@@ -40,15 +48,15 @@
             background-color: rgba(210, 171, 148, 0.9);
             border: none;
             box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
-            width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
-            min-width: 88px; /* 預留基本寬度以避免字太擠 */
-            border-radius: 9999px; /* 改成橢圓 pill 造型 */
-            padding: 4px 12px; /* 收緊上下左右空間 */
+            width: auto !important; 
+            min-width: 88px; 
+            border-radius: 9999px;
+            padding: 4px 12px;
         }
         .warm-menu-link {
             color: #4d3528;
-            text-align: center; /* 讓文字置中與膠囊對齊 */
-            padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+            text-align: center; 
+            padding: 4px 0 !important; 
             font-weight: 600;
         }
         .warm-menu-link:hover {
@@ -71,14 +79,14 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         
-        /* 容器樣式 */
+      
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
-        /* 頁首樣式 */
+       
         .header {
             background: linear-gradient(160deg, rgba(251, 241, 235, 0.95) 0%, rgba(230, 205, 189, 0.9) 100%);
             backdrop-filter: blur(10px);
@@ -127,7 +135,7 @@
             font-size: 20px;
         }
         
-        /* 主要內容區域 */
+       
         .main-content {
             padding: 60px 0;
         }
@@ -155,7 +163,7 @@
             line-height: 1.6;
         }
         
-        /* 貓咪卡片網格 */
+      
         .cats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -245,7 +253,7 @@
             font-size: 14px;
         }
         
-        /* 底部行動區塊 */
+       
         .bottom-cta {
             background: linear-gradient(160deg, rgba(249, 239, 233, 0.94) 0%, rgba(233, 209, 194, 0.96) 100%);
             border-radius: 16px;
@@ -286,7 +294,7 @@
             box-shadow: 0 12px 24px rgba(110, 83, 63, 0.22);
         }
         
-        /* 登入狀態提示 */
+        
         .login-hint {
             background: linear-gradient(160deg, rgba(249, 239, 233, 0.92) 0%, rgba(233, 209, 194, 0.9) 100%);
             border: 1px solid rgba(206, 181, 165, 0.6);
@@ -305,7 +313,7 @@
             color: #d8a685;
         }
 
-        /* 貓咪選擇效果 */
+      
         .cat-card.selected {
             border: 3px solid #d8a685;
             box-shadow: 0 0 0 1px rgba(216, 166, 133, 0.3);
@@ -316,7 +324,7 @@
             color: #4b3326;
         }
         
-        /* 響應式設計 */
+       
         @media (max-width: 768px) {
             .nav {
                 display: none;
@@ -365,12 +373,17 @@
     <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
 </head>
 <body>
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2VQTGFM"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                     <a href="{{ url_for('home') }}" class="flex items-center">
-                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                        <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
                     </a>
                     <span
                         class="text-gray-600 font-medium text-center"
@@ -409,8 +422,8 @@
             </div>
 
             <div class="cats-grid">
-                <!-- 貓咪 1: 暖心貓（布偶貓） -->
-                <div class="cat-card" onclick="selectCat(this, '暖心貓（布偶貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/A1.png') }}" alt="暖心貓（布偶貓）">
                         <div class="cat-badge">療癒型</div>
@@ -441,8 +454,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 2: 晴天貓（橘貓） -->
-                <div class="cat-card" onclick="selectCat(this, '晴天貓（橘貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/A2.png') }}" alt="晴天貓（橘貓）">
                         <div class="cat-badge">樂觀型</div>
@@ -473,8 +486,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 3: 活力貓（俄羅斯藍貓） -->
-                <div class="cat-card" onclick="selectCat(this, '活力貓（俄羅斯藍貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/A3.png') }}" alt="活力貓（俄羅斯藍貓）">
                         <div class="cat-badge">健康型</div>
@@ -505,8 +518,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 4: 恬靜貓（波斯貓） -->
-                <div class="cat-card" onclick="selectCat(this, '恬靜貓（波斯貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/B1.png') }}" alt="恬靜貓（波斯貓）">
                         <div class="cat-badge">恬靜型</div>
@@ -537,8 +550,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 5: 日常貓（三花貓） -->
-                <div class="cat-card" onclick="selectCat(this, '日常貓（三花貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/B2.png') }}" alt="日常貓（三花貓）">
                         <div class="cat-badge">平衡型</div>
@@ -569,8 +582,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 6: 外強內柔貓（英短銀漸層） -->
-                <div class="cat-card" onclick="selectCat(this, '外強內柔貓（英短銀漸層）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/B3.png') }}" alt="外強內柔貓（英短銀漸層）">
                         <div class="cat-badge">溫柔型</div>
@@ -601,8 +614,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 7: 暖伴貓（摺耳貓） -->
-                <div class="cat-card" onclick="selectCat(this, '暖伴貓（摺耳貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/C1.png') }}" alt="暖伴貓（摺耳貓）">
                         <div class="cat-badge">陪伴型</div>
@@ -633,8 +646,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 8: 深思貓（黑貓） -->
-                <div class="cat-card" onclick="selectCat(this, '深思貓（黑貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/C2.png') }}" alt="深思貓（黑貓）">
                         <div class="cat-badge">洞察型</div>
@@ -665,8 +678,8 @@
                     </div>
                 </div>
 
-                <!-- 貓咪 9: 靜心貓（暹羅貓） -->
-                <div class="cat-card" onclick="selectCat(this, '靜心貓（暹羅貓）')">
+                
+                <div class="cat-card">
                     <div class="cat-image">
                         <img src="{{ url_for('static', filename='cat_cards/images/cats/C3.png') }}" alt="靜心貓（暹羅貓）">
                         <div class="cat-badge">專注型</div>
@@ -699,7 +712,7 @@
             </div>
             </div>
 
-            <!-- 底部行動呼籲 -->
+            
             <div class="bottom-cta">
                 <h2 class="cta-title">找到你的專屬貓咪夥伴</h2>
                 <p class="cta-description">
@@ -724,143 +737,32 @@
         </div>
     </main>
 
-    <script>
-        let selectedCat = null;
-        
-        function selectCat(element, catName) {
-            // 移除之前選中的狀態
-            const previousSelected = document.querySelector('.cat-card.selected');
-            if (previousSelected) {
-                previousSelected.classList.remove('selected');
-            }
-            
-            // 添加選中狀態
-            element.classList.add('selected');
-            selectedCat = catName;
-            
-            // 顯示選擇提示
-            const message = `您選擇了：${catName}\n\n這隻貓咪的特質將會在生成您的個人化圖卡時參考！`;
-            
-            // 創建自定義提示框
-            showCustomAlert(message, catName);
-        }
-        
-        function showCustomAlert(message, catName) {
-            // 創建提示框
-            const alertDiv = document.createElement('div');
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: linear-gradient(160deg, #f9efe8 0%, #efd6c6 100%);
-                border-radius: 16px;
-                box-shadow: 0 20px 40px rgba(110, 83, 63, 0.22);
-                padding: 30px;
-                z-index: 1000;
-                max-width: 400px;
-                width: 90%;
-                text-align: center;
-                animation: fadeInScale 0.3s ease-out;
-            `;
-            
-            alertDiv.innerHTML = `
-                <div style="color: #d8a685; font-size: 48px; margin-bottom: 16px;">🐱</div>
-                <h3 style="color: #5b4032; font-size: 20px; font-weight: 700; margin-bottom: 12px;">
-                    已選擇：${catName}
-                </h3>
-                <p style="color: #7b5c4a; line-height: 1.6; margin-bottom: 20px;">
-                    這隻貓咪的特質將會在生成您的個人化圖卡時參考！
-                </p>
-                <button onclick="closeAlert()" style="
-                    background: linear-gradient(135deg, #f4d9c5, #e1b89d);
-                    color: #5b4032;
-                    border: none;
-                    padding: 12px 24px;
-                    border-radius: 25px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                ">
-                    知道了
-                </button>
-            `;
-            
-            // 創建背景遮罩
-            const overlay = document.createElement('div');
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 999;
-                animation: fadeIn 0.3s ease-out;
-            `;
-            
-            // 添加動畫樣式
-            if (!document.querySelector('#custom-alert-styles')) {
-                const style = document.createElement('style');
-                style.id = 'custom-alert-styles';
-                style.textContent = `
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-                    @keyframes fadeInScale {
-                        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-                        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            
-            document.body.appendChild(overlay);
-            document.body.appendChild(alertDiv);
-            
-            // 點擊遮罩關閉
-            overlay.onclick = closeAlert;
-            
-            // 保存引用以便關閉
-            window.currentAlert = { alertDiv, overlay };
-        }
-        
-        function closeAlert() {
-            if (window.currentAlert) {
-                document.body.removeChild(window.currentAlert.overlay);
-                document.body.removeChild(window.currentAlert.alertDiv);
-                window.currentAlert = null;
-            }
-        }
-        
-        // 添加卡片動畫效果
+        <script>
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.cat-card');
-            
-            // 為卡片添加進入動畫
+
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(30px)';
                 card.style.transition = 'all 0.6s ease';
-                
+
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
                 }, index * 100);
             });
         });
-        
-        // 滾動時的視差效果
+
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
             const rate = scrolled * -0.5;
             const header = document.querySelector('.header');
-            
+
             if (header) {
                 header.style.transform = `translateY(${rate * 0.1}px)`;
             }
         });
     </script>
+
 </body>
 </html>

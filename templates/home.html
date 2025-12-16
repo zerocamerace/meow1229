@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-K2VQTGFM');</script>
+        
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Home - Meow Yourself</title>
@@ -41,21 +49,21 @@
                 border: 1px solid rgba(207, 179, 163, 0.75);
             }
             #webcrumbs .cta-offset {
-                margin-top: 32px; /* #1005庭婕這裡拉開提醒與按鈕的距離 */
+                margin-top: 32px; 
             }
             #webcrumbs .warm-menu {
                 background-color: rgba(210, 171, 148, 0.9);
                 border: none;
                 box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
-                width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
-                min-width: 88px; /* 預留基本寬度以避免字太擠 */
-                border-radius: 9999px; /* 改成橢圓 pill 造型 */
-                padding: 4px 12px; /* 收緊上下左右空間 */
+                width: auto !important; 
+                min-width: 88px; 
+                border-radius: 9999px; 
+                padding: 4px 12px; 
             }
             #webcrumbs .warm-menu-link {
                 color: #4d3528;
-                text-align: center; /* 讓文字置中與膠囊對齊 */
-                padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+                text-align: center; 
+                padding: 4px 0 !important; 
                 font-weight: 600;
             }
             #webcrumbs .warm-menu-link:hover {
@@ -473,7 +481,7 @@
                 margin-right: 8px;
                 font-size: 22px;
             }
-            /* 移除所有連結的底線 */
+            
             #webcrumbs a,
             #webcrumbs a:link,
             #webcrumbs a:visited,
@@ -512,6 +520,10 @@
             }
             /* Privacy modal styles */
             .privacy-link { color: #0b4da6; margin-left: 8px; text-decoration: underline; cursor: pointer; background: transparent; border: none; padding: 0; font: inherit; }
+            .footer-cookie-note {
+                margin-top: 0.5rem;
+                margin-bottom: 2rem;
+            }
             .privacy-backdrop {
                 position: fixed;
                 inset: 0;
@@ -575,7 +587,7 @@
             .team-content { width: 100%; padding-left: 6px; padding-right: 6px; min-height: 0; overflow: visible; }
             .member-link { color: #0b4da6; display: inline-block; margin: 4px 0 8px 0; text-decoration: underline; font-weight: 600; white-space: normal; word-break: break-word; overflow-wrap: anywhere; max-width: 100%; }
             .team-card img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%;
-                /* Keep pixel-art crisp instead of smoothing */
+               
                 image-rendering: pixelated;
                 image-rendering: crisp-edges;
                 image-rendering: -moz-crisp-edges;
@@ -610,10 +622,10 @@
                 border-radius: 4px;
             }
 
-            /* Ensure grid rows grow with content */
+        
             .team-grid { grid-auto-rows: auto; }
 
-            /* Mobile: collapse long team descriptions, show toggle */
+            
             .expand-toggle { display: none; background: transparent; border: none; padding: 6px; cursor: pointer; }
             .expand-toggle svg { display: block; }
             .team-extra { display: block; }
@@ -645,13 +657,13 @@
                 }
                 .team-card.expanded .team-extra { display: block; }
             }
-            /* Make cards visually separated on desktop while remaining responsive */
+            
             @media (min-width: 768px) {
                 .team-grid { gap: 12px; }
                 .team-card { padding: 20px; }
             }
         </style>
-        <!-- GALING 10/5 新增manifest.json -->
+        
         <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
         <link rel="icon" href="https://cdn.webcrumbs.org/assets/images/landing/favicon.ico" />
         <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
@@ -662,6 +674,11 @@
         <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
     </head>
     <body>
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2VQTGFM"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+
         <div id="webcrumbs">
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
@@ -763,13 +780,13 @@
                                 <span class="material-symbols-outlined mr-2">pets</span> 開啟你的專屬旅程
                             </a>
                         </div>
-                        <!-- 🟢 修改開始：首頁免責聲明 -->
+                        
                         <div class="w-full cta-offset">
                             <div class="bg-amber-100 warm-outline text-amber-900 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
                                 <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
                             </div>
                         </div>
-                        <!-- 🟢 修改結束 -->
+                        
                     </div>
                     <div class="mobile-only mobile-cat-section px-4">
                         <div class="mobile-cat-card">
@@ -856,14 +873,14 @@
                             </details>
                         </div>
                     </div>
-                    <!-- START: 更新 Meet the Team 關於團隊 區塊內容 -->
+                    
                     <div class="mt-20 max-w-5xl sm:max-w-full mx-auto">
                         <h2 class="text-3xl font-bold mb-10 text-center text-gray-800">
                             Meet the Team <span class="text-amber-600">關於團隊</span>
                         </h2>
-                        <!-- 🎯 RWD: 桌機/平板4欄，手機2欄，卡片RWD縮小，頭像圓形 -->
+                        
                         <div class="grid team-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 px-2 sm:px-4">
-                            <!-- 成員卡片 1: Liyi | Co-Developer -->
+                            
                             <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
                                 <div class="avatar">
                                     <img src="{{ url_for('static', filename='Liyi.png') }}" alt="Liyi 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
@@ -884,7 +901,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- 成員卡片 2: Ashley | Product Lead & Developer -->
+                            
                             <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
                                 <div class="avatar">
                                     <img src="{{ url_for('static', filename='Ash.png') }}" alt="Ashley 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
@@ -905,7 +922,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- 成員卡片 3: Galing | Tech Lead & Developer -->
+                            
                             <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
                                 <div class="avatar">
                                     <img src="{{ url_for('static', filename='Galing.png') }}" alt="Galing 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
@@ -926,7 +943,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- 成員卡片 4: Ting | Co-Developer -->
+                            
                             <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
                                 <div class="avatar">
                                     <img src="{{ url_for('static', filename='Ting.png') }}" alt="Ting 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
@@ -949,7 +966,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- END: 更新 Meet the Team 關於團隊 區塊內容 -->
+                    
                 </main>
                 <footer class="mt-20 bg-[#E8D6C5] py-10 px-6 text-center text-gray-700">
                     <h2 class="text-2xl font-bold mb-2">與我們聯繫</h2>
@@ -961,7 +978,7 @@
                         </div>
                     </div>
                     <p class="text-xs text-gray-600 mt-6">© 2025 Meow Yourself. All rights reserved.<button id="privacy-toggle" type="button" class="privacy-link" aria-haspopup="dialog" aria-expanded="false">隱私權政策</button></p>
-                    <p class="text-xs text-gray-500 mt-2 max-w-prose mx-auto leading-snug">
+                    <p class="footer-cookie-note text-xs text-gray-500 mt-2 max-w-prose mx-auto leading-snug">
                         本網站使用Cookie分析技術，以提供您更優質的瀏覽體驗與情緒陪伴服務。繼續瀏覽即表示您同意我們的隱私權政策。
                     </p>
                 </footer>
@@ -977,7 +994,7 @@
                 <button type="button" class="browser-reminder-action" data-browser-reminder-dismiss>好的，我了解囉！</button>
             </div>
         </div>
-        <!-- Privacy modal -->
+        
         <div
             id="privacy-modal"
             class="privacy-backdrop hidden"
@@ -1177,11 +1194,11 @@
                 setActiveState(0);
                 startTimer();
             });
-            // Mobile-only: team card expand/collapse
+           
             (function () {
                 const mq = window.matchMedia && window.matchMedia('(max-width: 640px)');
                 const init = function () {
-                    if (!mq.matches) return; // only on small screens
+                    if (!mq.matches) return; 
                     document.querySelectorAll('.team-card').forEach(card => {
                         const btn = card.querySelector('.expand-toggle');
                         if (!btn) return;

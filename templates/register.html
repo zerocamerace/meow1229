@@ -2,6 +2,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-K2VQTGFM');</script>
+        
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Register - Meow Yourself</title>
@@ -26,7 +34,7 @@
             #webcrumbs .warm-surface {
                 background: linear-gradient(160deg, rgba(250, 238, 231, 0.94) 0%, rgba(233, 209, 194, 0.96) 100%);
             }
-            /* #1005庭婕這裡打造註冊主按鈕漸層與暖色調 */
+
             #webcrumbs .warm-cta-main {
                 background: linear-gradient(135deg, #f4d1bd, #e3b89d);
                 color: #543a2c;
@@ -37,7 +45,7 @@
             #webcrumbs .warm-cta-main:hover {
                 background: linear-gradient(135deg, #ebc7b1, #d5a789);
             }
-            /* #1005庭婕這裡新增回登入按鈕的棕色呼應 */
+
             #webcrumbs .warm-cta-outline {
                 background-color: #c09073;
                 border: 2px solid #a47257;
@@ -47,12 +55,12 @@
             #webcrumbs .warm-cta-outline:hover {
                 background-color: #a47257;
             }
-            /* #1005庭婕這裡加入舒適閱讀字級與行距 */
+
             #webcrumbs .comfort-text {
                 font-size: 16px;
                 line-height: 1.5;
             }
-            /* #1005庭婕這裡新增區塊分隔線與留白 */
+
             #webcrumbs .form-divider {
                 border-bottom: 1px solid rgba(206, 181, 165, 0.6);
                 margin: 24px 0;
@@ -64,15 +72,15 @@
                 background-color: rgba(210, 171, 148, 0.9);
                 border: none;
                 box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
-                width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
-                min-width: 88px; /* 預留基本寬度以避免字太擠 */
-                border-radius: 9999px; /* 改成橢圓 pill 造型 */
-                padding: 4px 12px; /* 收緊上下左右空間 */
+                width: auto !important; 
+                min-width: 88px;
+                border-radius: 9999px; 
+                padding: 4px 12px;
             }
             #webcrumbs .warm-menu-link {
                 color: #4d3528;
-                text-align: center; /* 讓文字置中與膠囊對齊 */
-                padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+                text-align: center; 
+                padding: 4px 0 !important; 
                 font-weight: 600;
             }
             #webcrumbs .warm-menu-link:hover {
@@ -225,12 +233,12 @@
             #webcrumbs .focus\:ring-1:focus { box-shadow: 0 0 0 1px rgb(156 163 175); }
             #webcrumbs .focus\:ring-gray-400:focus { --tw-ring-color: rgb(156 163 175); }
             #webcrumbs a {
-                text-decoration: none; /* 移除底線 */
+                text-decoration: none;
             }
             #webcrumbs a:hover,
             #webcrumbs a:focus,
             #webcrumbs a:active {
-                text-decoration: none; /* 移除懸停和點擊狀態的底線 */
+                text-decoration: none;
             }
             @media (max-width: 640px) {
                 #webcrumbs .sm\:p-4 { padding: 16px; }
@@ -260,12 +268,17 @@
         <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
     </head>
     <body>
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2VQTGFM"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+
         <div id="webcrumbs">
             <div class="max-w-[1200px] w-full font-sans mx-auto warm-shell">
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                         <a href="{{ url_for('home') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
                         </a>
                         <span
                             class="text-gray-600 font-medium text-center"
@@ -315,7 +328,7 @@
                             {% for category, message in get_flashed_messages(with_categories=true) %}
                             <p class="text-sm {% if category == 'error' %}text-red-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
                             {% endfor %}
-                            <!-- #1005庭婕這裡提升註冊表單字級與間距 -->
+                            
                             <form method="POST" action="{{ url_for('register') }}" class="space-y-4 comfort-text">
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">電子郵件</label>

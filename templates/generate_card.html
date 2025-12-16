@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-K2VQTGFM');</script>
+        
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generate Card - Meow Yourself</title>
@@ -43,19 +51,19 @@
             background-color: rgba(210, 171, 148, 0.9);
             border: none;
             box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
-            width: auto !important; /* 讓選單依內容縮小，覆蓋原本 w-40 設定 */
-            min-width: 88px; /* 預留基本寬度以避免字太擠 */
-            border-radius: 9999px; /* 改成橢圓 pill 造型 */
-            padding: 4px 12px; /* 收緊上下左右空間 */
+            width: auto !important;
+            min-width: 88px;
+            border-radius: 9999px; 
+            padding: 4px 12px;
         }
         .warm-menu-link {
             color: #4d3528;
-            text-align: center; /* 讓文字置中與膠囊對齊 */
-            padding: 4px 0 !important; /* 讓文字與底色距離更靠近，覆蓋 px-4/py-2 */
+            text-align: center;
+            padding: 4px 0 !important; 
             font-weight: 600;
         }
         .warm-menu-link:hover {
-            background-color: transparent; /* 保持原色，移除滑過時的深色底 */
+            background-color: transparent;
             color: #3a271c;
         }
         img {
@@ -77,7 +85,7 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         
-        /* 基礎樣式 */
+        
         .container {
             max-width: min(1200px, 100%);
             width: 100%;
@@ -130,7 +138,7 @@
             font-size: 20px;
         }
         
-        /* 主要內容區域 */
+        
         .main-content {
             padding: clamp(24px, 5vw, 40px) clamp(16px, 5vw, 32px);
             text-align: center;
@@ -156,14 +164,14 @@
             line-height: 1.6;
         }
         
-        /* 貓咪卡片設計 */
+        
         .cat-card {
-            background: linear-gradient(135deg, #F6E4D3, #E2D1C3, #D5B79A); /* default fallback */
+            background: linear-gradient(135deg, #F6E4D3, #E2D1C3, #D5B79A);
             border-radius: 24px;
             padding: clamp(24px, 5vw, 32px);
             margin: 0 auto 40px;
-            max-width: min(562px, 100%); /* 🟡 1007 修改8：再放大卡片寬度約 120% */
-            min-height: 560px; /* GALING 修復iphone跑版 10/8 */
+            max-width: min(562px, 100%); 
+            min-height: 560px; 
             position: relative;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             transform: perspective(1000px) rotateY(0deg);
@@ -205,7 +213,7 @@
         }
         
         .cat-image {
-            width: clamp(200px, 50vw, 250px); /* 🟡 1007 修改5：放大貓咪肖像 */
+            width: clamp(200px, 50vw, 250px); 
             height: clamp(200px, 50vw, 250px);
             border-radius: 50%;
             object-fit: cover;
@@ -219,18 +227,18 @@
             position: absolute;
             top: -10px;
             right: 20px;
-            background: #EFE0D2; /* #1005庭婕這裡把對話泡泡換暖黃色 */
+            background: #EFE0D2; 
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 14px;
             color: #3F2B1E;
             box-shadow: 0 4px 12px rgba(63, 43, 30, 0.15);
-            white-space: normal; /* GALING 修復iphone跑版 10/8 */
-            max-width: calc(100% - 36px); /* GALING 修復iphone跑版 10/8 */
-            word-break: break-word; /* GALING 修復iphone跑版 10/8 */
-            line-height: 1.4; /* GALING 修復iphone跑版 10/8 */
-            overflow: visible; /* GALING 修復iphone跑版 10/8 */
-            text-overflow: unset; /* GALING 修復iphone跑版 10/8 */
+            white-space: normal; 
+            max-width: calc(100% - 36px); 
+            word-break: break-word; 
+            line-height: 1.4; 
+            overflow: visible; 
+            text-overflow: unset; 
         }
         
         .cat-speech-bubble::after {
@@ -242,35 +250,35 @@
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 6px solid #EFE0D2; /* #1005庭婕這裡同步對話泡泡箭頭顏色 */
+            border-top: 6px solid #EFE0D2; 
         }
         
         .cat-name {
-            font-size: 28px; /* 🟡 1007 修改7：放大主要標題字體 */
+            font-size: 28px; 
             font-weight: 700;
             color: #2d3436;
             margin-bottom: 8px;
         }
         
         .cat-description {
-            font-size: 17px; /* 🟡 1007 修改7：放大內文 */
+            font-size: 17px; 
             color: #636e72;
             line-height: 1.5;
             margin-bottom: 20px;
-            text-align: justify; /* 🟡 1007 修改圖卡：更平衡的排版 */
+            text-align: justify; 
             text-justify: inter-ideograph;
             hyphens: auto;
         }
         
-        /* 🟡 1007 修改『圖卡生成推薦』：推薦清單樣式 */
+        
         .curation-list {
             margin-top: 20px;
-            background: rgba(226, 209, 195, 0.45); /* 🟡 1007 修改5：統一推薦底色層 */
+            background: rgba(226, 209, 195, 0.45); 
             border-radius: 16px;
             padding: 18px 16px;
             display: grid;
             gap: 14px;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 🟡 1007 修改圖卡：左右排版 */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
 
         .curation-item {
@@ -279,7 +287,7 @@
             gap: 6px;
             border-radius: 12px;
             padding: 12px;
-            border: 1px solid rgba(71, 109, 255, 0.28); /* 🟡 1007 修改5：以單一色系框線區隔 */
+            border: 1px solid rgba(71, 109, 255, 0.28);
             background: rgba(255, 255, 255, 0.72);
         }
 
@@ -291,13 +299,13 @@
         }
 
         .curation-title {
-            font-size: 19px; /* 🟡 1007 修改7：放大推薦標題 */
+            font-size: 19px;
             font-weight: 700;
             color: #2d3436;
         }
 
         .curation-reason {
-            font-size: 15px; /* 🟡 1007 修改7：放大推薦說明 */
+            font-size: 15px;
             color: #4a4a4a;
             line-height: 1.6;
             text-align: justify;
@@ -311,7 +319,7 @@
             opacity: 0.8;
         }
         
-        /* 分享按鈕區域 */
+        
         .share-section {
             background: linear-gradient(160deg, rgba(249, 239, 233, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
             backdrop-filter: blur(10px);
@@ -377,12 +385,12 @@
             border: 1px solid rgba(205, 175, 154, 0.6);
         }
 
-        /* 🟡 0930 修改：提供可重複使用的隱藏樣式，避免刪除原始區塊 */
+        
         .hidden-section {
             display: none;
         }
         
-        /* 操作按鈕 */
+        
         .action-buttons {
             display: flex;
             gap: 16px;
@@ -494,7 +502,7 @@
             border: 1px solid rgba(205, 175, 154, 0.6);
         }
 
-        /* 通知提示樣式 */
+        
         .notification {
             position: fixed;
             top: 20px;
@@ -520,7 +528,7 @@
             transform: translateX(0);
         }
 
-        /* 連結顯示區域 */
+        
         .link-display {
             background: linear-gradient(160deg, rgba(249, 239, 233, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
             backdrop-filter: blur(10px);
@@ -546,18 +554,18 @@
             background: white;
         }
         
-        /* 響應式設計 */
+       
         @media (min-width: 600px) {
             .cat-card {
-                aspect-ratio: 9 / 14.4; /* GALING 修復iphone跑版 10/8 */
-                min-height: auto; /* GALING 修復iphone跑版 10/8 */
+                aspect-ratio: 9 / 14.4; 
+                min-height: auto; 
             }
         }
 
         @media (hover: none) {
             .cat-card,
             .cat-card:hover {
-                transform: none !important; /* GALING 修復iphone跑版 10/8 */
+                transform: none !important; 
             }
         }
 
@@ -598,12 +606,12 @@
 
         @media (max-width: 600px) {
             .cat-card {
-                padding: 24px 16px; /* GALING 修復iphone跑版 10/8 */
-                min-height: 520px; /* GALING 修復iphone跑版 10/8 */
+                padding: 24px 16px; 
+                min-height: 520px; 
             }
             .cat-image {
-                width: min(60vw, 180px); /* GALING 修復iphone跑版 10/8 */
-                height: min(60vw, 180px); /* GALING 修復iphone跑版 10/8 */
+                width: min(60vw, 180px); 
+                height: min(60vw, 180px); 
             }
         }
 
@@ -626,10 +634,10 @@
                 right: 32px;
             }
             .curation-list {
-                grid-template-columns: 1fr; /* GALING 修復iphone跑版 10/8 */
+                grid-template-columns: 1fr; 
             }
             .curation-item {
-                padding: 10px; /* GALING 修復iphone跑版 10/8 */
+                padding: 10px;
             }
             .share-section {
                 padding: 20px 16px;
@@ -653,9 +661,14 @@
     <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
 </head>
 <body>
+        
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2VQTGFM"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        
+
     {% set c = card or {} %}
     {% set default_image = 'https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?crop=entropy&cs=tinysrgb&fit=max&fm=jpg' %}
-    {% set card_url = c.get('cat_image_source') or c.get('image_url') or card_image_url or default_image %} <!-- 🟡 優先使用原始貓咪圖片，無檔時才退回圖卡 -->
+    {% set card_url = c.get('cat_image_source') or c.get('image_url') or card_image_url or default_image %} 
     {% set proxy_card_url = card_url and url_for('proxy_image') ~ '?url=' ~ (card_url | urlencode) %}
     {% set palette = c.get('palette') or ['#F6E4D3', '#E2D1C3', '#D5B79A', '#3F2B1E'] %}
     {% set gradient = 'linear-gradient(135deg, ' ~ palette[0] ~ ', ' ~ palette[1] ~ ', ' ~ palette[2] ~ ')' %}
@@ -666,7 +679,7 @@
         <header class="header">
             <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                 <a href="{{ url_for('home') }}" class="flex items-center">
-                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> <!-- #1005庭婕調整Logo大小並移除文字 -->
+                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
                 </a>
                 <span
                     style="display: block; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap; text-align: center;"
@@ -674,31 +687,29 @@
                 >
             </div>
             <nav class="nav">
-                <!-- 🟢 修改：首頁按鈕導向首頁路由 -->
+                
                 <a href="{{ url_for('home') }}" class="nav-item">
                     <span class="material-symbols-outlined">home</span> 首頁
                 </a>
-                <!--<a href="#" class="nav-item">
-                    <span class="material-symbols-outlined">pets</span> 我的貓咪
-                </a>-->
+                
             </nav>
         </header>
         
         <main class="main-content">
             <h1 class="title">你的專屬貓咪誕生了！</h1>
-            <p class="subtitle"><!-- 🟡 1006 修改：分行並更新心靈寵物文案 -->
+            <p class="subtitle">
                 根據你的健康數據與心理測驗結果，<br />AI 為你量身挑選了一隻獨一無二的心靈寵物
             </p>
             
-            <!-- 貓咪卡片 -->
+            
             <div class="cat-card" id="cat-card" style="background: {{ gradient }};">
                 <div class="cat-card-header">
                     <div class="brand-logo">MEOW Yourself</div>
-                    <div class="cat-type-badge">{{ c.persona or c.persona_label or '療癒系貓咪' }}</div> <!-- 0929修改：依照 AI 或九宮格顯示貓咪稱號 -->
+                    <div class="cat-type-badge">{{ c.persona or c.persona_label or '療癒系貓咪' }}</div> 
                 </div>
                 
                 <div class="cat-image-section">
-                    <div class="cat-speech-bubble"><!-- 🟡 1007 修改6：改為完整心情小語 -->
+                    <div class="cat-speech-bubble">
                         {{ speech_display }}
                     </div>
                     <img src="{{ card_url }}" alt="Your Cat" class="cat-image" {% if proxy_card_url %}data-proxy-src="{{ proxy_card_url }}"{% endif %} data-original-src="{{ card_url }}" />
@@ -716,9 +727,9 @@
                 </div>
                 
                 {% if c.recommendations %}
-                <div class="curation-list"><!-- 🟡 1007 修改『圖卡生成推薦』：呈現影音與活動建議 -->
+                <div class="curation-list">
                     {% for rec in c.recommendations %}
-                    <div class="curation-item"><!-- 🟡 1007 修改5：統一推薦底色 -->
+                    <div class="curation-item">
                         <div class="curation-label">{{ rec.label }}</div>
                         <div class="curation-title">{{ rec.title }}</div>
                         <div class="curation-reason">{{ rec.reason }}</div>
@@ -730,14 +741,14 @@
                 <div class="ai-signature">🤖 AI 生成專屬健康伙伴</div>
             </div>
             {% if c.cat_image_source %}
-            <!-- 🟡 0930 修改：依需求隱藏圖片來源文字於前端，保留原有資料 -->
+            
             <p class="hidden-section" style="font-size: 12px; color: rgba(255,255,255,0.75); margin-top: -12px;">
                 圖片來源：<a href="{{ c.cat_image_source }}" target="_blank" rel="noopener noreferrer nofollow" style="color:#ffeaa7;">{{ c.cat_image_source }}</a>
             </p>
             {% endif %}
             
             {% if report %}
-            <!-- 🟡 0930 修改：依需求暫時隱藏健康提醒內容於前端 -->
+            
             <div class="info-card hidden-section">
                 <h3>健康提醒</h3>
                 <ul>
@@ -752,7 +763,7 @@
                 </ul>
             </div>
 
-            <!-- 🟡 0930 修改：依需求暫時隱藏最新健檢摘要於前端 -->
+            
             <div class="info-card hidden-section">
                 <h3>最新健檢摘要</h3>
                 <p><span class="info-label">健康分數：</span>{{ report.get('health_score') if report.get('health_score') is not none else '尚未評估' }}</p>
@@ -773,7 +784,7 @@
             </div>
             {% endif %}
 
-            <!-- 🟡 1003 修改：操作按鈕移至情緒摘要上方以強化行動導向版面 -->
+            
             <div class="action-buttons">
                 <button class="btn btn-secondary" onclick="downloadCard(event)">
                     <span class="material-symbols-outlined">download</span>
@@ -798,21 +809,21 @@
                 <p><span class="info-label">摘要：</span>{{ psychology.get('summary') }}</p>
                 {% endif %}
                 {% if psychology.get('keywords') %}
-                <!-- 🟡 0930 修改：保留資料但隱藏情緒測驗關鍵字於前端 -->
+                
                 <p class="hidden-section"><span class="info-label">關鍵字：</span>{{ psychology.get('keywords') | join('、') }}</p>
                 {% endif %}
             </div>
             {% endif %}
 
-            <!-- 🟡 0929修改：生成頁免責聲明 -->
+            
             <div class="disclaimer-block" style="margin: 24px 0;">
                 <div style="background: #fde68a; border: 1px solid #fcd34d; color: #92400e; border-radius: 20px; padding: 16px 24px; text-align: center; font-size: 14px; line-height: 1.6;">
                     <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
                 </div>
             </div>
             
-            <!-- 分享區域 -->
-            <!-- 🟡 1001修改02：依需求暫時隱藏分享區塊於前端，維持原有功能碼 -->
+            
+            
             <div class="share-section hidden-section">
                 <div class="share-title">分享你的貓咪夥伴</div>
                 <div class="share-buttons">
@@ -834,13 +845,13 @@
                     </button>
                 </div>
                 
-                <!-- 連結顯示區域 -->
+                
                 <div class="link-display" id="linkDisplay">
                     <input type="text" class="link-input" id="linkInput" readonly onclick="this.select()" />
                 </div>
             </div>
             
-            <!-- 🟡 1003 修改：操作按鈕移位，原區塊保留註解避免重複呈現 -->
+            
             {% if health_tips %}
             <div class="tips-overlay" id="tipsOverlay">
                 <div class="tips-modal">
@@ -886,7 +897,7 @@
         const healthHistoryScores = {{ (health_history_scores or []) | tojson }};
         let healthHistoryChart = null;
 
-        // 顯示通知
+       
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -901,7 +912,7 @@
             }, 3000);
         }
         
-        // 分享功能
+        
         function shareToLine() {
             const url = window.location.href;
             const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareMessage)}`;
@@ -920,7 +931,7 @@
             window.open(twitterUrl, '_blank', 'width=600,height=400');
         }
         
-        // 改進的複製連結功能
+       
         async function copyToClipboard() {
             const url = window.location.href;
             const btn = event.target.closest('.share-copy');
@@ -931,18 +942,15 @@
             const linkInput = document.getElementById('linkInput');
             
             try {
-                // 嘗試使用現代的 Clipboard API
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(url);
                     showNotification('連結已複製到剪貼簿！', 'success');
                 } else {
-                    // 備用方案：顯示連結讓用戶手動複製
                     linkInput.value = url;
                     linkDisplay.style.display = 'block';
                     linkInput.focus();
                     linkInput.select();
                     
-                    // 嘗試舊版複製方式
                     try {
                         const successful = document.execCommand('copy');
                         if (successful) {
@@ -958,7 +966,6 @@
                     }
                 }
                 
-                // 更新按鈕狀態
                 btn.innerHTML = '<span class="material-symbols-outlined">check</span>已複製！';
                 btn.style.background = '#10b981';
                 btn.style.color = 'white';
@@ -971,7 +978,6 @@
                 
             } catch (err) {
                 console.error('複製失敗:', err);
-                // 顯示連結讓用戶手動複製
                 linkInput.value = url;
                 linkDisplay.style.display = 'block';
                 linkInput.focus();
@@ -1043,7 +1049,6 @@
             }
         }
 
-        // 下載卡片功能
         async function downloadCard(evt) {
             if (isDownloading) {
                 showNotification('卡片正在準備中，請稍候。', 'success');
@@ -1110,7 +1115,6 @@
             }
         }
         
-        // 卡片3D效果
         const card = document.querySelector('.cat-card');
         card.addEventListener('mousemove', (e) => {
             if (isDownloading) {
@@ -1204,7 +1208,6 @@
             });
         }
 
-        // 點擊連結輸入框外部時隱藏
         document.addEventListener('click', (e) => {
             const linkDisplay = document.getElementById('linkDisplay');
             if (!e.target.closest('.share-section') && linkDisplay.style.display === 'block') {
