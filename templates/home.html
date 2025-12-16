@@ -491,6 +491,7 @@
                 #webcrumbs .sm\:h-48 { height: 192px; }
                 #webcrumbs .sm\:gap-4 { gap: 16px; }
                 #webcrumbs .sm\:max-w-full { max-width: 100%; }
+                #webcrumbs .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
                 #webcrumbs .primary-cta {
                     border-radius: 9999px;
                     background-color: #1f2937 !important;
@@ -505,12 +506,149 @@
             @media (min-width: 768px) {
                 #webcrumbs .md\:flex { display: flex; }
                 #webcrumbs .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                #webcrumbs .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
                 #webcrumbs .md\:text-5xl { font-size: 48px; line-height: 52.8px; }
                 #webcrumbs .mobile-only { display: none; }
+            }
+            /* Privacy modal styles */
+            .privacy-link { color: #0b4da6; margin-left: 8px; text-decoration: underline; cursor: pointer; background: transparent; border: none; padding: 0; font: inherit; }
+            .privacy-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(44, 35, 28, 0.55);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                z-index: 20000;
+            }
+            .privacy-backdrop.hidden,
+            .privacy-backdrop[aria-hidden="true"] {
+                display: none;
+            }
+            .privacy-card {
+                position: relative;
+                background: linear-gradient(160deg, #fffdfb 0%, #fffaf5 100%);
+                border-radius: 12px;
+                max-width: 880px;
+                width: 100%;
+                max-height: 86vh;
+                overflow: auto;
+                padding: 22px;
+                color: #4a3426;
+                line-height: 1.65;
+                font-size: 16px;
+                box-shadow: 0 18px 40px rgba(47, 33, 23, 0.25);
+                border: 1px solid rgba(230, 190, 160, 0.6);
+            }
+            .privacy-card h3 {
+                margin-top: 0;
+                color: #5b4032;
+                font-size: 22px;
+            }
+            .privacy-card h4 {
+                margin-bottom: 8px;
+                margin-top: 20px;
+                color: #5b4032;
+                font-size: 18px;
+            }
+            .privacy-card p { margin: 0 0 12px 0; }
+            .privacy-card ul { padding-left: 20px; margin: 0 0 12px 0; }
+            .privacy-card p,
+            .privacy-card ul li {
+                word-break: normal;
+                line-break: normal;
+                overflow-wrap: anywhere;
+            }
+            .privacy-close { position: absolute; right: 20px; top: 18px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: #a26a3f; }
+            @media (max-width: 640px) {
+                .privacy-card { padding: 16px; border-radius: 10px; }
             }
             @media (max-width: 1024px) {
                 #webcrumbs .lg\:max-w-4xl { max-width: 56rem; }
                 #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
+            }
+            /* Meet the Team styling helpers */
+            .team-grid { gap: 0; grid-auto-flow: row; }
+            .team-card { display: flex; flex-direction: column; align-items: stretch; text-align: left; height: auto; min-height: 0; box-sizing: border-box; border: 1px solid #FFD1A8; padding: 18px; background: #fff; border-radius: 8px; }
+            .team-card .avatar { width: 100%; display:flex; justify-content:center; }
+            .team-content { width: 100%; padding-left: 6px; padding-right: 6px; min-height: 0; overflow: visible; }
+            .member-link { color: #0b4da6; display: inline-block; margin: 4px 0 8px 0; text-decoration: underline; font-weight: 600; white-space: normal; word-break: break-word; overflow-wrap: anywhere; max-width: 100%; }
+            .team-card img { width: 80px; height: 80px; object-fit: cover; border-radius: 50%;
+                /* Keep pixel-art crisp instead of smoothing */
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
+                image-rendering: -moz-crisp-edges;
+                image-rendering: -o-crisp-edges;
+                -ms-interpolation-mode: nearest-neighbor; /* IE fallback */
+            }
+            .team-card h3 {
+                margin-top: 6px;
+                margin-bottom: 6px;
+                color: #D35400;
+                font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+                line-height: 1.3;
+                letter-spacing: 0.01em;
+                display: block;
+                width: 100%;
+                overflow-wrap: break-word;
+                word-break: normal;
+            }
+            .team-card p {
+                white-space: normal;
+                overflow-wrap: anywhere;
+                word-break: normal;
+                line-break: normal;
+                line-height: 1.55;
+                margin: 0 0 8px 0;
+            }
+            .team-card .team-extra br {
+                display: block;
+                margin: 0 0 0.4rem;
+                height: 0.9rem;
+                background: linear-gradient(90deg, rgba(59, 130, 246, 0.9), rgba(99, 102, 241, 0.9));
+                border-radius: 4px;
+            }
+
+            /* Ensure grid rows grow with content */
+            .team-grid { grid-auto-rows: auto; }
+
+            /* Mobile: collapse long team descriptions, show toggle */
+            .expand-toggle { display: none; background: transparent; border: none; padding: 6px; cursor: pointer; }
+            .expand-toggle svg { display: block; }
+            .team-extra { display: block; }
+            @media (max-width: 640px) {
+                .team-card { padding: 14px; }
+                .team-card h3 { font-size: clamp(0.85rem, 4.2vw, 1rem); }
+                .team-card .team-extra { display: none; }
+                .team-card .team-header {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 6px;
+                }
+                .team-card .team-header h3 { flex: none; width: 100%; margin: 0; }
+                .team-card .team-header .member-link {
+                    order: 2;
+                    flex-basis: auto;
+                    margin-top: 0;
+                    display: inline-flex;
+                }
+                .team-card .team-header .member-link,
+                .team-card .team-header .expand-toggle {
+                    align-self: center;
+                }
+                .team-card .team-header .expand-toggle {
+                    order: 3;
+                    margin-left: 0;
+                    display: inline-flex;
+                }
+                .team-card.expanded .team-extra { display: block; }
+            }
+            /* Make cards visually separated on desktop while remaining responsive */
+            @media (min-width: 768px) {
+                .team-grid { gap: 12px; }
+                .team-card { padding: 20px; }
             }
         </style>
         <!-- GALING 10/5 新增manifest.json -->
@@ -688,6 +826,7 @@
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
+                                    我們只提取必要的健康數據進行計算，不會儲存健檢報告原始文件檔/圖檔。<br />
                                     服務會將你的AI對話內容整理成主題摘要，並不會儲存完整的對話紀錄。<br />
                                     摘要也會經過去識別化處理，確保無法被回推到特定個人。<br />
                                     使用AI進行並保留摘要，不保存完整對話，且「去個人化」。看不出是誰說的，請放心使用。
@@ -717,17 +856,114 @@
                             </details>
                         </div>
                     </div>
+                    <!-- START: 更新 Meet the Team 關於團隊 區塊內容 -->
+                    <div class="mt-20 max-w-5xl sm:max-w-full mx-auto">
+                        <h2 class="text-3xl font-bold mb-10 text-center text-gray-800">
+                            Meet the Team <span class="text-amber-600">關於團隊</span>
+                        </h2>
+                        <!-- 🎯 RWD: 桌機/平板4欄，手機2欄，卡片RWD縮小，頭像圓形 -->
+                        <div class="grid team-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 px-2 sm:px-4">
+                            <!-- 成員卡片 1: Liyi | Co-Developer -->
+                            <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
+                                <div class="avatar">
+                                    <img src="{{ url_for('static', filename='Liyi.png') }}" alt="Liyi 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-header">
+                                        <h3 class="font-extrabold text-lg mb-1">Liyi |<br />Co-Developer</h3>
+                                        <a class="member-link" href="https://linktr.ee/liyi17" target="_blank" rel="noopener" aria-label="Liyi Linktree">Linktree</a>
+                                        <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="team-extra">
+                                        <p class="text-gray-600 text-xs leading-snug">
+                                            加拿大打工度假中。將冥想的平靜轉化為Meow Yourself的視覺語言，是專案的靈感起源。<br><br><br>
+                                            身為賦予AI靈魂的魔術師，他主導<strong>品牌視覺</strong>，並深入參與<strong>NLP模組調校</strong>。不只設計產品的「長相」，更塑造了AI溫暖且具同理心的「說話風格」，讓技術更有溫度。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 成員卡片 2: Ashley | Product Lead & Developer -->
+                            <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
+                                <div class="avatar">
+                                    <img src="{{ url_for('static', filename='Ash.png') }}" alt="Ashley 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-header">
+                                        <h3 class="font-extrabold text-lg mb-1">Ashley |<br />Product Lead & Developer</h3>
+                                        <a class="member-link" href="https://www.instagram.com/hsinhuiii170/" target="_blank" rel="noopener" aria-label="Ashley Instagram">Instagram</a>
+                                        <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="team-extra">
+                                        <p class="text-gray-600 text-xs leading-snug">
+                                            有一隻灰貓。結合歷史系的宏觀與計量金融的邏輯，剛好能讀懂人類情感脈絡。<br><br><br>
+                                            負責<strong>產品核心邏輯、提示工程優化與全端整合</strong>。她運用<strong>VAD模型</strong>與<strong>Google Gemini LLM</strong>打造「聽得懂情緒」的大腦，並<strong>串接圖卡生成</strong>，將抽象的情緒轉化為療癒的視覺。致力於讓技術不再冰冷，而是能接住每一個需要被理解的靈魂。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 成員卡片 3: Galing | Tech Lead & Developer -->
+                            <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
+                                <div class="avatar">
+                                    <img src="{{ url_for('static', filename='Galing.png') }}" alt="Galing 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-header">
+                                        <h3 class="font-extrabold text-lg mb-1">Galing |<br />Tech Lead & Developer</h3>
+                                        <a class="member-link" href="https://www.instagram.com/galingalinga/" target="_blank" rel="noopener" aria-label="Galing Instagram">Instagram</a>
+                                        <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="team-extra">
+                                        <p class="text-gray-600 text-xs leading-snug">
+                                            從劇場走入雲端的技術統籌。正以寫劇本的細膩度，優化AI複雜的雲端架構。<br><br><br>
+                                            團隊的技術架構師。一手打造穩定的<strong>GCP環境</strong>，並開發「健檢報告解析模組」，專注於<strong>Computer Vision</strong>與<strong>Prompt Engineering</strong>，具備將<strong>多模態AI模型</strong> (如：Gemini) 完美落地到產品環境的實戰能力，確保系統能精準地提取關鍵資訊並回應使用者的需求。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 成員卡片 4: Ting | Co-Developer -->
+                            <div class="team-card bg-white p-3 sm:p-4 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] border-t-4 border-amber-400">
+                                <div class="avatar">
+                                    <img src="{{ url_for('static', filename='Ting.png') }}" alt="Ting 圖像" class="mb-3 sm:mb-4 border-2 border-amber-300 shadow-md" />
+                                </div>
+                                <div class="team-content">
+                                    <div class="team-header">
+                                        <h3 class="font-extrabold text-lg mb-1">Ting |<br />Co-Developer</h3>
+                                        <a class="member-link" href="https://www.instagram.com/tingchen1992/" target="_blank" rel="noopener" aria-label="Ting Instagram">Instagram</a>
+                                        <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
+                                            <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        </button>
+                                    </div>
+                                    <div class="team-extra">
+                                        <p class="text-gray-600 text-xs leading-snug">
+                                            左手拿蔬菜汁，右手寫Code。用電影滋養靈魂，在理性與感性間切換自如。<br><br><br>
+                                            團隊最堅實的守門員。她嚴謹把關<strong>Git版本協作與資安隱私</strong>，確保開發步調穩健；同時致力於<strong>前端UI/UX設計</strong>，將複雜功能轉化為直覺體驗，為用戶打造一個既流暢又安全無虞的互動空間。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END: 更新 Meet the Team 關於團隊 區塊內容 -->
                 </main>
                 <footer class="mt-20 bg-[#E8D6C5] py-10 px-6 text-center text-gray-700">
                     <h2 class="text-2xl font-bold mb-2">與我們聯繫</h2>
-                    <p class="text-base mb-4">如果您有任何問題或建議，請隨時透過以下方式聯絡我們。</p>
+                    <p class="text-xs mb-4">如果您有任何問題或建議，請隨時透過以下方式聯絡我們。</p>
                     <div class="flex flex-col items-center gap-2 text-base">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined">mail</span>
                             <span>meowyourself2025@gmail.com</span>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-600 mt-6">© 2025 Meow Yourself. All rights reserved.</p>
+                    <p class="text-xs text-gray-600 mt-6">© 2025 Meow Yourself. All rights reserved.<button id="privacy-toggle" type="button" class="privacy-link" aria-haspopup="dialog" aria-expanded="false">隱私權政策</button></p>
+                    <p class="text-xs text-gray-500 mt-2 max-w-prose mx-auto leading-snug">
+                        本網站使用Cookie分析技術，以提供您更優質的瀏覽體驗與情緒陪伴服務。繼續瀏覽即表示您同意我們的隱私權政策。
+                    </p>
                 </footer>
             </div>
         </div>
@@ -739,6 +975,45 @@
                     <p>若透過 LINE 或 Messenger 內建瀏覽器開啟，可能導致頁面跳轉失敗或內容顯示不完整。</p>
                 </div>
                 <button type="button" class="browser-reminder-action" data-browser-reminder-dismiss>好的，我了解囉！</button>
+            </div>
+        </div>
+        <!-- Privacy modal -->
+        <div
+            id="privacy-modal"
+            class="privacy-backdrop hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="privacy-modal-title"
+            aria-hidden="true"
+        >
+            <div class="privacy-card">
+                <button id="privacy-close" class="privacy-close" aria-label="關閉隱私權政策">×</button>
+                <div class="prose prose-sm px-1">
+                    <h3 id="privacy-modal-title">🐱Meow Yourself隱私權政策</h3>
+                    <p><strong>嗨！歡迎來到 Meow Yourself。</strong><br />我們致力於打造一個能接住情緒、溫暖陪伴的 AI 空間。就像貓咪需要安全感一樣，我們深知您的隱私與數據安全有多麼重要。這份簡短的聲明將告訴您，當您瀏覽我們的網站時，我們如何處理您的資訊。</p>
+                    <h4>1. 我們收集什麼？（只收集「看不見臉孔」的數據）</h4>
+                    <p>為了確保網站運作順暢，我們會收集一些<strong>去識別化</strong>的數據。這意味著我們<strong>無法</strong>透過這些數據知道您是誰（例如：我們不會知道您的真實姓名、實際對話內容、地址或身分證字號）。</p>
+                    <p>我們收集的資訊包含：</p>
+                    <ul>
+                        <li><strong>裝置資訊</strong>：您是用手機還是電腦？是 iPhone 還是 Android？</li>
+                        <li><strong>地理位置</strong>：您來自哪個國家或城市（例如：台灣、台北市）。</li>
+                        <li><strong>瀏覽行為</strong>：您在網站停留了多久？您對哪些功能感興趣？</li>
+                    </ul>
+                    <h4>2. 我們用這些數據做什麼？</h4>
+                    <p>收集這些數據只有一個目的：<strong>優化您的體驗</strong>。</p>
+                    <ul>
+                        <li>如果我們發現 90% 的用戶都使用手機，我們會優先把手機版介面做得更漂亮。</li>
+                        <li>如果我們發現某個頁面大家停留很久，代表那裡的內容對大家很有幫助，我們會多做一點。</li>
+                    </ul>
+                    <p><strong>我們承諾：絕不會將您的數據販售給任何第三方。</strong></p>
+                    <h4>3. 關於 Google Analytics (GA4) 與 Cookie</h4>
+                    <p>本網站使用了 <strong>Google Analytics 4 (GA4)</strong> 分析工具。這就像是網站的「計數器」，幫助我們了解人流與使用狀況。GA4 會透過 <strong>Cookie</strong>（一種儲存在您瀏覽器上的小型文字檔案）來運作。這些 Cookie 只會記錄匿名的瀏覽資訊。</p>
+                    <h4>4. 您擁有絕對的控制權</h4>
+                    <p>我們尊重您的選擇。如果您不希望被記錄，您可以隨時透過瀏覽器的設定功能<strong>清除 Cookie</strong>，或是使用「無痕模式」瀏覽本網站。這完全不會影響您使用 Meow Yourself 的核心功能。</p>
+                    <h4>5. 聯絡我們</h4>
+                    <p>Meow Yourself 是由一群熱愛 AI 與貓咪的人類所打造的。如果您對隱私權有任何疑問，歡迎隨時透過 Instagram 或 Email 與我們聯繫。</p>
+                    <p><em>(本聲明更新於 2025 年 12 月)</em></p>
+                </div>
             </div>
         </div>
         {% if show_card_limit_modal and card_limit_modal_text %}
@@ -776,6 +1051,49 @@
             })();
         </script>
         {% endif %}
+        <script>
+            // Privacy modal: toggle `hidden`, close on backdrop click or Esc
+            (function () {
+                const toggle = document.getElementById('privacy-toggle');
+                const modal = document.getElementById('privacy-modal');
+                const closeBtn = document.getElementById('privacy-close');
+                if (!toggle || !modal) return;
+
+                const open = () => {
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
+                    modal.setAttribute('aria-hidden', 'false');
+                    toggle.setAttribute('aria-expanded', 'true');
+                    // focus the close button for accessibility
+                    if (closeBtn) closeBtn.focus();
+                };
+
+                const close = () => {
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
+                    modal.setAttribute('aria-hidden', 'true');
+                    toggle.setAttribute('aria-expanded', 'false');
+                };
+
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (modal.classList.contains('hidden')) open(); else close();
+                });
+
+                if (closeBtn) closeBtn.addEventListener('click', close);
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        close();
+                    }
+                });
+
+                document.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Escape' && !modal.classList.contains('hidden')) {
+                        close();
+                    }
+                });
+            })();
+        </script>
         <script>
             (function () {
                 const modal = document.getElementById('browser-reminder-modal');
@@ -859,6 +1177,23 @@
                 setActiveState(0);
                 startTimer();
             });
+            // Mobile-only: team card expand/collapse
+            (function () {
+                const mq = window.matchMedia && window.matchMedia('(max-width: 640px)');
+                const init = function () {
+                    if (!mq.matches) return; // only on small screens
+                    document.querySelectorAll('.team-card').forEach(card => {
+                        const btn = card.querySelector('.expand-toggle');
+                        if (!btn) return;
+                        btn.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            const expanded = card.classList.toggle('expanded');
+                            btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                        });
+                    });
+                };
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+            })();
         </script>
     </body>
 </html>

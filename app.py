@@ -1507,7 +1507,7 @@ def _get_sentence_embedder():
         return None
     if _SENTENCE_EMBEDDER is None:
         try:
-            _SENTENCE_EMBEDDER = SentenceTransformer("sentence-transformers/all-MiniLM-L12-v2")
+            _SENTENCE_EMBEDDER = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
             logging.debug("SentenceTransformer model loaded for semantic movie search.")
         except Exception as exc:
             logging.error("Failed to load sentence-transformers model: %s", exc)
