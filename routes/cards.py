@@ -18,7 +18,7 @@ from config.settings import (
     OVER_LIMIT_MESSAGE,
 )
 from google.cloud.firestore import SERVER_TIMESTAMP
-from health_report_module import analyze_health_report
+from services.health_report_module import analyze_health_report
 from services.cards import build_cat_card, render_cat_card_image
 from services.health import build_health_tips, normalize_health_data
 from services.firebase import db
