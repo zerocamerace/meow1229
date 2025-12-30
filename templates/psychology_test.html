@@ -39,6 +39,12 @@
             --user-bubble: #F1EDF9;
             --gemini-bubble: #FBFBFB; 
             --shadow-color: rgba(146, 121, 197, 0.1);
+            --box-color: #d7b494;
+            --box-dark: #b69375;
+            --table-color: #8d6e63;
+            --cat-color: #8e8e8e;
+            --cat-light: #d0d0d0;
+            --paw-pink: #f8bbd0;
         }
         .transition-all { transition: all 0.3s ease-in-out; }
         .view-transition {
@@ -140,47 +146,109 @@
             padding: clamp(32px, 5vw, 64px);
             box-shadow: 0 24px 48px rgba(57, 37, 99, 0.25);
             text-align: center;
-            max-width: 480px;
-            width: min(90%, 480px);
+            max-width: 560px;
+            width: min(92%, 560px);
             border: 1px solid rgba(164, 145, 211, 0.35);
         }
-        .magic-loader {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 24px;
+        .magic-animation-frame {
+            width: min(480px, 92vw);
+            margin: 0 auto 10px;
         }
-        .magic-loader::before,
-        .magic-loader::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border: 3px solid rgba(164, 145, 211, 0.3);
-            border-top-color: #a491d3;
-            animation: spin 2.4s linear infinite;
+        .magic-animation-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform-origin: center;
         }
-        .magic-loader::after {
-            inset: 14px;
-            border-top-color: #f9a8d4;
-            animation-duration: 1.6s;
+        .magic-animation-svg .cat-arm-active,
+        .magic-animation-svg .cat-tail,
+        .magic-animation-svg .target-box {
+            animation: none;
         }
-        .magic-wand {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 42px;
-            animation: wandFloat 1.8s ease-in-out infinite;
+        .magic-animation-svg.magic-animate .cat-arm-active {
+            animation: arm-swat 2.5s infinite cubic-bezier(0.6, -0.28, 0.735, 0.045);
+            transform-origin: 220px 260px;
         }
-        @keyframes wandFloat {
-            0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); }
-            50% { transform: translate(-50%, -65%) rotate(8deg); }
+        .magic-animation-svg.magic-animate .cat-tail {
+            animation: tail-wag 1.5s ease-in-out infinite;
+            transform-origin: 165px 280px;
+        }
+        .magic-animation-svg.magic-animate .target-box {
+            animation: box-fall 2.5s infinite ease-out;
+            transform-origin: bottom center;
+        }
+        @keyframes box-fall {
+            0%, 40.5% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            41% { transform: translate(5px, -2px) rotate(2deg); }
+            42% { transform: translate(150px, -80px) rotate(60deg); opacity: 1; }
+            50% { transform: translate(600px, 150px) rotate(240deg); opacity: 0; }
+            100% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+        }
+        @keyframes arm-swat {
+            0%, 30% { transform: rotate(0deg); }
+            35% { transform: rotate(-25deg); }
+            41% { transform: rotate(75deg); }
+            55% { transform: rotate(0deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes tail-wag {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-15deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            80% { transform: rotate(5deg); }
+        }
+        .magic-animation-svg #targetText {
+            font-size: clamp(10px, 1vw, 12px);
         }
         .magic-message {
             font-size: 1.05rem;
             color: #5d4a83;
             line-height: 1.7;
+            margin-top: 8px;
+        }
+        .petting-overlay {
+            display: none;
+            text-align: center;
+        }
+        .petting-overlay.active {
+            display: block;
+        }
+        .petting-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 95%;
+        }
+        .petting-container canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .heart,
+        .feedback-emoji {
+            position: absolute;
+            pointer-events: none;
+            font-size: clamp(1.25rem, 2vw, 2rem);
+            animation: floatUp 1.2s ease-out forwards;
+            z-index: 5;
+        }
+        .heart {
+            color: #ff6b6b;
+        }
+        .feedback-emoji {
+            color: #f9a8d4;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-80px) scale(1.5);
+                opacity: 0;
+            }
         }
         .card-paw-decoration {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%23F1EDF9'%3E%3Cpath d='M65.2 55.8c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm19.5-19.5c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm-39 0c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zm-19.5 19.5c-1.8-1.8-4.2-2.8-6.7-2.8s-4.9 1-6.7 2.8c-3.7 3.7-3.7 9.7 0 13.4 1.8 1.8 4.2 2.8 6.7 2.8s4.9-1 6.7-2.8c3.7-3.7 3.7-9.7 0-13.4zM50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0z'/%3E%3C/svg%3E");
@@ -499,12 +567,66 @@
 
     
     <div id="magic-overlay" class="magic-overlay" role="status" aria-live="polite">
-        <div class="magic-overlay-card">
-            <div class="magic-loader">
-                <span class="magic-wand">🪄</span>
+        <div id="box-animation" class="magic-overlay-card">
+            <div class="magic-animation-frame">
+                <svg class="magic-animation-svg" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" role="presentation" aria-hidden="true">
+                    <rect x="0" y="0" width="600" height="300" fill="#f0f4f8" />
+                    <circle cx="500" cy="60" r="30" fill="#fff9c4" opacity="0.6" />
+                    <g class="cat-tail">
+                        <path d="M165 280 Q 110 280 100 230 T 130 180" stroke="var(--cat-color)" stroke-width="22" fill="none" stroke-linecap="round" />
+                    </g>
+                    <g class="cat-lower-body">
+                        <path d="M155 300 Q 150 260 220 230 Q 290 260 285 300" fill="var(--cat-color)" />
+                    </g>
+                    <g class="cat-body">
+                        <ellipse cx="220" cy="270" rx="60" ry="70" fill="var(--cat-color)" />
+                    </g>
+                    <g class="cat-arm-static">
+                        <path d="M220 260 L 175 285" stroke="var(--cat-color)" stroke-width="25" stroke-linecap="round" fill="none" />
+                        <circle cx="175" cy="285" r="15" fill="var(--cat-light)" />
+                    </g>
+                    <g class="cat-arm-active">
+                        <path d="M220 260 L 320 230" stroke="var(--cat-color)" stroke-width="30" stroke-linecap="round" fill="none" />
+                        <circle cx="320" cy="230" r="18" fill="var(--cat-light)" />
+                        <circle cx="320" cy="232" r="7" fill="var(--paw-pink)" />
+                        <circle cx="312" cy="224" r="3.5" fill="var(--paw-pink)" />
+                        <circle cx="320" cy="220" r="3.5" fill="var(--paw-pink)" />
+                        <circle cx="328" cy="224" r="3.5" fill="var(--paw-pink)" />
+                    </g>
+                    <rect x="0" y="280" width="600" height="20" fill="var(--table-color)" />
+                    <g class="cat-head">
+                        <path d="M178 170 Q 160 115 205 150 Q 215 165 212 180 L 178 180 Z" fill="var(--cat-color)" />
+                        <path d="M262 170 Q 280 115 235 150 Q 225 165 228 180 L 262 180 Z" fill="var(--cat-color)" />
+                        <circle cx="220" cy="190" r="45" fill="var(--cat-color)" />
+                        <g>
+                            <circle cx="205" cy="185" r="8" fill="white" />
+                            <circle cx="207" cy="185" r="4" fill="black" />
+                            <circle cx="235" cy="185" r="8" fill="white" />
+                            <circle cx="237" cy="185" r="4" fill="black" />
+                        </g>
+                        <path d="M215 200 L 225 200 L 220 205 Z" fill="#f48fb1" />
+                        <line x1="185" y1="195" x2="150" y2="185" stroke="#444" stroke-width="1.5" />
+                        <line x1="185" y1="202" x2="145" y2="202" stroke="#444" stroke-width="1.5" />
+                        <line x1="185" y1="209" x2="150" y2="219" stroke="#444" stroke-width="1.5" />
+                        <line x1="255" y1="195" x2="290" y2="185" stroke="#444" stroke-width="1.5" />
+                        <line x1="255" y1="202" x2="295" y2="202" stroke="#444" stroke-width="1.5" />
+                        <line x1="255" y1="209" x2="290" y2="219" stroke="#444" stroke-width="1.5" />
+                    </g>
+                    <g class="target-box box-active" id="boxGroup">
+                        <rect x="320" y="185" width="120" height="95" fill="var(--box-color)" stroke="var(--box-dark)" stroke-width="2" rx="4" />
+                        <line x1="320" y1="195" x2="440" y2="195" stroke="var(--box-dark)" stroke-width="1" />
+                        <rect x="330" y="225" width="100" height="25" fill="rgba(255,255,255,0.8)" rx="2" />
+                        <text id="targetText" x="380" y="242" font-size="12" fill="#5d4037" font-weight="900" text-anchor="middle" style="user-select: none;">準備中</text>
+                    </g>
+                </svg>
             </div>
-            <p class="magic-message">貓咪魔法正在施展，專屬圖卡準備中…</p>
-            <p class="magic-message" style="font-size:0.95rem; opacity:0.8;">約 20 ~ 30 秒後，喵咪驚喜就會送達！</p>
+            <p class="magic-message">生成圖卡約需20~30秒。先來摸摸貓咪吧！</p>
+        </div>
+        <div id="pet-animation" class="magic-overlay-card petting-overlay hidden">
+        <div id="pet-container" class="petting-container">
+            <canvas id="petCanvas"></canvas>
+        </div>
+            <p class="magic-message">生成圖卡約需20~30秒。先來摸摸貓咪吧！</p>
         </div>
     </div>
 
@@ -534,7 +656,14 @@
         const progressBarFill = document.getElementById('progress-bar-fill');
         const chatPanel = document.getElementById('chat-panel');
         const mainGrid = document.getElementById('main-grid');
-        const magicOverlay = document.getElementById('magic-overlay'); 
+        const magicOverlay = document.getElementById('magic-overlay');
+        const magicAnimationSvg = document.querySelector('.magic-animation-svg');
+        const targetTextElement = document.getElementById('targetText');
+        const boxGroup = document.getElementById('boxGroup');
+        const boxAnimation = document.getElementById('box-animation');
+        const petAnimation = document.getElementById('pet-animation');
+        const petContainer = document.getElementById('pet-container');
+        const petCanvas = document.getElementById('petCanvas');
         const selectionModeCards = document.querySelectorAll('.selection-mode-card');
         const selectionBubbleEffects = [];
         let messageLengthAlertShown = false;
@@ -564,6 +693,561 @@
             "你看起來好像撐了很久。來，跟奶奶說說，你累在哪裡？",
             "沒關係，無論你現在什麼心情，都可以帶來。我會好好地聽。"
         ];
+        const NEGATIVE_HINTS = ["不公", "憂", "沮", "消極", "焦", "煩", "難過", "壓", "怒", "悲", "痛", "恐", "怕", "懼", "厭", "困", "絕", "孤單"];
+        const POSITIVE_HINTS = ["晴", "喜", "樂", "開心", "暖", "安", "靜", "順", "好", "滿", "感謝", "期待", "幸福"];
+
+        const MAX_KEYWORD_CYCLE = 3;
+        let magicKeywords = ['壞情緒'];
+        let magicKeywordIndex = 0;
+        let magicKeywordInterval = null;
+
+        function sanitizeKeyword(value) {
+            if (!value && value !== 0) return '';
+            return String(value).trim();
+        }
+
+        function isNegativeText(value) {
+            if (!value) return false;
+            const normalized = value.replace(/\s+/g, '');
+            return NEGATIVE_HINTS.some(hint => normalized.includes(hint));
+        }
+
+        function isPositiveText(value) {
+            if (!value) return false;
+            const normalized = value.replace(/\s+/g, '');
+            return POSITIVE_HINTS.some(hint => normalized.includes(hint));
+        }
+
+        function extractKeywordsFromSummary(summary) {
+            if (!summary) return [];
+            const cleaned = summary.replace(/[\n\r]+/g, ' ');
+            const bracketMatches = cleaned.match(/[「『【](.+?)[」』】]/g) || [];
+            const keywords = bracketMatches.map(match => match.slice(1, -1).trim()).filter(Boolean);
+            const plainWords = cleaned.split(/[,，。；、\s]+/).filter(Boolean);
+            return [...keywords, ...plainWords].slice(0, MAX_KEYWORD_CYCLE * 2);
+        }
+
+        function gatherMagicKeywords() {
+            const data = window.currentReportData || {};
+            const negatives = [];
+            const positives = [];
+
+            const pushNegative = (value) => {
+                const text = sanitizeKeyword(value);
+                if (!text) return;
+                if (!negatives.includes(text) && isNegativeText(text)) {
+                    negatives.push(text);
+                }
+            };
+
+            const pushPositive = (value) => {
+                const text = sanitizeKeyword(value);
+                if (!text) return;
+                if (isPositiveText(text) && !positives.includes(text)) {
+                    positives.push(text);
+                }
+            };
+
+            const tryPush = (value) => {
+                const text = sanitizeKeyword(value);
+                if (!text) return;
+                if (isNegativeText(text)) {
+                    pushNegative(text);
+                } else {
+                    pushPositive(text);
+                }
+            };
+
+            if (Array.isArray(data.keywords)) {
+                for (const candidate of data.keywords) {
+                    tryPush(candidate);
+                    if (negatives.length >= MAX_KEYWORD_CYCLE) break;
+                }
+            } else if (typeof data.keywords === 'string') {
+                tryPush(data.keywords);
+            }
+
+            if (negatives.length < MAX_KEYWORD_CYCLE) {
+                const summaryExtras = extractKeywordsFromSummary(data.summary || '');
+                for (const extra of summaryExtras) {
+                    tryPush(extra);
+                    if (negatives.length >= MAX_KEYWORD_CYCLE) break;
+                }
+            }
+
+            const hasNegative = negatives.length > 0;
+            const hasPositiveOnly = !hasNegative && positives.length > 0;
+            const fallbackKeywords = hasNegative ? negatives : ['壞情緒'];
+            return {
+                keywords: fallbackKeywords,
+                hasNegative,
+                hasPositiveOnly: hasPositiveOnly && !hasNegative
+            };
+        }
+
+        function applyKeywordToBox(keyword) {
+            if (!targetTextElement) return;
+            const value = (keyword || '壞情緒').replace(/\s+/g, '');
+            const truncated = value.slice(0, 12);
+            const lines = [];
+            if (!truncated.length) {
+                lines.push('壞');
+            } else {
+                if (truncated.length <= 6) {
+                    lines.push(truncated);
+                } else {
+                    lines.push(truncated.slice(0, 6));
+                    lines.push(truncated.slice(6));
+                }
+            }
+            targetTextElement.innerHTML = lines
+                .map((segment, index) => `<tspan x="380" dy="${index === 0 ? 0 : 14}">${segment}</tspan>`)
+                .join('');
+            if (truncated.length >= 12) {
+                targetTextElement.setAttribute('font-size', '10');
+            } else if (truncated.length >= 8) {
+                targetTextElement.setAttribute('font-size', '12');
+            } else {
+                targetTextElement.setAttribute('font-size', '14');
+            }
+        }
+
+        function stopMagicKeywordCycle() {
+            if (magicKeywordInterval) {
+                clearInterval(magicKeywordInterval);
+                magicKeywordInterval = null;
+            }
+        }
+
+        function startMagicKeywordCycle(keywords) {
+            stopMagicKeywordCycle();
+            magicKeywords = (keywords && keywords.length) ? keywords : ['壞情緒'];
+            magicKeywordIndex = 0;
+            applyKeywordToBox(magicKeywords[magicKeywordIndex]);
+            if (magicKeywords.length > 1) {
+                magicKeywordInterval = window.setInterval(() => {
+                    magicKeywordIndex = (magicKeywordIndex + 1) % magicKeywords.length;
+                    applyKeywordToBox(magicKeywords[magicKeywordIndex]);
+                }, 2200);
+            }
+        }
+
+        let pettingAnimation = { start: () => {}, stop: () => {} };
+        function startPettingAnimation() {
+            pettingAnimation.start();
+        }
+        function stopPettingAnimation() {
+            pettingAnimation.stop();
+        }
+
+        function showBoxAnimation(keywords) {
+            petAnimation.classList.add('hidden');
+            petAnimation.classList.remove('active');
+            boxAnimation.classList.remove('hidden');
+            boxAnimation.classList.add('active');
+            startMagicKeywordCycle(keywords);
+            stopPettingAnimation();
+        }
+
+        function showPetAnimation() {
+            boxAnimation.classList.add('hidden');
+            boxAnimation.classList.remove('active');
+            petAnimation.classList.remove('hidden');
+            petAnimation.classList.add('active');
+            stopMagicKeywordCycle();
+            startPettingAnimation();
+        }
+
+        function resetMagicAnimation() {
+            if (!magicAnimationSvg) return;
+            magicAnimationSvg.classList.remove('magic-animate');
+            void magicAnimationSvg.offsetWidth;
+            magicAnimationSvg.classList.add('magic-animate');
+            if (boxGroup) {
+                boxGroup.classList.remove('box-active');
+                void boxGroup.offsetWidth;
+                boxGroup.classList.add('box-active');
+            }
+            const {keywords, hasNegative, hasPositiveOnly} = gatherMagicKeywords();
+            const shouldShowBox = hasNegative || (!hasPositiveOnly && !hasNegative);
+            if (shouldShowBox) {
+                showBoxAnimation(keywords);
+            } else {
+                showPetAnimation();
+            }
+        }
+
+        function refreshMagicScene() {
+            resetMagicAnimation();
+        }
+
+        function createPettingAnimation() {
+            if (!petCanvas || !petContainer) {
+                return { start: () => {}, stop: () => {} };
+            }
+            const ctx = petCanvas.getContext('2d');
+            let width = 0;
+            let height = 0;
+            let touchX = 0;
+            let touchY = 0;
+            let handX = 0;
+            let handY = 0;
+            let scale = 1.35;
+            let isTouching = false;
+            let isActuallyPetting = false;
+            let isBiting = false;
+            let petDuration = 0;
+            let biteCooldown = 0;
+            let handOffset = { x: 0, y: 0 };
+            let animId = null;
+            let listenersAdded = false;
+            const cat = {
+                x: 0,
+                y: 0,
+                color: '#8e8e8e',
+                tailAngle: 0
+            };
+
+            function resize() {
+                width = petCanvas.clientWidth;
+                height = petCanvas.clientHeight;
+                petCanvas.width = width;
+                petCanvas.height = height;
+                cat.x = width / 2;
+                cat.y = height / 2 + 30;
+                touchX = width / 2;
+                touchY = height + 100;
+                handX = touchX;
+                handY = touchY;
+            }
+
+            function updatePos(e) {
+                if (isBiting) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                const rect = petCanvas.getBoundingClientRect();
+                const relativeX = clientX - rect.left;
+                const relativeY = clientY - rect.top;
+                const centerX = width / 2;
+                const limitRangeX = 180;
+
+                if (relativeX < centerX - limitRangeX) touchX = centerX - limitRangeX;
+                else if (relativeX > centerX + limitRangeX) touchX = centerX + limitRangeX;
+                else touchX = relativeX;
+
+                const maxYLimit = cat.y - 100 * scale;
+                if (relativeY < maxYLimit) touchY = maxYLimit;
+                else if (relativeY > height + 100) touchY = height + 100;
+                else touchY = relativeY;
+
+                isTouching = true;
+                const dx = Math.abs(touchX - cat.x);
+                const dy = Math.abs(touchY - cat.y);
+                isActuallyPetting = (dx < 150 * scale && dy < 120 * scale) && biteCooldown <= 0;
+            }
+
+            function handleStart(e) {
+                updatePos(e);
+                if (isActuallyPetting && !isBiting) {
+                    createEmoji('❤️');
+                }
+            }
+
+            function handleEnd() {
+                isTouching = false;
+                isActuallyPetting = false;
+                petDuration = 0;
+            }
+
+            function createEmoji(icon) {
+                const emoji = document.createElement('div');
+                emoji.innerHTML = icon;
+                emoji.className = icon === '❤️' ? 'heart' : 'feedback-emoji';
+                emoji.style.left = `${touchX - 12}px`;
+                emoji.style.top = `${touchY - 12}px`;
+                petContainer.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 1200);
+            }
+
+            function triggerBite() {
+                isBiting = true;
+                isActuallyPetting = false;
+                createEmoji('💢');
+                createEmoji('⚡');
+                handOffset.x = (Math.random() - 0.5) * 40;
+                handOffset.y = 50;
+                setTimeout(() => {
+                    isBiting = false;
+                    petDuration = 0;
+                    biteCooldown = 120;
+                    handOffset.x = 0;
+                    handOffset.y = 0;
+                }, 600);
+            }
+
+            function drawCat() {
+                const shake = (isActuallyPetting || isBiting) ? Math.sin(Date.now() * 0.05) * 2 : 0;
+                ctx.save();
+                ctx.translate(cat.x + shake, cat.y);
+                ctx.scale(scale, scale);
+
+                ctx.save();
+                ctx.translate(80, 20);
+                cat.tailAngle = Math.sin(Date.now() * 0.003) * 0.5;
+                ctx.rotate(cat.tailAngle);
+                ctx.lineWidth = 22;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = cat.color;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(50, -50, 85, -15);
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.fillStyle = cat.color;
+                ctx.beginPath();
+                ctx.ellipse(10, 20, 110, 70, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = cat.color;
+                ctx.beginPath();
+                ctx.ellipse(-45, 75, 28, 16, -0.1, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(-5, 80, 28, 16, 0.05, 0, Math.PI * 2);
+                ctx.fill();
+
+                const hX = -85;
+                const hY = -40;
+                ctx.fillStyle = cat.color;
+                ctx.beginPath();
+                ctx.arc(hX, hY, 60, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = cat.color;
+                ctx.beginPath();
+                ctx.moveTo(hX - 55, hY - 20);
+                ctx.lineTo(hX - 45, hY - 85);
+                ctx.lineTo(hX - 5, hY - 55);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(hX + 5, hY - 55);
+                ctx.lineTo(hX + 45, hY - 85);
+                ctx.lineTo(hX + 55, hY - 20);
+                ctx.fill();
+
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                if (isActuallyPetting && !isBiting) {
+                    ctx.beginPath();
+                    ctx.arc(hX - 25, hY - 5, 8, 0.1 * Math.PI, 0.9 * Math.PI);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.arc(hX + 25, hY - 5, 8, 0.1 * Math.PI, 0.9 * Math.PI);
+                    ctx.stroke();
+                } else if (isBiting) {
+                    ctx.beginPath();
+                    ctx.moveTo(hX - 35, hY - 10);
+                    ctx.lineTo(hX - 15, hY);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(hX + 15, hY);
+                    ctx.lineTo(hX + 35, hY - 10);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#333';
+                    ctx.beginPath();
+                    ctx.arc(hX - 25, hY - 5, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(hX + 25, hY - 5, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                if (!isBiting) {
+                    ctx.fillStyle = '#FFB6C1';
+                    ctx.beginPath();
+                    ctx.moveTo(hX - 6, hY + 8);
+                    ctx.lineTo(hX + 6, hY + 8);
+                    ctx.lineTo(hX, hY + 14);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(hX, hY + 14);
+                    ctx.quadraticCurveTo(hX - 5, hY + 20, hX - 10, hY + 15);
+                    ctx.moveTo(hX, hY + 14);
+                    ctx.quadraticCurveTo(hX + 5, hY + 20, hX + 10, hY + 15);
+                    ctx.stroke();
+                } else {
+                    ctx.fillStyle = '#333';
+                    ctx.beginPath();
+                    ctx.ellipse(hX, hY + 18, 10, 14, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ff99aa';
+                    ctx.beginPath();
+                    ctx.ellipse(hX, hY + 22, 6, 6, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.moveTo(hX - 15, hY + 10);
+                ctx.lineTo(hX - 70, hY + 2);
+                ctx.moveTo(hX - 15, hY + 13);
+                ctx.lineTo(hX - 75, hY + 18);
+                ctx.moveTo(hX - 15, hY + 16);
+                ctx.lineTo(hX - 70, hY + 34);
+                ctx.moveTo(hX + 15, hY + 10);
+                ctx.lineTo(hX + 70, hY + 2);
+                ctx.moveTo(hX + 15, hY + 13);
+                ctx.lineTo(hX + 75, hY + 18);
+                ctx.moveTo(hX + 15, hY + 16);
+                ctx.lineTo(hX + 70, hY + 34);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            function drawHand() {
+                const rootX = width / 2;
+                const rootY = height + 100;
+                const targetX = touchX + handOffset.x;
+                const targetY = touchY + handOffset.y;
+                handX += (targetX - handX) * 0.15;
+                handY += (targetY - handY) * 0.15;
+
+                const skinColor = '#f5d1c1';
+                const sleeveColor = '#ffffff';
+
+                ctx.save();
+                ctx.translate(handX, handY);
+                ctx.fillStyle = isBiting ? '#ffb0a0' : skinColor;
+                ctx.beginPath();
+                ctx.ellipse(0, 30, 28, 40, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(0, 15, 36, 45, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                const fL = [35, 52, 58, 48];
+                const fA = [0.3, 0.1, -0.05, -0.25];
+                const fX = [24, 10, -6, -22];
+                const fY = [-8, -22, -25, -20];
+
+                for (let i = 0; i < 4; i++) {
+                    ctx.save();
+                    ctx.translate(fX[i], fY[i]);
+                    ctx.rotate(fA[i]);
+                    ctx.beginPath();
+                    ctx.rect(-8.5, -fL[i], 17, fL[i] + 30);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(0, -fL[i], 8.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                ctx.save();
+                ctx.translate(-24, 12);
+                ctx.rotate(-Math.PI / 2.3);
+                ctx.beginPath();
+                ctx.ellipse(0, 5, 12, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.rect(-11, -26, 22, 31);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(0, -26, 11, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                ctx.restore();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.lineWidth = 80;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = sleeveColor;
+                ctx.moveTo(rootX + (handX - rootX) * 0.2, rootY);
+                ctx.quadraticCurveTo(handX, handY + 110, handX, handY + 45);
+                ctx.stroke();
+
+                ctx.fillStyle = sleeveColor;
+                ctx.beginPath();
+                ctx.ellipse(handX, handY + 45, 46, 22, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#eeeeee';
+                ctx.lineWidth = 2;
+                for (let i = -30; i <= 30; i += 10) {
+                    ctx.beginPath();
+                    ctx.moveTo(handX + i, handY + 35);
+                    ctx.lineTo(handX + i, handY + 55);
+                    ctx.stroke();
+                }
+                ctx.restore();
+            }
+
+            function loop() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(0, cat.y + 75 * scale, width, height);
+                drawCat();
+                drawHand();
+
+                if (isActuallyPetting) {
+                    petDuration++;
+                    if (petDuration > 100 && Math.random() < (petDuration / 10000)) {
+                        triggerBite();
+                    }
+                    if (Math.random() > 0.94) {
+                        createEmoji('❤️');
+                    }
+                } else {
+                    if (petDuration > 0) {
+                        petDuration -= 0.5;
+                    }
+                }
+
+                if (biteCooldown > 0) {
+                    biteCooldown--;
+                }
+
+                animId = requestAnimationFrame(loop);
+            }
+
+            function addListeners() {
+                if (listenersAdded) return;
+                listenersAdded = true;
+                const preventDefault = (e) => { e.preventDefault(); };
+                petCanvas.addEventListener('mousedown', handleStart);
+                petCanvas.addEventListener('touchstart', (e) => { preventDefault(e); handleStart(e); }, { passive: false });
+                window.addEventListener('mouseup', handleEnd);
+                window.addEventListener('touchend', handleEnd);
+                window.addEventListener('mousemove', updatePos);
+                window.addEventListener('touchmove', (e) => { preventDefault(e); updatePos(e); }, { passive: false });
+            }
+
+            return {
+                start() {
+                    if (animId) return;
+                    resize();
+                    addListeners();
+                    loop();
+                },
+                stop() {
+                    if (!animId) return;
+                    cancelAnimationFrame(animId);
+                    animId = null;
+                    ctx.clearRect(0, 0, width, height);
+                }
+            };
+        }
+
+        pettingAnimation = createPettingAnimation();
 
         function pickGrandmaOpening() {
             if (!GRANDMA_OPENERS.length) {
@@ -912,6 +1596,7 @@
                 generateCardBtn.innerHTML = '🐱 點選此產生貓咪圖卡 ✨';
                 generateCardBtn.addEventListener('click', () => {
                     if (magicOverlay) {
+                        refreshMagicScene();
                         magicOverlay.classList.add('active');
                     }
                     generateCardBtn.disabled = true;
@@ -967,6 +1652,10 @@
             }
             if (magicOverlay) {
                 magicOverlay.classList.remove('active'); 
+                boxAnimation.classList.remove('hidden');
+                petAnimation.classList.add('hidden');
+                stopMagicKeywordCycle();
+                stopPettingAnimation();
             }
             
             if (chatPanel && dashboardPanel) {
