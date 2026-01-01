@@ -13,25 +13,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Home - Meow Yourself</title>
         <style>
-            @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
-            @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap);
             @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
             *, :after, :before {
                 border: 0 solid #e5e7eb;
                 box-sizing: border-box;
             }
             body {
-                line-height: inherit;
                 margin: 0;
                 overflow-x: hidden;
-                background-color: #f1e7e0;
-                background-image: linear-gradient(160deg, #f1e7e0 0%, #e7d2c5 45%, #f8f1eb 100%);
+                font-size: 16px;
+                line-height: 1.7;
+                color: #2f2a25;
+                font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+                background-color: #f6f5f3;
+                background-image: linear-gradient(160deg, #f6f5f3 0%, #faf9f7 45%, #fdfbf8 100%);
             }
             #webcrumbs .warm-shell {
-                background: linear-gradient(180deg, #f9f0e9 0%, #f1e7e0 55%, #e7d4c6 100%);
+                background: linear-gradient(180deg, #fdfbf8 0%, #f6f5f3 60%, #faf9f7 100%);
             }
             #webcrumbs .warm-surface {
-                background: linear-gradient(160deg, rgba(249, 239, 233, 0.92) 0%, rgba(236, 214, 200, 0.94) 100%);
+                background: linear-gradient(160deg, rgba(253, 251, 248, 0.95) 0%, rgba(246, 245, 243, 0.95) 100%);
             }
             #webcrumbs .warm-cta {
                 background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
@@ -43,18 +45,18 @@
                 color: #4b3326;
             }
             #webcrumbs .warm-divider {
-                border-bottom: 1px solid rgba(206, 181, 165, 0.6);
+                border-bottom: 1px solid rgba(210, 198, 188, 0.6);
             }
             #webcrumbs .warm-outline {
-                border: 1px solid rgba(207, 179, 163, 0.75);
+                border: 1px solid rgba(210, 200, 190, 0.7);
             }
             #webcrumbs .cta-offset {
                 margin-top: 32px; 
             }
             #webcrumbs .warm-menu {
-                background-color: rgba(210, 171, 148, 0.9);
+                background-color: rgba(245, 240, 235, 0.95);
                 border: none;
-                box-shadow: 0 6px 16px rgba(110, 83, 63, 0.16);
+                box-shadow: 0 6px 16px rgba(110, 83, 63, 0.12);
                 width: auto !important; 
                 min-width: 88px; 
                 border-radius: 9999px; 
@@ -164,7 +166,7 @@
                 z-index: 9999;
             }
             .limit-modal-card {
-                background: linear-gradient(160deg, #fffaf5 0%, #fbe3d1 100%);
+                background: linear-gradient(160deg, #fdfbf8 0%, #f6f5f3 100%);
                 border-radius: 20px;
                 max-width: 380px;
                 width: 100%;
@@ -172,7 +174,7 @@
                 box-shadow: 0 18px 40px rgba(47, 33, 23, 0.25);
                 text-align: center;
                 position: relative;
-                border: 1px solid rgba(250, 211, 187, 0.6);
+                border: 1px solid rgba(215, 196, 182, 0.6);
             }
             .limit-modal-card h3 {
                 margin: 0 0 12px;
@@ -230,13 +232,13 @@
             }
             .browser-reminder-card {
                 width: min(420px, 90vw);
-                background: linear-gradient(160deg, #fffdfb 0%, #ffe7d5 100%);
+                background: linear-gradient(160deg, #fdfbf8 0%, #f6f5f3 100%);
                 border-radius: 24px;
                 padding: 44px 32px 32px;
                 text-align: center;
                 position: relative;
                 box-shadow: 0 18px 40px rgba(47, 33, 23, 0.25);
-                border: 1px solid rgba(255, 184, 133, 0.5);
+                border: 1px solid rgba(215, 196, 182, 0.6);
             }
             .browser-reminder-text {
                 margin: 0 0 20px;
@@ -261,14 +263,14 @@
                 height: 36px;
                 border-radius: 9999px;
                 border: none;
-                background: rgba(255, 255, 255, 0.8);
-                color: #a26a3f;
+                background: rgba(253, 251, 248, 0.9);
+                color: #8c6c58;
                 font-size: 20px;
                 cursor: pointer;
                 box-shadow: 0 6px 18px rgba(47, 33, 23, 0.15);
             }
             .browser-reminder-close:focus-visible {
-                outline: 2px solid #ffb67a;
+                outline: 2px solid #e0c6b3;
                 outline-offset: 2px;
             }
             .browser-reminder-action {
@@ -278,15 +280,48 @@
                 padding: 12px 20px;
                 font-size: 18px;
                 font-weight: 600;
-                color: #fff7f0;
-                background: linear-gradient(135deg, #ff8c3b 0%, #ffb347 100%);
+                color: #4d3528;
+                background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
                 cursor: pointer;
-                box-shadow: 0 14px 30px rgba(255, 140, 59, 0.35);
+                box-shadow: 0 12px 26px rgba(180, 140, 115, 0.25);
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
             }
             .browser-reminder-action:hover {
                 transform: translateY(-1px);
-                box-shadow: 0 18px 34px rgba(255, 140, 59, 0.45);
+                box-shadow: 0 16px 32px rgba(180, 140, 115, 0.3);
+            }
+            .soft-reminder {
+                background: #faf9f7;
+                border: none;
+                border-radius: 12px;
+                padding: 16px 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                color: #3c342f;
+                line-height: 1.7;
+                text-align: center;
+            }
+            .soft-reminder-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 600;
+                color: #2f2a25;
+            }
+            .soft-reminder-icon {
+                font-size: 1.1rem;
+                line-height: 1;
+            }
+            .soft-reminder-text {
+                margin: 0;
+            }
+            @media (max-width: 640px) {
+                .soft-reminder {
+                    align-items: flex-start;
+                    text-align: left;
+                }
             }
             .material-symbols-outlined {
                 font-family: 'Material Symbols Outlined';
@@ -311,6 +346,7 @@
             #webcrumbs .mb-10 { margin-bottom: 40px; }
             #webcrumbs .mb-2 { margin-bottom: 8px; }
             #webcrumbs .mb-4 { margin-bottom: 16px; }
+            #webcrumbs .mb-5 { margin-bottom: 20px; }
             #webcrumbs .mb-6 { margin-bottom: 24px; }
             #webcrumbs .mb-8 { margin-bottom: 32px; }
             #webcrumbs .ml-1 { margin-left: 4px; }
@@ -318,6 +354,7 @@
             #webcrumbs .mr-1 { margin-right: 4px; }
             #webcrumbs .mr-2 { margin-right: 8px; }
             #webcrumbs .mt-2 { margin-top: 8px; }
+            #webcrumbs .mt-4 { margin-top: 16px; }
             #webcrumbs .mt-20 { margin-top: 80px; }
             #webcrumbs .mt-6 { margin-top: 24px; }
             #webcrumbs .block { display: block; }
@@ -338,7 +375,7 @@
             #webcrumbs .w-40 { width: 160px; }
             #webcrumbs .w-full { width: 100%; }
             #webcrumbs .max-w-\[1200px\] { max-width: min(1200px, 100%); }
-            #webcrumbs .max-w-2xl { max-width: min(42rem, 100%); }
+            #webcrumbs .max-w-2xl { max-width: min(36rem, 100%); }
             #webcrumbs .max-w-3xl { max-width: min(48rem, 100%); }
             #webcrumbs .max-w-4xl { max-width: min(56rem, 100%); }
             #webcrumbs .max-w-5xl { max-width: min(64rem, 100%); }
@@ -366,6 +403,11 @@
                 --tw-space-x-reverse: 0;
                 margin-left: calc(24px * (1 - var(--tw-space-x-reverse)));
                 margin-right: calc(24px * var(--tw-space-x-reverse));
+            }
+            #webcrumbs :is(.space-y-2 > :not([hidden]) ~ :not([hidden])) {
+                --tw-space-y-reverse: 0;
+                margin-bottom: calc(8px * var(--tw-space-y-reverse));
+                margin-top: calc(8px * (1 - var(--tw-space-y-reverse)));
             }
             #webcrumbs :is(.space-y-3 > :not([hidden]) ~ :not([hidden])) {
                 --tw-space-y-reverse: 0;
@@ -398,14 +440,16 @@
             #webcrumbs .py-4 { padding-bottom: 16px; padding-top: 16px; }
             #webcrumbs .pt-0 { padding-top: 0; }
             #webcrumbs .text-center { text-align: center; }
-            #webcrumbs .font-sans { font-family: Open Sans, ui-sans-serif, system-ui, sans-serif; }
-            #webcrumbs .text-2xl { font-size: 24px; line-height: 31.2px; }
-            #webcrumbs .text-4xl { font-size: 36px; line-height: 41.4px; }
-            #webcrumbs .text-lg { font-size: 18px; line-height: 27px; }
-            #webcrumbs .text-sm { font-size: 14px; line-height: 21px; }
-            #webcrumbs .text-xl { font-size: 20px; line-height: 28px; }
+            #webcrumbs .font-sans { font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif; }
+            #webcrumbs .text-2xl { font-size: 1.625rem; line-height: 2.2rem; }
+            #webcrumbs .text-4xl { font-size: 2.125rem; line-height: 2.6rem; }
+            #webcrumbs .text-lg { font-size: 1rem; line-height: 1.7rem; }
+            #webcrumbs .text-sm { font-size: 0.9375rem; line-height: 1.6rem; }
+            #webcrumbs .text-xs { font-size: 0.875rem; line-height: 1.5rem; }
+            #webcrumbs .text-xl { font-size: 1.25rem; line-height: 1.9rem; }
             #webcrumbs .font-bold { font-weight: 700; }
             #webcrumbs .font-medium { font-weight: 500; }
+            #webcrumbs .font-semibold { font-weight: 600; }
             #webcrumbs .text-gray-600 { color: rgb(75 85 99); }
             #webcrumbs .text-gray-700 { color: rgb(55 65 81); }
             #webcrumbs .text-gray-800 { color: rgb(31 41 55); }
@@ -430,7 +474,7 @@
             #webcrumbs .primary-cta { border-radius: 20px; }
             #webcrumbs .mobile-cat-section { margin-top: 40px; padding: 0 12px; }
             #webcrumbs .mobile-cat-card {
-                background: linear-gradient(180deg, #f7ece4 0%, #f1e7e0 55%, #e6d1c4 100%);
+                background: linear-gradient(180deg, #fdfbf8 0%, #f6f5f3 55%, #faf9f7 100%);
                 border-radius: 28px;
                 padding: 28px 20px;
                 box-shadow: 0 22px 46px rgba(110, 83, 63, 0.14);
@@ -493,7 +537,7 @@
             @media (max-width: 640px) {
                 #webcrumbs .sm\:p-4 { padding: 16px; }
                 #webcrumbs .sm\:px-2 { padding-left: 8px; padding-right: 8px; }
-                #webcrumbs .sm\:text-3xl { font-size: 30px; line-height: 36px; }
+                #webcrumbs .sm\:text-3xl { font-size: 1.875rem; line-height: 2.3rem; }
                 #webcrumbs .sm\:text-lg { font-size: 16px; line-height: 24px; }
                 #webcrumbs .cat-carousel { aspect-ratio: 3 / 4; max-width: min(280px, 90vw); }
                 #webcrumbs .sm\:h-48 { height: 192px; }
@@ -515,7 +559,7 @@
                 #webcrumbs .md\:flex { display: flex; }
                 #webcrumbs .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
                 #webcrumbs .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-                #webcrumbs .md\:text-5xl { font-size: 48px; line-height: 52.8px; }
+                #webcrumbs .md\:text-5xl { font-size: 2.1875rem; line-height: 2.75rem; }
                 #webcrumbs .mobile-only { display: none; }
             }
             /* Privacy modal styles */
@@ -540,7 +584,7 @@
             }
             .privacy-card {
                 position: relative;
-                background: linear-gradient(160deg, #fffdfb 0%, #fffaf5 100%);
+                background: linear-gradient(160deg, #fdfbf8 0%, #f6f5f3 100%);
                 border-radius: 12px;
                 max-width: 880px;
                 width: 100%;
@@ -551,7 +595,7 @@
                 line-height: 1.65;
                 font-size: 16px;
                 box-shadow: 0 18px 40px rgba(47, 33, 23, 0.25);
-                border: 1px solid rgba(230, 190, 160, 0.6);
+                border: 1px solid rgba(215, 196, 182, 0.6);
             }
             .privacy-card h3 {
                 margin-top: 0;
@@ -572,7 +616,7 @@
                 line-break: normal;
                 overflow-wrap: anywhere;
             }
-            .privacy-close { position: absolute; right: 20px; top: 18px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: #a26a3f; }
+            .privacy-close { position: absolute; right: 20px; top: 18px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: #8c6c58; }
             @media (max-width: 640px) {
                 .privacy-card { padding: 16px; border-radius: 10px; }
             }
@@ -611,7 +655,7 @@
                 overflow-wrap: anywhere;
                 word-break: normal;
                 line-break: normal;
-                line-height: 1.55;
+                line-height: 1.7;
                 margin: 0 0 8px 0;
             }
             .team-card .team-extra br {
@@ -672,6 +716,41 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Meow Yourself" />
+        <!-- #TBD: update url/logo/social links in JSON-LD below -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Meow Yourself",
+          "alternateName": "Meow Yourself AI Companion",
+          "url": "https://meowyourself.com",
+          "description": "Meow Yourself 是一款以貓咪為視覺語言的 AI 陪伴型 Web 應用，透過對話與摘要，協助使用者整理當下的身心狀態，並生成可下載的專屬狀態圖卡與生活建議。",
+          "applicationCategory": "LifestyleApplication",
+          "operatingSystem": "Web",
+          "keywords": [
+            "Meow Yourself",
+            "AI emotional companion",
+            "mental wellness app",
+            "情緒摘要工具",
+            "AI 陪伴應用",
+            "貓咪狀態圖卡"
+          ],
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "isAccessibleForFree": true,
+          "inLanguage": ["zh-TW"],
+          "disambiguatingDescription": "Meow Yourself 為品牌名稱，指一款 AI 陪伴型 Web 應用，而非心理學名詞或醫療評估工具。",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Meow Yourself",
+            "url": "https://meowyourself.com",
+            "logo": "https://meowyourself.com/static/your-logo.png",
+            "sameAs": [
+              "https://instagram.com/your-handle"
+            ]
+          }
+        }
+        </script>
+
     </head>
     <body>
         
@@ -684,7 +763,7 @@
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                         <a href="{{ url_for('home') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
+                            <img src="{{ url_for('static', filename='banner_white.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" />
                         </a>
                         <span
                             class="text-gray-600 font-medium text-center"
@@ -728,10 +807,12 @@
                 </header>
                 <main class="p-6 sm:p-4">
                     <div class="flex flex-col items-center justify-center w-full max-w-4xl sm:max-w-full mx-auto px-4">
-                        <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">Meow Yourself</h1>
-                        <p class="text-lg sm:text-lg text-gray-700 mb-8 text-center max-w-2xl sm:max-w-full">
-                            你的健康，不只是一份報告；<br />
-                            讓AI幫你看懂壓力與能量平衡！
+                        <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-5 text-center">跟貓咪聊聊，找回你的身心平衡</h1>
+                        <p class="text-lg sm:text-lg text-gray-700 mb-2 text-center max-w-2xl sm:max-w-full">
+                            AI 陪你讀懂身心
+                        </p>
+                        <p class="text-sm text-gray-600 mb-6 text-center max-w-2xl sm:max-w-full">
+                            用 AI 陪你整理現在的狀態，從現在的感受開始
                         </p>
                         <div class="cat-carousel w-full mb-10" data-carousel="home">
                             <div class="carousel-track">
@@ -777,21 +858,15 @@
                         </div>
                         <div class="w-full max-w-md sm:max-w-full">
                             <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
-                                <span class="material-symbols-outlined mr-2">pets</span> 開啟你的專屬旅程
+                                <span class="material-symbols-outlined mr-2">pets</span> 開始聊天，說說我現在的狀態
                             </a>
                         </div>
-                        
-                        <div class="w-full cta-offset">
-                            <div class="bg-amber-100 warm-outline text-amber-900 rounded-xl px-6 py-4 text-sm text-center leading-relaxed">
-                                <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
-                            </div>
-                        </div>
-                        
+                        <p class="text-sm text-gray-600 mt-4 text-center">✔ 非醫療服務｜僅摘要分析｜隨時可離開</p>
                     </div>
                     <div class="mobile-only mobile-cat-section px-4">
                         <div class="mobile-cat-card">
-                            <h2>我們的九宮格貓咪</h2>
-                            <p>九大貓咪人格一次看懂，看看哪一隻最貼近你的靈魂貓夥伴。</p>
+                            <h2>九宮格貓咪一覽</h2>
+                            <p>先看看你的狀態可能會遇到哪位貓咪夥伴。</p>
                             <div class="mobile-cat-grid">
                                 <img src="{{ url_for('static', filename='cat_cards/images/cats/A1.png') }}" alt="暖心貓（布偶貓）" />
                                 <img src="{{ url_for('static', filename='cat_cards/images/cats/A2.png') }}" alt="晴天貓（橘貓）" />
@@ -808,45 +883,27 @@
                             </a>
                         </div>
                     </div>
-                    <div class="mt-20 max-w-5xl lg:max-w-4xl sm:max-w-full mx-auto">
-                        <h2 class="text-2xl font-medium mb-8 text-center">如何運作</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-4">
-                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
-                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                                    <span class="material-symbols-outlined text-gray-700 text-2xl">upload_file</span>
-                                </div>
-                                <h3 class="font-medium text-lg mb-2">上傳健康檢查報告</h3>
-                                <p class="text-gray-600">AI智能判讀健檢報告，<br />給予健康分數與建議</p>
-                            </div>
-                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
-                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                                    <span class="material-symbols-outlined text-gray-700 text-2xl">psychology</span>
-                                </div>
-                                <h3 class="font-medium text-lg mb-2">貓咪談心室</h3>
-                                <p class="text-gray-600">跟療癒貓咪談心吧！我們只會留下重點摘要，不會保存完整對話</p>
-                            </div>
-                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
-                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                                    <span class="material-symbols-outlined text-gray-700 text-2xl">pets</span>
-                                </div>
-                                <h3 class="font-medium text-lg mb-2">AI生成你的專屬圖卡</h3>
-                                <p class="text-gray-600">推薦適合您的音樂或活動<br />以及一部您也許會喜歡的電影</p>
-                            </div>
-                        </div>
-                    </div>
                     <div class="mt-20 max-w-3xl lg:max-w-3xl sm:max-w-full mx-auto">
                         <h2 class="text-2xl font-medium mb-4 text-center">常見問題</h2>
-                        <div class="space-y-3 mt-6">
+                                                <div class="space-y-2 mt-4">
                             <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
-                                <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between">
+                                <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between ">
                                     我的健康資料安全嗎？
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    我們只提取必要的健康數據進行計算，不會儲存健檢報告原始文件檔/圖檔。<br />
-                                    服務會將你的AI對話內容整理成主題摘要，並不會儲存完整的對話紀錄。<br />
-                                    摘要也會經過去識別化處理，確保無法被回推到特定個人。<br />
-                                    使用AI進行並保留摘要，不保存完整對話，且「去個人化」。看不出是誰說的，請放心使用。
+                                    你上傳的原始報告不會被長期保存，
+                                    系統僅擷取必要摘要資訊，並進行去識別化處理。
+                                </div>
+                            </details>
+                            <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
+                                <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between">
+                                    這是醫療服務嗎？
+                                    <span class="material-symbols-outlined transition-transform">expand_more</span>
+                                </summary>
+                                <div class="p-4 sm:p-2 pt-0 text-gray-600">
+                                    本服務為自我整理與參考用途，
+                                    不提供診斷或治療，亦無法取代專業醫療建議。
                                 </div>
                             </details>
                             <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
@@ -855,25 +912,47 @@
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    目前有兩種模式，如果時間較趕可以選擇時間較短的「焦點訪談」，<br />
-                                    若是需要更進一步的聊心則可以點選「深度聊聊」，時間取決於您。<br />
-                                    若感覺聊夠了，可以按「悄悄話總結」這個按鈕來結束對話喔！
+                                    你可選焦點訪談或深度聊聊；時間取決於你想說多少。
                                 </div>
                             </details>
                             <details class="warm-surface rounded-lg overflow-hidden hover:shadow transition-all duration-300">
-                                <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between text-gray-800">
-                                    什麼是專屬圖卡？
+                                <summary class="p-4 sm:p-2 cursor-pointer font-medium flex items-center justify-between">
+                                    我完成後會得到什麼？
                                     <span class="material-symbols-outlined transition-transform">expand_more</span>
                                 </summary>
                                 <div class="p-4 sm:p-2 pt-0 text-gray-600">
-                                    我們根據您的情緒與需求，推薦適合您的活動或音樂，<br />
-                                    並串接自建的電影知識庫進行RAG推薦，挑選一部你也許會喜歡的電影。<br />
-                                    您可以下載這張圖卡，跟朋友分享。
+                                    你會收到一份可下載的狀態圖卡，
+                                    包含當下狀態摘要與行動建議，供你自行參考，或是與朋友分享。
                                 </div>
                             </details>
                         </div>
                     </div>
-                    
+                    <div class="mt-20 max-w-5xl lg:max-w-4xl sm:max-w-full mx-auto">
+                        <h2 class="text-2xl font-medium mb-8 text-center">你會發生什麼</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-4">
+                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
+                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                    <span class="material-symbols-outlined text-gray-700 text-2xl">upload_file</span>
+                                </div>
+                                <h3 class="font-medium text-lg mb-2">你會上傳健檢或身體數據</h3>
+                                <p class="text-gray-600">AI 解析你的數據，建立健康摘要。</p>
+                            </div>
+                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
+                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                    <span class="material-symbols-outlined text-gray-700 text-2xl">psychology</span>
+                                </div>
+                                <h3 class="font-medium text-lg mb-2">你會完成簡短情緒測驗</h3>
+                                <p class="text-gray-600">我們只保留摘要，不保存完整對話。</p>
+                            </div>
+                            <div class="warm-surface p-6 sm:p-4 rounded-lg shadow-sm hover:shadow transition-all duration-300 flex flex-col items-center text-center">
+                                <div class="h-14 w-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                                    <span class="material-symbols-outlined text-gray-700 text-2xl">pets</span>
+                                </div>
+                                <h3 class="font-medium text-lg mb-2">你會獲得貓咪圖卡與建議</h3>
+                                <p class="text-gray-600">含活動／音樂／電影建議，可下載分享。</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mt-20 max-w-5xl sm:max-w-full mx-auto">
                         <h2 class="text-3xl font-bold mb-10 text-center text-gray-800">
                             Meet the Team <span class="text-amber-600">關於團隊</span>
@@ -887,7 +966,7 @@
                                 </div>
                                 <div class="team-content">
                                     <div class="team-header">
-                                        <h3 class="font-extrabold text-lg mb-1">Liyi |<br />Co-Developer</h3>
+                                        <h3 class="font-extrabold text-lg mb-1">Liyi｜Co-Developer</h3>
                                         <a class="member-link" href="https://linktr.ee/liyi17" target="_blank" rel="noopener" aria-label="Liyi Linktree">Linktree</a>
                                         <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
                                             <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -895,8 +974,8 @@
                                     </div>
                                     <div class="team-extra">
                                         <p class="text-gray-600 text-xs leading-snug">
-                                            加拿大打工度假中。將冥想的平靜轉化為Meow Yourself的視覺語言，是專案的靈感起源。<br><br><br>
-                                            身為賦予AI靈魂的魔術師，他主導<strong>品牌視覺</strong>，並深入參與<strong>NLP模組調校</strong>。不只設計產品的「長相」，更塑造了AI溫暖且具同理心的「說話風格」，讓技術更有溫度。
+                                            專注產品視覺與互動呈現，將抽象概念轉化為可感知的設計語言。<br />
+                                            擅長在技術與感受之間找到平衡，讓產品有清楚的「樣子」。
                                         </p>
                                     </div>
                                 </div>
@@ -908,7 +987,7 @@
                                 </div>
                                 <div class="team-content">
                                     <div class="team-header">
-                                        <h3 class="font-extrabold text-lg mb-1">Ashley |<br />Product Lead & Developer</h3>
+                                        <h3 class="font-extrabold text-lg mb-1">Ashley｜Product Lead & Developer</h3>
                                         <a class="member-link" href="https://www.instagram.com/hsinhuiii170/" target="_blank" rel="noopener" aria-label="Ashley Instagram">Instagram</a>
                                         <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
                                             <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -916,8 +995,8 @@
                                     </div>
                                     <div class="team-extra">
                                         <p class="text-gray-600 text-xs leading-snug">
-                                            有一隻灰貓。結合歷史系的宏觀與計量金融的邏輯，剛好能讀懂人類情感脈絡。<br><br><br>
-                                            負責<strong>產品核心邏輯、提示工程優化與全端整合</strong>。她運用<strong>VAD模型</strong>與<strong>Google Gemini LLM</strong>打造「聽得懂情緒」的大腦，並<strong>串接圖卡生成</strong>，將抽象的情緒轉化為療癒的視覺。致力於讓技術不再冰冷，而是能接住每一個需要被理解的靈魂。
+                                            負責產品核心邏輯、使用者體驗與 AI 整合方向。<br />
+                                            關注「人怎麼被理解」，而不只是系統怎麼運作。
                                         </p>
                                     </div>
                                 </div>
@@ -929,7 +1008,7 @@
                                 </div>
                                 <div class="team-content">
                                     <div class="team-header">
-                                        <h3 class="font-extrabold text-lg mb-1">Galing |<br />Tech Lead & Developer</h3>
+                                        <h3 class="font-extrabold text-lg mb-1">Galing｜Tech Lead & Developer</h3>
                                         <a class="member-link" href="https://www.instagram.com/galingalinga/" target="_blank" rel="noopener" aria-label="Galing Instagram">Instagram</a>
                                         <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
                                             <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -937,8 +1016,8 @@
                                     </div>
                                     <div class="team-extra">
                                         <p class="text-gray-600 text-xs leading-snug">
-                                            從劇場走入雲端的技術統籌。正以寫劇本的細膩度，優化AI複雜的雲端架構。<br><br><br>
-                                            團隊的技術架構師。一手打造穩定的<strong>GCP環境</strong>，並開發「健檢報告解析模組」，專注於<strong>Computer Vision</strong>與<strong>Prompt Engineering</strong>，具備將<strong>多模態AI模型</strong> (如：Gemini) 完美落地到產品環境的實戰能力，確保系統能精準地提取關鍵資訊並回應使用者的需求。
+                                            負責系統架構與 AI 功能落地，確保產品穩定、可擴充。<br />
+                                            習慣把複雜問題拆解成可實作的技術路徑。
                                         </p>
                                     </div>
                                 </div>
@@ -950,7 +1029,7 @@
                                 </div>
                                 <div class="team-content">
                                     <div class="team-header">
-                                        <h3 class="font-extrabold text-lg mb-1">Ting |<br />Co-Developer</h3>
+                                        <h3 class="font-extrabold text-lg mb-1">Ting｜Co-Developer</h3>
                                         <a class="member-link" href="https://www.instagram.com/tingchen1992/" target="_blank" rel="noopener" aria-label="Ting Instagram">Instagram</a>
                                         <button class="expand-toggle" aria-expanded="false" aria-label="展開成員介紹">
                                             <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1L10 10L19 1" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -958,8 +1037,8 @@
                                     </div>
                                     <div class="team-extra">
                                         <p class="text-gray-600 text-xs leading-snug">
-                                            左手拿蔬菜汁，右手寫Code。用電影滋養靈魂，在理性與感性間切換自如。<br><br><br>
-                                            團隊最堅實的守門員。她嚴謹把關<strong>Git版本協作與資安隱私</strong>，確保開發步調穩健；同時致力於<strong>前端UI/UX設計</strong>，將複雜功能轉化為直覺體驗，為用戶打造一個既流暢又安全無虞的互動空間。
+                                            負責前端體驗與產品互動細節，確保使用流程直覺順暢。<br />
+                                            重視使用者在每一步操作中的安全感與清晰感。
                                         </p>
                                     </div>
                                 </div>
@@ -967,8 +1046,21 @@
                         </div>
                     </div>
                     
+                    <div class="mt-6 mb-8 max-w-3xl lg:max-w-3xl sm:max-w-full mx-auto">
+                        <div class="soft-reminder text-sm">
+                            <div class="soft-reminder-title">
+                                <span class="soft-reminder-icon" aria-hidden="true">ℹ️</span>
+                                <span>溫馨提醒</span>
+                            </div>
+                            <p class="soft-reminder-text">
+                                本測驗僅提供自我探索與參考，不能取代專業醫療建議。<br />
+                                若你對結果感到不安，或正經歷身心困擾，請考慮尋求專業協助。
+                            </p>
+                        </div>
+                    </div>
+
                 </main>
-                <footer class="mt-20 bg-[#E8D6C5] py-10 px-6 text-center text-gray-700">
+                <footer class="bg-[#FAF9F7] py-10 px-6 text-center text-gray-700">
                     <h2 class="text-2xl font-bold mb-2">與我們聯繫</h2>
                     <p class="text-xs mb-4">如果您有任何問題或建議，請隨時透過以下方式聯絡我們。</p>
                     <div class="flex flex-col items-center gap-2 text-base">

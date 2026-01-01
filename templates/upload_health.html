@@ -13,43 +13,78 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Upload Health Report - Meow Yourself</title>
         <style>
-            @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
-            @import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+            @import url(https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap);
             @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
             *, :after, :before {
                 border: 0 solid #e5e7eb;
                 box-sizing: border-box;
             }
             body {
-                line-height: inherit;
                 margin: 0;
                 overflow-x: hidden;
-                background-color: #f1e7e0;
-                background-image: linear-gradient(155deg, #f1e7e0 0%, #e7d2c5 48%, #f9f1ec 100%);
+                font-size: 16px;
+                line-height: 1.7;
+                color: #2f2a25;
+                font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+                background-color: #f6f5f3;
+                background-image: linear-gradient(160deg, #f6f5f3 0%, #faf9f7 45%, #fdfbf8 100%);
             }
             #webcrumbs .warm-shell {
-                background: linear-gradient(185deg, #faeee7 0%, #f1e7e0 60%, #e6d1c4 100%);
+                background: linear-gradient(180deg, #fdfbf8 0%, #f6f5f3 60%, #faf9f7 100%);
             }
             #webcrumbs .warm-surface {
-                background: linear-gradient(160deg, rgba(250, 238, 231, 0.94) 0%, rgba(233, 209, 194, 0.96) 100%);
+                background: linear-gradient(160deg, rgba(253, 251, 248, 0.95) 0%, rgba(246, 245, 243, 0.95) 100%);
             }
             #webcrumbs .warm-cta {
-                background: linear-gradient(135deg, #f5d9c5 0%, #e9c4ae 100%);
+                background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
                 color: #5b4032;
                 border: 1px solid rgba(205, 175, 154, 0.6);
             }
             #webcrumbs .warm-cta:hover {
-                background: linear-gradient(135deg, #eccfbb 0%, #dfb49a 100%);
-                color: #4a3124;
+                background: linear-gradient(135deg, #ebcdb7 0%, #dfb49a 100%);
+                color: #4b3326;
             }
             #webcrumbs .warm-divider {
-                border-bottom: 1px solid rgba(206, 181, 165, 0.6);
+                border-bottom: 1px solid rgba(210, 198, 188, 0.6);
             }
             #webcrumbs .warm-border {
-                border: 1px solid rgba(207, 179, 163, 0.65);
+                border: 1px solid rgba(210, 200, 190, 0.7);
             }
             #webcrumbs .warm-note {
                 background: linear-gradient(135deg, rgba(249, 237, 230, 0.9) 0%, rgba(233, 209, 194, 0.9) 100%);
+            }
+            .status-card {
+                background: #f4ece5;
+                border: 1px solid rgba(210, 188, 170, 0.35);
+                border-radius: 20px;
+                padding: 24px 28px;
+                text-align: center;
+                box-shadow: 0 8px 20px rgba(110, 83, 63, 0.08);
+            }
+            .status-title {
+                margin: 0 0 8px;
+                font-size: 1.15rem;
+                font-weight: 600;
+                color: #3c2f26;
+            }
+            .status-subtitle {
+                margin: 0 0 16px;
+                font-size: 0.95rem;
+                color: #6f5e52;
+            }
+            .status-disclaimer {
+                margin-top: 24px;
+                font-size: 0.85rem;
+                color: #8b796c;
+                text-align: center;
+            }
+            @media (max-width: 640px) {
+                .status-card {
+                    text-align: left;
+                }
+                .status-disclaimer {
+                    text-align: left;
+                }
             }
             #webcrumbs .warm-menu {
                 background-color: rgba(210, 171, 148, 0.9);
@@ -192,7 +227,7 @@
             #webcrumbs .py-4 { padding-bottom: 16px; padding-top: 16px; }
             #webcrumbs .pt-0 { padding-top: 0; }
             #webcrumbs .text-center { text-align: center; }
-            #webcrumbs .font-sans { font-family: Open Sans, ui-sans-serif, system-ui, sans-serif; }
+            #webcrumbs .font-sans { font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif; }
             #webcrumbs .text-2xl { font-size: 24px; line-height: 31.2px; }
             #webcrumbs .text-4xl { font-size: 36px; line-height: 41.4px; }
             #webcrumbs .text-lg { font-size: 18px; line-height: 27px; }
@@ -234,44 +269,61 @@
             }
             
             .upload-section {
-                border: 2px dashed #d1d5db;
-                border-radius: 12px;
+                border: 2px dashed rgba(210, 200, 190, 0.75);
+                border-radius: 16px;
                 padding: 24px;
                 text-align: center;
+                cursor: pointer;
+                background-color: rgba(253, 251, 248, 0.6);
                 transition: all 0.3s ease;
             }
             
             .upload-section:hover {
-                border-color: #9ca3af;
-                background-color: #f9fafb;
+                border-color: rgba(180, 160, 145, 0.85);
+                background-color: rgba(253, 251, 248, 0.9);
             }
             
             .upload-section.drag-over {
-                border-color: #6b7280;
-                background-color: #f3f4f6;
+                border-color: rgba(150, 130, 115, 0.9);
+                background-color: rgba(246, 245, 243, 0.95);
             }
 
+            
             .invalid-report-card {
-                background-color: #fff7ed;
-                border: 1px solid #fdba74;
-                border-radius: 18px;
-                padding: 24px;
+                background-color: #fdfbf8;
+                border: 1px solid rgba(210, 200, 190, 0.7);
+                border-radius: 20px;
+                padding: 24px 28px;
                 margin-bottom: 24px;
-                box-shadow: 0 8px 16px rgba(253, 186, 116, 0.15);
+                box-shadow: 0 8px 20px rgba(110, 83, 63, 0.08);
                 text-align: center;
             }
 
-            .invalid-report-message {
+            .invalid-report-title {
+                margin: 0 0 8px;
                 font-size: 1.15rem;
                 font-weight: 600;
-                color: #a16207;
+                color: #3c2f26;
+            }
+
+            .invalid-report-body {
+                margin: 0 0 12px;
+                font-size: 0.95rem;
+                line-height: 1.7;
+                color: #6f5e52;
+            }
+
+            .invalid-report-note {
+                margin: 0 0 18px;
+                font-size: 0.85rem;
+                color: #7a6a5c;
             }
 
             .invalid-report-actions {
                 display: flex;
                 justify-content: center;
                 gap: 12px;
-                margin-top: 18px;
+                margin-top: 0;
                 flex-wrap: wrap;
             }
 
@@ -288,24 +340,25 @@
             }
 
             .btn-invalid-primary {
-                background: linear-gradient(90deg, #4b5563, #1f2937);
-                color: #ffffff;
-                box-shadow: 0 4px 10px rgba(31, 41, 55, 0.2);
+                background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
+                color: #5b4032;
+                border: 1px solid rgba(205, 175, 154, 0.75);
+                box-shadow: 0 6px 14px rgba(112, 83, 63, 0.15);
             }
 
             .btn-invalid-primary:hover {
-                background: linear-gradient(90deg, #1f2937, #111827);
+                background: linear-gradient(135deg, #ebcdb7 0%, #dfb49a 100%);
             }
 
             .btn-invalid-secondary {
-                background-color: #fff;
-                color: #374151;
-                border: 1px solid #d1d5db;
+                background-color: transparent;
+                color: #6a5648;
+                border: 1px solid rgba(205, 175, 154, 0.65);
             }
 
             .btn-invalid-secondary:hover {
-                border-color: #9ca3af;
-                color: #1f2937;
+                border-color: rgba(180, 160, 145, 0.9);
+                color: #4f3a2f;
             }
 
             .button-reupload {
@@ -350,12 +403,12 @@
             .loading-overlay {
                 position: fixed;
                 inset: 0;
-                background: rgba(0, 0, 0, 0.6);
+                background: rgba(44, 35, 28, 0.45);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 padding: 24px;
-                backdrop-filter: blur(4px);
+                backdrop-filter: blur(6px);
                 z-index: 999;
             }
 
@@ -364,11 +417,12 @@
             }
 
             .loading-card {
-                background: #fff;
+                background: #fdfbf8;
                 border-radius: 20px;
                 padding: 48px 40px;
                 text-align: center;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(215, 196, 182, 0.5);
+                box-shadow: 0 20px 50px rgba(60, 45, 35, 0.2);
             }
 
             .dots-loader {
@@ -421,6 +475,20 @@
             .file-input {
                 display: none;
             }
+
+            #webcrumbs .warm-cta:disabled {
+                opacity: 0.55;
+                cursor: not-allowed;
+                box-shadow: none;
+            }
+
+            .upload-reminder {
+                margin: 0;
+                font-size: 0.85rem;
+                line-height: 1.6;
+                color: #7a6a5c;
+                text-align: center;
+            }
             
             .upload-buttons {
                 display: flex;
@@ -434,19 +502,37 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                padding: 8px 16px;
-                border: 1px solid #d1d5db;
-                border-radius: 8px;
-                background-color: white;
-                color: #374151;
+                padding: 8px 18px;
+                border: 1px solid rgba(205, 175, 154, 0.65);
+                border-radius: 999px;
+                background-color: transparent;
+                color: #5b4032;
                 cursor: pointer;
                 transition: all 0.2s ease;
                 font-size: 14px;
+                font-weight: 600;
+            }
+            
+            .btn-upload-primary {
+                background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
+                border-color: rgba(205, 175, 154, 0.75);
+            }
+
+            .btn-upload-secondary {
+                background-color: rgba(253, 251, 248, 0.9);
+                color: #6a5648;
             }
             
             .btn-upload:hover {
-                background-color: #f9fafb;
-                border-color: #9ca3af;
+                border-color: rgba(180, 160, 145, 0.9);
+            }
+
+            .btn-upload-primary:hover {
+                background: linear-gradient(135deg, #ebcdb7 0%, #dfb49a 100%);
+            }
+
+            .btn-upload-secondary:hover {
+                background-color: rgba(253, 251, 248, 1);
             }
             
             .file-info {
@@ -506,7 +592,7 @@
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                         <a href="{{ url_for('home') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
+                            <img src="{{ url_for('static', filename='banner_white.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
                         </a>
                         <span
                             class="text-gray-600 font-medium text-center"
@@ -544,29 +630,23 @@
                     </div>
                 </header>
                 <main class="p-6 sm:p-4">
-                    <div class="flex flex-col items-center justify-center min-h-[80vh] max-w-4xl sm:max-w-full mx-auto">
+                    <div class="flex flex-col items-center justify-center {% if auto_redirect %}min-h-[60vh]{% else %}min-h-[80vh]{% endif %} max-w-4xl sm:max-w-full mx-auto">
                         <h1 class="text-3xl sm:text-2xl md:text-4xl font-bold mb-4 text-center">上傳健康報告</h1>
                         <p class="text-lg sm:text-base text-gray-600 mb-6 text-center max-w-2xl sm:max-w-full">
-                            請上傳您的健康報告（PDF 或 JPG/PNG 格式，最大 10MB）
+                            支援 PDF、JPG、PNG 格式，檔案大小上限 10MB
                         </p>
                         
                         
-                        <div class="w-full max-w-4xl sm:max-w-full mb-6">
-                            <div class="bg-amber-100 warm-border text-amber-900 rounded-xl px-5 py-3 text-sm text-center leading-relaxed">
-                                <strong>【特別提醒】</strong> 本測驗僅為娛樂與參考，並非醫療建議。若有任何身心困擾，請尋求專業協助。
-                            </div>
-                        </div>
-                        
                         {% if auto_redirect %}
-                        <div class="w-full max-w-3xl sm:max-w-full mb-7 text-center">
-                            <div class="inline-block warm-note warm-border text-gray-700 rounded-2xl px-6 py-4 text-sm leading-relaxed shadow-sm">
-                                <p class="mb-2 text-lg font-semibold">已找到您最近一次的健檢報告，系統將為您跳轉至心理測驗。</p>
+                        <div class="w-full max-w-3xl sm:max-w-full mb-8">
+                            <div class="status-card">
+                                <p class="status-title">已找到您最近一次的健檢報告</p>
+                                <p class="status-subtitle">系統將以此作為後續心理測驗的參考摘要</p>
                                 <a href="{{ url_for('upload_health', reupload=1) }}" class="button-reupload">
-                                    <span class="paw-icon" aria-hidden="true">🐾</span>
-                                    <span class="button-text">我要重新上傳報告</span>
-                                    <span class="material-symbols-outlined upload-icon" aria-hidden="true">file_upload</span>
+                                    <span class="button-text">我想重新上傳報告</span>
                                 </a>
                             </div>
+                            <p class="status-disclaimer">非醫療服務｜僅作參考，無法取代專業建議</p>
                         </div>
                         <script>
                             setTimeout(function () {
@@ -576,8 +656,8 @@
                         {% endif %}
                         {% if force_reupload %}
                         
-                        <div class="w-full max-w-3xl sm:max-w-full mb-6">
-                            <div class="bg-white/80 border border-gray-200 text-gray-700 rounded-xl px-5 py-3 text-sm text-center">
+                        <div class="w-full max-w-3xl sm:max-w-full mb-8">
+                            <div class="warm-surface warm-border text-gray-700 rounded-xl px-5 py-3 text-sm text-center">
                                 您選擇重新上傳健檢報告，提交後將覆蓋最新紀錄。
                             </div>
                         </div>
@@ -594,53 +674,44 @@
                         {% endfor %}
                         {% if invalid_report_prompt %}
                         
-                        <div class="invalid-report-card" role="alert">
-                            <p class="invalid-report-message">{{ msg_ns.invalid_message or 'Sorry喵，系統未讀取到健檢報告相關數據' }}</p>
+                        <div class="invalid-report-card" role="status">
+                            <p class="invalid-report-title">未辨識為健檢報告</p>
+                            <p class="invalid-report-body">系統已完成檔案掃描，但內容未符合健檢報告的判定條件，<br>因此無法作為後續分析的參考。</p>
+                            <p class="invalid-report-note">此檔案不會被儲存或使用，請放心。</p>
                             <div class="invalid-report-actions">
-                                <a class="btn-invalid-secondary" href="{{ url_for('upload_health', reupload=1) }}">繼續重新上傳</a>
-                                <a class="btn-invalid-primary" href="{{ url_for('psychology_test') }}">使用既有報告</a>
+                                <a class="btn-invalid-primary" href="{{ url_for('upload_health', reupload=1) }}">重新上傳健檢報告</a>
+                                <a class="btn-invalid-secondary" href="{{ url_for('psychology_test') }}">使用既有報告繼續</a>
                             </div>
                         </div>
                         {% endif %}
-                        <div class="bg-white rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
-                            {% if error %}
-                            <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
-                            {% endif %}
-                            {% for category, message in msg_ns.general %}
-                            <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
-                            {% endfor %}
-                            <form id="health-upload-form" method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6">
+                        <form id="health-upload-form" method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6 max-w-md w-full sm:max-w-full">
+                            <div class="warm-surface upload-card rounded-lg shadow-sm p-6">
+                                {% if error %}
+                                <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
+                                {% endif %}
+                                {% for category, message in msg_ns.general %}
+                                <p class="text-sm {% if category == 'error' %}text-red-600{% elif category == 'warning' %}text-yellow-600{% else %}text-green-600{% endif %} mb-4 text-center">{{ message }}</p>
+                                {% endfor %}
                                 <div>
-                                    <label class="block text-sm font-medium mb-2 text-center">選擇檔案或拍照上傳</label>
-                                    
-                                    
+                                    <label class="block text-sm font-medium mb-2 text-center">選擇檔案上傳</label>
                                     <div class="upload-section" onclick="triggerFileInput()">
                                         <div class="mb-4">
                                             <span class="material-symbols-outlined text-gray-400" style="font-size: 48px;">upload_file</span>
                                         </div>
-                                        <p class="text-sm text-gray-600 mb-2">點擊此處或拖曳檔案到這裡</p>
-                                        <p class="text-sm text-gray-500">支援 PDF、JPG、PNG 格式，最大 10MB</p>
-                                        <p class="text-sm text-gray-500 mt-1">小提醒：上傳前請先遮住您的個資（例如姓名、身分證字號、病歷號碼等），確保資訊安全💡</p>
-                                        
+                                        <p class="text-sm text-gray-600 mb-2">點擊此處或將檔案拖曳到這裡</p>
                                         <div class="upload-buttons">
-                                            <button type="button" class="btn-upload" onclick="event.stopPropagation(); triggerFileInput()">
+                                            <button type="button" class="btn-upload btn-upload-primary" onclick="event.stopPropagation(); triggerFileInput()">
                                                 <span class="material-symbols-outlined">folder_open</span>
                                                 選擇檔案
                                             </button>
-                                            <button type="button" class="btn-upload" onclick="event.stopPropagation(); triggerCameraInput()">
+                                            <button type="button" class="btn-upload btn-upload-secondary" onclick="event.stopPropagation(); triggerCameraInput()">
                                                 <span class="material-symbols-outlined">photo_camera</span>
                                                 拍照
                                             </button>
                                         </div>
                                     </div>
-                                    
-                                    
                                     <input type="file" id="health_report" name="health_report" accept="image/jpeg,image/png,application/pdf" class="file-input" onchange="showFileInfo(this)">
-                                    
-                                    
                                     <input type="file" id="camera_input" accept="image/jpeg,image/png" capture="camera" class="file-input" onchange="syncCameraFile(this)">
-                                    
-                                    
                                     <div id="file-info" class="file-info">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
@@ -651,12 +722,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <button type="submit" class="w-full py-3 px-4 rounded warm-cta transition-colors duration-300 mt-8">
-                                    上傳健康報告
-                                </button>
-                            </form>
-                        </div>
+                            </div>
+                            <p class="upload-reminder">上傳前請先遮住個人識別資訊（如姓名、證號、病歷號碼），<br>以確保你的隱私安全。</p>
+                            <button id="submit-upload" type="submit" class="w-full py-3 px-4 rounded warm-cta transition-colors duration-300" disabled>
+                                確認上傳
+                            </button>
+                        </form>
                         {% endif %}
                     </div>
                 </main>
@@ -727,6 +798,7 @@
                 const fileInfo = document.getElementById('file-info');
                 const fileName = document.getElementById('file-name');
                 const fileSize = document.getElementById('file-size');
+                const submitButton = document.getElementById('submit-upload');
                 
                 if (input.files && input.files[0]) {
                     const file = input.files[0];
@@ -741,13 +813,22 @@
                         fileName.style.color = '#dc2626';
                         fileSize.style.color = '#dc2626';
                         fileSize.textContent += ' (超過限制)';
+                        if (submitButton) {
+                            submitButton.disabled = true;
+                        }
                     } else {
                         fileInfo.style.backgroundColor = '#f0fdf4';
                         fileName.style.color = '#166534';
                         fileSize.style.color = '#6b7280';
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                        }
                     }
                 } else {
                     fileInfo.style.display = 'none';
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                    }
                 }
             }
 

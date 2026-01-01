@@ -15,6 +15,7 @@
     <style>
         @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap);
+        @import url(https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&display=swap);
         @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
         
         *, :after, :before {
@@ -397,6 +398,30 @@
             justify-content: center;
             flex-wrap: wrap;
         }
+
+        .home-info-card {
+            margin: 28px auto 0;
+            max-width: min(640px, 100%);
+            background: #fdfbf8;
+            border: 1px solid rgba(210, 200, 190, 0.6);
+            border-radius: 16px;
+            padding: 16px 20px;
+            text-align: left;
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            color: #2f2a25;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        .home-info-card h3 {
+            margin: 0 0 8px;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #3c2f26;
+        }
+        .home-info-card p {
+            margin: 0;
+            color: #5b4a3f;
+        }
         .tips-overlay {
             position: fixed;
             inset: 0;
@@ -679,7 +704,7 @@
         <header class="header">
             <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                 <a href="{{ url_for('home') }}" class="flex items-center">
-                    <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
+                    <img src="{{ url_for('static', filename='banner_pink.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
                 </a>
                 <span
                     style="display: block; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap; text-align: center;"
@@ -801,6 +826,11 @@
                 </button>
                 {% endif %}
             </div>
+            <div class="home-info-card">
+                <h3>什麼是專屬圖卡？</h3>
+                <p>你會收到一份可下載的狀態圖卡，包含當下狀態摘要與行動建議，供你自行參考，或是與朋友分享。</p>
+            </div>
+
 
             {% if psychology %}
             <div class="info-card">
@@ -813,6 +843,7 @@
                 <p class="hidden-section"><span class="info-label">關鍵字：</span>{{ psychology.get('keywords') | join('、') }}</p>
                 {% endif %}
             </div>
+
             {% endif %}
 
             
