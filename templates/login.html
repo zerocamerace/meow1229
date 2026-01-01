@@ -64,6 +64,11 @@
             #webcrumbs .warm-cta-secondary:hover {
                 background-color: #a47257;
             }
+            #webcrumbs .login-card {
+                background: rgba(253, 251, 248, 0.92);
+                border: 1px solid rgba(206, 181, 165, 0.45);
+                box-shadow: 0 8px 20px rgba(88, 64, 48, 0.08);
+            }
   
             #webcrumbs .cta-divider {
                 border-bottom: 1px solid rgba(206, 181, 165, 0.6);
@@ -287,11 +292,11 @@
                 <header class="py-4 px-6 sm:px-2 flex justify-between items-center warm-shell warm-divider">
                     <div class="flex flex-col items-center gap-2" style="width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                         <a href="{{ url_for('home') }}" class="flex items-center">
-                            <img src="{{ url_for('static', filename='cat_cards/images/image-removebg-logo.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
+                            <img src="{{ url_for('static', filename='banner_pink.png') }}" alt="Meow Yourself Logo" style="height: calc(0.96rem + 1.6cm); width: auto;" /> 
                         </a>
                         <span
                             class="text-gray-600 font-medium text-center"
-                            style="display: block; width: 100%; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap;"
+                            style="display: block; width: 100%; font-size: 0.85rem; letter-spacing: 0.14em; white-space: nowrap;"
                             >AI陪你讀懂身心</span
                         >
                     </div>
@@ -329,9 +334,9 @@
                     <div class="flex flex-col items-center justify-center min-h-[80vh] max-w-4xl sm:max-w-full mx-auto">
                         <h1 class="text-4xl sm:text-3xl md:text-5xl font-bold mb-6 text-center">登入</h1>
                         <p class="text-xl sm:text-lg text-gray-600 mb-8 text-center max-w-2xl sm:max-w-full">
-                            歡迎回來！請登入你的帳戶。
+                            使用你的帳號繼續
                         </p>
-                        <div class="warm-surface rounded-lg shadow-sm p-6 max-w-md w-full sm:max-w-full">
+                        <div class="warm-surface login-card rounded-lg p-6 max-w-md w-full sm:max-w-full">
                             {% if error %}
                             <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
                             {% endif %}
@@ -342,7 +347,7 @@
                             <form method="POST" action="{{ url_for('login') }}" class="space-y-4 comfort-text">
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">電子郵件</label>
-                                    <input type="email" name="email" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
+                                    <input type="email" name="email" placeholder="name@example.com" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">密碼</label>
@@ -351,10 +356,9 @@
                                 <button type="submit" class="w-full py-3 px-4 rounded warm-cta-main transition-colors duration-300 text-base mt-6">
                                     登入
                                 </button>
-                                <div class="cta-divider"></div>
-                                <div class="flex justify-center">
-                                    <a href="{{ url_for('register') }}" class="inline-flex items-center justify-center px-6 py-3 rounded warm-cta-secondary transition-colors duration-300 text-base shadow-sm">
-                                        還沒有帳號嗎？請點此建立新帳號
+                                <div class="mt-6 flex justify-center">
+                                    <a href="{{ url_for('register') }}" class="text-sm text-gray-600 hover:text-gray-700 hover:underline transition-colors duration-200">
+                                        還沒有帳號？建立新帳號
                                     </a>
                                 </div>
                             </form>

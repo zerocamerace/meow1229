@@ -140,6 +140,11 @@
             opacity: 1;
             pointer-events: auto;
         }
+        .magic-overlay.orange-mode {
+            --cat-color: #d8905b;
+            --cat-light: #f1c9a4;
+            --paw-pink: #f5b3c5;
+        }
         .magic-overlay-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.94), rgba(239,235,255,0.96));
             border-radius: 24px;
@@ -429,10 +434,10 @@
 
         
         <div id="selection-view" class="flex flex-col items-center justify-center h-full view-transition">
-            <div class="text-center mb-12">
+            <div class="text-center mb-10">
                  
                 
-            <div class="mb-4">
+            <div class="mb-3">
                 
                 <svg class="w-24 h-24 mx-auto transform hover:scale-110 transition duration-300" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
                     <defs>
@@ -444,14 +449,14 @@
                     <path d="M60 100 C25 70 8 52 10 32 C12 14 26 6 40 10 C50 13 56 22 60 28 C64 22 70 13 80 10 C94 6 108 14 110 32 C112 52 95 70 60 100 Z" fill="url(#heartGradient)" stroke="#f0315a" stroke-width="6" stroke-linejoin="round" />
                 </svg>
             </div>
-                 <h1 class="text-4xl md:text-5xl font-bold mb-2">貓咪談心室</h1>
+                 <h1 class="text-4xl md:text-5xl font-semibold mb-2">貓咪談心室</h1>
                 <p class="text-lg text-[var(--text-secondary)]">選一位貓咪朋友，開始你們的悄悄話時間。</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
                 <button onclick="selectMode('deep-chat')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(184, 172, 215, 0.55)">
                     <div class="bg-purple-100 p-4 rounded-full"><img src="{{ url_for('static', filename='grandma.jpg') }}" alt="喵奶奶春蘭" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold">深度聊聊</h2>
+                        <h2 class="text-2xl font-medium text-slate-700">深度聊聊</h2>
                         
                         <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">讓溫柔的「喵奶奶春蘭」陪你深入探索內心世界，慢慢梳理思緒，你可以傳送任何想聊的心情話語給喵奶奶春蘭，若感覺聊夠了，可以按「悄悄話總結」噢！</p>
                     </div>
@@ -459,7 +464,7 @@
                 <button onclick="selectMode('quick-qa')" class="group bg-[var(--bg-secondary)] p-8 rounded-2xl custom-shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all text-left flex items-center gap-6 relative overflow-hidden selection-mode-card" data-bubble-color="rgba(255, 201, 130, 0.55)">
                     <div class="bg-amber-100 p-4 rounded-full"><img src="{{ url_for('static', filename='reporter.jpg') }}" alt="喵記者馬克" class="w-[60px] h-[60px] rounded-full object-cover shadow-sm" /></div>
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold">焦點訪談</h2>
+                        <h2 class="text-2xl font-medium text-slate-700">焦點訪談</h2>
                         
                         <p class="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">由專業的「喵記者馬克」提問 3 題至 15 題選擇題，你可以三選一作答，也可以改輸入文字傳送答案；若感覺聊夠了可以按「悄悄話總結」，讓馬克陪你快速釐清當下的心情與狀況。</p>
                     </div>
@@ -664,6 +669,8 @@
         const petAnimation = document.getElementById('pet-animation');
         const petContainer = document.getElementById('pet-container');
         const petCanvas = document.getElementById('petCanvas');
+        const boxMessage = boxAnimation ? boxAnimation.querySelector('.magic-message') : null;
+        const petMessage = petAnimation ? petAnimation.querySelector('.magic-message') : null;
         const selectionModeCards = document.querySelectorAll('.selection-mode-card');
         const selectionBubbleEffects = [];
         let messageLengthAlertShown = false;
@@ -695,6 +702,20 @@
         ];
         const NEGATIVE_HINTS = ["不公", "憂", "沮", "消極", "焦", "煩", "難過", "壓", "怒", "悲", "痛", "恐", "怕", "懼", "厭", "困", "絕", "孤單"];
         const POSITIVE_HINTS = ["晴", "喜", "樂", "開心", "暖", "安", "靜", "順", "好", "滿", "感謝", "期待", "幸福"];
+
+        const NEGATIVE_MAGIC_MESSAGES = [
+            "幫你把壞情緒掃走",
+            "有點煩？貓咪先幫你拍掉",
+            "情緒有點亂？讓貓咪幫你撥下去",
+            "讓貓咪出手，把煩的先撥走"
+        ];
+        const POSITIVE_MAGIC_MESSAGES = [
+            "先來摸摸貓咪，圖卡馬上送到",
+            "先陪貓咪呼嚕一下，心情慢慢暖起來",
+            "先來擼一會兒貓咪，放鬆一下",
+            "先讓貓咪陪你放鬆，等圖卡出爐"
+        ];
+        const MAGIC_WAIT_PREFIX = "生成圖卡約需20~30秒。";
 
         const MAX_KEYWORD_CYCLE = 3;
         let magicKeywords = ['壞情緒'];
@@ -840,11 +861,43 @@
             pettingAnimation.stop();
         }
 
+        let lastMagicMessage = '';
+        function pickMagicMessage(isNegative) {
+            const list = isNegative ? NEGATIVE_MAGIC_MESSAGES : POSITIVE_MAGIC_MESSAGES;
+            if (!list.length) {
+                return MAGIC_WAIT_PREFIX;
+            }
+            let choice = list[Math.floor(Math.random() * list.length)];
+            if (list.length > 1) {
+                let attempts = 0;
+                while (choice === lastMagicMessage && attempts < 5) {
+                    choice = list[Math.floor(Math.random() * list.length)];
+                    attempts += 1;
+                }
+            }
+            lastMagicMessage = choice;
+            return `${MAGIC_WAIT_PREFIX}${choice}`;
+        }
+
+        function setMagicMessage(isNegative) {
+            const message = pickMagicMessage(isNegative);
+            if (boxMessage) {
+                boxMessage.textContent = message;
+            }
+            if (petMessage) {
+                petMessage.textContent = message;
+            }
+        }
+
         function showBoxAnimation(keywords) {
             petAnimation.classList.add('hidden');
             petAnimation.classList.remove('active');
             boxAnimation.classList.remove('hidden');
             boxAnimation.classList.add('active');
+            if (magicOverlay) {
+                magicOverlay.classList.add('orange-mode');
+            }
+            setMagicMessage(true);
             startMagicKeywordCycle(keywords);
             stopPettingAnimation();
         }
@@ -854,6 +907,10 @@
             boxAnimation.classList.remove('active');
             petAnimation.classList.remove('hidden');
             petAnimation.classList.add('active');
+            if (magicOverlay) {
+                magicOverlay.classList.remove('orange-mode');
+            }
+            setMagicMessage(false);
             stopMagicKeywordCycle();
             startPettingAnimation();
         }
@@ -1652,6 +1709,7 @@
             }
             if (magicOverlay) {
                 magicOverlay.classList.remove('active'); 
+                magicOverlay.classList.remove('orange-mode');
                 boxAnimation.classList.remove('hidden');
                 petAnimation.classList.add('hidden');
                 stopMagicKeywordCycle();
