@@ -13,6 +13,7 @@ CAT_CARD_DIR = STATIC_DIR / "cat_cards"
 CAT_CARD_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
+MAX_PDF_PAGES = 10
 ALLOWED_UPLOAD_EXTENSIONS = (".jpg", ".jpeg", ".png", ".pdf")
 ALLOWED_UPLOAD_MIMES = {
     "image/jpeg",
@@ -20,6 +21,17 @@ ALLOWED_UPLOAD_MIMES = {
     "application/pdf",
 }
 MAX_USER_TEXT_CHARS = 1000
+REGISTER_RATE_LIMIT_WINDOW_SECONDS = int(
+    os.getenv("REGISTER_RATE_LIMIT_WINDOW_SECONDS", "3600")
+)
+REGISTER_RATE_LIMIT_MAX_PER_IP = int(
+    os.getenv("REGISTER_RATE_LIMIT_MAX_PER_IP", "10")
+)
+REGISTER_RATE_LIMIT_MAX_PER_EMAIL = int(
+    os.getenv("REGISTER_RATE_LIMIT_MAX_PER_EMAIL", "5")
+)
+REGISTER_RATE_LIMIT_MESSAGE = "Please try again later."
+REGISTER_HONEYPOT_FIELD = "website"
 OVER_LIMIT_MESSAGE = "Oops...字數超過1000字無法傳送唷"
 MAX_DAILY_CARD_GENERATIONS = 10
 CARD_LIMIT_MESSAGE = "今日生成次數已達上限，請明天再試。"

@@ -13,6 +13,8 @@ from dotenv import load_dotenv
 import datetime
 import pdfplumber
 
+from config.settings import MAX_PDF_PAGES, MAX_UPLOAD_BYTES
+
 # Load environment variables
 load_dotenv()
 
@@ -174,6 +176,15 @@ def extract_pdf_text(pdf_data):
         return None
 
 
+def _get_pdf_page_count(pdf_data):
+    try:
+        with pdfplumber.open(BytesIO(pdf_data)) as pdf:
+            return len(pdf.pages)
+    except Exception as e:
+        logging.error("Failed to read PDF page count: %s", e)
+        return None
+
+
 def get_gemini_prompt(user_uid, file_type, gender):
     """根據文件類型和性別生成 Gemini 提示"""
     base_prompt = f"""
@@ -219,7 +230,7 @@ def get_gemini_prompt(user_uid, file_type, gender):
 請你只回傳 JSON 格式的內容，不要包含任何額外的文字或說明。
 """
     if file_type == "pdf":
-        return f"{base_prompt}\n以下是健檢報告的文本內容："
+        return f"{base_prompt}\n以下是健檢報告內容："
     return base_prompt
 
 
@@ -276,16 +287,27 @@ def analyze_image_with_gemini(image_data, user_uid, gender):
 
 def analyze_pdf_with_gemini(pdf_data, user_uid, gender):
     """分析 PDF 並返回健康數據"""
-    logging.info("Sending PDF text to Gemini for analysis...")
-    text = extract_pdf_text(pdf_data)
-    if not text:
-        logging.error("No text extracted from PDF")
+    logging.info("Sending PDF to Gemini for analysis...")
+    if len(pdf_data) > MAX_UPLOAD_BYTES:
+        logging.error("PDF exceeds size limit: %s bytes", len(pdf_data))
+        return None
+    page_count = _get_pdf_page_count(pdf_data)
+    if page_count is None:
+        logging.error("Unable to determine PDF page count")
+        return None
+    if page_count > MAX_PDF_PAGES:
+        logging.warning(
+            "PDF page count %s exceeds limit %s", page_count, MAX_PDF_PAGES
+        )
         return None
 
     prompt = get_gemini_prompt(user_uid, "pdf", gender)
 
     try:
-        response = _generate_gemini_content([prompt, text])
+        pdf_part = genai_types.Part.from_bytes(
+            data=pdf_data, mime_type="application/pdf"
+        )
+        response = _generate_gemini_content([prompt, pdf_part])
 
         logging.info("Gemini PDF analysis complete, processing returned data...")
         gemini_output_str = (
@@ -299,15 +321,49 @@ def analyze_pdf_with_gemini(pdf_data, user_uid, gender):
                 not isinstance(vital_stats_json, dict)
                 or "vital_stats" not in vital_stats_json
             ):
-                logging.error("Invalid JSON structure from Gemini")
+                logging.warning("Invalid JSON structure from Gemini PDF")
+                raise ValueError("Invalid JSON structure from Gemini PDF")
+            return vital_stats_json
+        except json.JSONDecodeError as json_e:
+            logging.warning(
+                "Failed to parse Gemini JSON output for PDF: %s", json_e
+            )
+            raise
+
+    except Exception as e:
+        logging.warning("Gemini PDF direct failed, falling back: %s", e)
+
+    text = extract_pdf_text(pdf_data)
+    if not text:
+        logging.error("No text extracted from PDF")
+        return None
+
+    try:
+        response = _generate_gemini_content([prompt, text])
+
+        logging.info("Gemini PDF fallback analysis complete, processing returned data...")
+        gemini_output_str = (
+            response.text.strip().replace("```json", "").replace("```", "")
+        )
+        logging.debug(f"Gemini raw output: {gemini_output_str}")
+
+        try:
+            vital_stats_json = json.loads(gemini_output_str)
+            if (
+                not isinstance(vital_stats_json, dict)
+                or "vital_stats" not in vital_stats_json
+            ):
+                logging.error("Invalid JSON structure from Gemini PDF fallback")
                 return None
             return vital_stats_json
         except json.JSONDecodeError as json_e:
-            logging.error(f"Failed to parse Gemini JSON output: {str(json_e)}")
+            logging.error(
+                f"Failed to parse Gemini JSON output (fallback): {str(json_e)}"
+            )
             return None
 
     except Exception as e:
-        logging.error(f"Failed to analyze PDF with Gemini: {str(e)}")
+        logging.error(f"Failed to analyze PDF with Gemini fallback: {str(e)}")
         return None
 
 
