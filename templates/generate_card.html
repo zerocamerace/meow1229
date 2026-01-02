@@ -675,6 +675,61 @@
                 padding: 14px 20px;
             }
         }
+    
+        body {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #2f2a25;
+            background-color: #f6f5f3;
+            background-image: linear-gradient(160deg, #f6f5f3 0%, #faf9f7 45%, #fdfbf8 100%);
+        }
+        #webcrumbs .warm-shell,
+        .warm-shell {
+            background: linear-gradient(180deg, #fdfbf8 0%, #f6f5f3 60%, #faf9f7 100%);
+        }
+        #webcrumbs .warm-surface,
+        .warm-surface {
+            background: linear-gradient(160deg, rgba(253, 251, 248, 0.95) 0%, rgba(246, 245, 243, 0.95) 100%);
+        }
+
+        .container {
+            background: linear-gradient(160deg, rgba(253, 251, 248, 0.95) 0%, rgba(246, 245, 243, 0.95) 100%);
+            box-shadow: 0 20px 40px rgba(44, 35, 28, 0.08);
+        }
+        .header {
+            background: linear-gradient(160deg, rgba(253, 251, 248, 0.95) 0%, rgba(246, 245, 243, 0.95) 100%);
+            border-bottom: 1px solid rgba(210, 198, 188, 0.6);
+        }
+
+        #webcrumbs .warm-cta,
+        #webcrumbs .warm-cta-main,
+        .warm-cta,
+        .warm-cta-main,
+        .btn-primary,
+        .cta-button,
+        #brand-intro-enter-btn,
+        #generate-card-button {
+            background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
+            color: #5b4032;
+            border: 1px solid rgba(205, 175, 154, 0.6);
+        }
+        #webcrumbs .warm-cta:hover,
+        #webcrumbs .warm-cta-main:hover,
+        .warm-cta:hover,
+        .warm-cta-main:hover,
+        .btn-primary:hover,
+        .cta-button:hover,
+        #brand-intro-enter-btn:hover,
+        #generate-card-button:hover {
+            background: linear-gradient(135deg, #ebcdb7 0%, #dfb49a 100%);
+            color: #4b3326;
+        }
+        #webcrumbs .font-sans,
+        .font-sans {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+        }
+
     </style>
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
@@ -704,7 +759,7 @@
         <header class="header">
             <div class="logo" style="display: flex; flex-direction: column; align-items: center; gap: 8px; width: max-content; min-width: calc(0.96rem + 1.6cm + 56px);">
                 <a href="{{ url_for('home') }}" class="flex items-center">
-                    <img src="{{ url_for('static', filename='banner_pink.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
+                    <img src="{{ url_for('static', filename='banner_white.png') }}" alt="Meow Yourself Logo" style="height: calc(15.36px + 1.6cm); width: auto;" /> 
                 </a>
                 <span
                     style="display: block; font-size: 1rem; letter-spacing: 0.18em; white-space: nowrap; text-align: center;"
