@@ -706,7 +706,21 @@
                 .team-grid { gap: 12px; }
                 .team-card { padding: 20px; }
             }
-        </style>
+
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
         
         <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
@@ -857,7 +871,7 @@
                             </div>
                         </div>
                         <div class="w-full max-w-md sm:max-w-full">
-                            <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                            <a href="{{ url_for('upload_health', next=url_for('cards.psychology_test')) }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
                                 <span class="material-symbols-outlined mr-2">pets</span> 開始聊天，說說我現在的狀態
                             </a>
                         </div>

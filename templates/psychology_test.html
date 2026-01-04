@@ -153,11 +153,14 @@
             box-shadow: 0 24px 48px rgba(57, 37, 99, 0.25);
             text-align: center;
             max-width: 560px;
-            width: min(92%, 560px);
+            width: min(92vw, 560px);
             border: 1px solid rgba(164, 145, 211, 0.35);
+            box-sizing: border-box;
+            overflow: hidden;
         }
         .magic-animation-frame {
-            width: min(480px, 92vw);
+            width: min(480px, 100%);
+            max-width: 100%;
             margin: 0 auto 10px;
         }
         .magic-animation-svg {
@@ -468,7 +471,20 @@
             font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
         }
 
-    </style>
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
 </head>
 <body class="text-[var(--text-primary)] flex items-center justify-center min-h-screen p-4">
         
@@ -748,7 +764,6 @@
             "沒關係，無論你現在什麼心情，都可以帶來。我會好好地聽。"
         ];
         const NEGATIVE_HINTS = ["不公", "憂", "沮", "消極", "焦", "煩", "難過", "壓", "怒", "悲", "痛", "恐", "怕", "懼", "厭", "困", "絕", "孤單"];
-        const POSITIVE_HINTS = ["晴", "喜", "樂", "開心", "暖", "安", "靜", "順", "好", "滿", "感謝", "期待", "幸福"];
 
         const NEGATIVE_MAGIC_MESSAGES = [
             "幫你把壞情緒掃走",
@@ -765,6 +780,7 @@
         const MAGIC_WAIT_PREFIX = "生成圖卡約需20~30秒。";
 
         const MAX_KEYWORD_CYCLE = 3;
+        const MAX_BOX_KEYWORD_LEN = 8;
         let magicKeywords = ['壞情緒'];
         let magicKeywordIndex = 0;
         let magicKeywordInterval = null;
@@ -780,83 +796,46 @@
             return NEGATIVE_HINTS.some(hint => normalized.includes(hint));
         }
 
-        function isPositiveText(value) {
-            if (!value) return false;
-            const normalized = value.replace(/\s+/g, '');
-            return POSITIVE_HINTS.some(hint => normalized.includes(hint));
-        }
-
-        function extractKeywordsFromSummary(summary) {
-            if (!summary) return [];
-            const cleaned = summary.replace(/[\n\r]+/g, ' ');
-            const bracketMatches = cleaned.match(/[「『【](.+?)[」』】]/g) || [];
-            const keywords = bracketMatches.map(match => match.slice(1, -1).trim()).filter(Boolean);
-            const plainWords = cleaned.split(/[,，。；、\s]+/).filter(Boolean);
-            return [...keywords, ...plainWords].slice(0, MAX_KEYWORD_CYCLE * 2);
+        function normalizeBoxKeyword(value) {
+            const text = sanitizeKeyword(value).replace(/\s+/g, '');
+            if (!text || text.length > MAX_BOX_KEYWORD_LEN) return '';
+            return text;
         }
 
         function gatherMagicKeywords() {
             const data = window.currentReportData || {};
             const negatives = [];
-            const positives = [];
 
             const pushNegative = (value) => {
-                const text = sanitizeKeyword(value);
+                const text = normalizeBoxKeyword(value);
                 if (!text) return;
-                if (!negatives.includes(text) && isNegativeText(text)) {
+                if (isNegativeText(text) && !negatives.includes(text)) {
                     negatives.push(text);
-                }
-            };
-
-            const pushPositive = (value) => {
-                const text = sanitizeKeyword(value);
-                if (!text) return;
-                if (isPositiveText(text) && !positives.includes(text)) {
-                    positives.push(text);
-                }
-            };
-
-            const tryPush = (value) => {
-                const text = sanitizeKeyword(value);
-                if (!text) return;
-                if (isNegativeText(text)) {
-                    pushNegative(text);
-                } else {
-                    pushPositive(text);
                 }
             };
 
             if (Array.isArray(data.keywords)) {
                 for (const candidate of data.keywords) {
-                    tryPush(candidate);
+                    pushNegative(candidate);
                     if (negatives.length >= MAX_KEYWORD_CYCLE) break;
                 }
             } else if (typeof data.keywords === 'string') {
-                tryPush(data.keywords);
-            }
-
-            if (negatives.length < MAX_KEYWORD_CYCLE) {
-                const summaryExtras = extractKeywordsFromSummary(data.summary || '');
-                for (const extra of summaryExtras) {
-                    tryPush(extra);
-                    if (negatives.length >= MAX_KEYWORD_CYCLE) break;
-                }
+                pushNegative(data.keywords);
             }
 
             const hasNegative = negatives.length > 0;
-            const hasPositiveOnly = !hasNegative && positives.length > 0;
             const fallbackKeywords = hasNegative ? negatives : ['壞情緒'];
             return {
                 keywords: fallbackKeywords,
                 hasNegative,
-                hasPositiveOnly: hasPositiveOnly && !hasNegative
+                usedFallback: !hasNegative
             };
         }
 
         function applyKeywordToBox(keyword) {
             if (!targetTextElement) return;
             const value = (keyword || '壞情緒').replace(/\s+/g, '');
-            const truncated = value.slice(0, 12);
+            const truncated = value.slice(0, MAX_BOX_KEYWORD_LEN);
             const lines = [];
             if (!truncated.length) {
                 lines.push('壞');
@@ -871,9 +850,9 @@
             targetTextElement.innerHTML = lines
                 .map((segment, index) => `<tspan x="380" dy="${index === 0 ? 0 : 14}">${segment}</tspan>`)
                 .join('');
-            if (truncated.length >= 12) {
-                targetTextElement.setAttribute('font-size', '10');
-            } else if (truncated.length >= 8) {
+            if (truncated.length >= 8) {
+                targetTextElement.setAttribute('font-size', '12');
+            } else if (truncated.length >= 6) {
                 targetTextElement.setAttribute('font-size', '12');
             } else {
                 targetTextElement.setAttribute('font-size', '14');
@@ -972,8 +951,8 @@
                 void boxGroup.offsetWidth;
                 boxGroup.classList.add('box-active');
             }
-            const {keywords, hasNegative, hasPositiveOnly} = gatherMagicKeywords();
-            const shouldShowBox = hasNegative || (!hasPositiveOnly && !hasNegative);
+            const {keywords, hasNegative, usedFallback} = gatherMagicKeywords();
+            const shouldShowBox = hasNegative || usedFallback;
             if (shouldShowBox) {
                 showBoxAnimation(keywords);
             } else {

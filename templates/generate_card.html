@@ -222,6 +222,12 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             margin: 0 auto;
             display: block;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cat-image.demo-blur {
+            filter: blur(8px);
         }
 
         .cat-speech-bubble {
@@ -240,6 +246,7 @@
             line-height: 1.4; 
             overflow: visible; 
             text-overflow: unset; 
+            z-index: 2;
         }
         
         .cat-speech-bubble::after {
@@ -313,6 +320,100 @@
             text-justify: inter-ideograph;
             hyphens: auto;
         }
+
+        .action-line {
+            margin-top: 4px;
+            text-align: left;
+            text-align-last: left;
+            text-justify: auto;
+            letter-spacing: normal;
+            word-spacing: normal;
+            position: relative;
+        }
+
+        .demo-action {
+            --action-line-height: 1.5em;
+        }
+
+        .demo-action .action-text {
+            display: block;
+            line-height: 1.5;
+        }
+
+        .demo-action .action-text-blur {
+            position: relative;
+            filter: blur(28px);
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .demo-action .action-text-clear {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: var(--action-line-height);
+        }
+
+        .action-label-hidden {
+            visibility: hidden;
+        }
+
+        .demo-blur-text {
+            display: inline-block;
+            filter: blur(5px);
+            opacity: 0.6;
+        }
+
+        .curation-list.demo-curation {
+            position: relative;
+        }
+
+        .demo-curation-overlay {
+            position: absolute;
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(4px);
+            font-size: 13px;
+            line-height: 1.6;
+            color: #4b2f24;
+            font-family: 'Noto Serif TC', 'Open Sans', serif;
+            box-shadow: 0 8px 20px rgba(71, 109, 255, 0.18);
+            z-index: 2;
+            text-align: center;
+        }
+
+        .demo-cta {
+            margin: 36px auto 0;
+            max-width: min(640px, 100%);
+            text-align: center;
+            padding: 0 12px;
+        }
+
+        .demo-cta-title {
+            margin: 0 0 10px;
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 600;
+            color: #4b2f24;
+            font-family: 'Lato', 'Open Sans', 'Noto Serif TC', serif;
+        }
+
+        .demo-cta-subtitle {
+            margin: 0 0 18px;
+            font-size: clamp(14px, 3.2vw, 17px);
+            color: #7c5b4a;
+            line-height: 1.7;
+            font-family: 'Open Sans', 'Noto Serif TC', serif;
+        }
+
         
         .ai-signature {
             font-size: 10px;
@@ -448,6 +549,12 @@
         .tips-modal h3 {
             margin-top: 0;
             color: #4b2f24;
+        }
+        .tips-subtitle {
+            margin: 6px 0 0;
+            font-size: 14px;
+            color: #7c5b4a;
+            line-height: 1.6;
         }
         .tips-close {
             background: transparent;
@@ -674,6 +781,10 @@
             .btn {
                 padding: 14px 20px;
             }
+            .demo-curation-overlay {
+                font-size: 12px;
+                padding: 10px 12px;
+            }
         }
     
         body {
@@ -730,7 +841,20 @@
             font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
         }
 
-    </style>
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
@@ -780,6 +904,11 @@
             <p class="subtitle">
                 根據你的健康數據與心理測驗結果，<br />AI 為你量身挑選了一隻獨一無二的心靈寵物
             </p>
+            {% if report and report.get('is_demo') %}
+            <div class="warm-note" style="padding: 12px 18px; border-radius: 16px; max-width: 520px; margin: 0 auto 24px; color: #6a4a3a; font-size: 0.95rem;">
+                健檢報告使用示範資料
+            </div>
+            {% endif %}
             
             
             <div class="cat-card" id="cat-card" style="background: {{ gradient }};">
@@ -792,7 +921,7 @@
                     <div class="cat-speech-bubble">
                         {{ speech_display }}
                     </div>
-                    <img src="{{ card_url }}" alt="Your Cat" class="cat-image" {% if proxy_card_url %}data-proxy-src="{{ proxy_card_url }}"{% endif %} data-original-src="{{ card_url }}" />
+                    <img src="{{ card_url }}" alt="Your Cat" class="cat-image{% if demo_mode %} demo-blur{% endif %}" {% if proxy_card_url %}data-proxy-src="{{ proxy_card_url }}"{% endif %} data-original-src="{{ card_url }}" />
                 </div>
                 
                 <div class="cat-name">{{ c.name or '專屬貓咪' }}</div>
@@ -802,23 +931,47 @@
                         <div style="margin-top:8px;"><strong>心情結論：</strong>{{ c.insight }}</div>
                     {% endif %}
                     {% if c.action %}
-                        <div style="margin-top:4px;"><strong>建議行動：</strong>{{ c.action }}</div>
+                        {% if demo_mode %}
+                        <div class="action-line demo-action">
+                            <span class="action-text action-text-clear">
+                                <strong>建議行動：</strong>{{ c.action }}
+                            </span>
+                            <span class="action-text action-text-blur" aria-hidden="true">
+                                <span class="action-label-hidden">建議行動：</span>{{ c.action }}
+                            </span>
+                        </div>
+                        {% else %}
+                        <div class="action-line">
+                            <strong>建議行動：</strong>{{ c.action }}
+                        </div>
+                        {% endif %}
                     {% endif %}
                 </div>
                 
                 {% if c.recommendations %}
-                <div class="curation-list">
+                <div class="curation-list{% if demo_mode %} demo-curation{% endif %}">
                     {% for rec in c.recommendations %}
                     <div class="curation-item">
                         <div class="curation-label">{{ rec.label }}</div>
                         <div class="curation-title">{{ rec.title }}</div>
-                        <div class="curation-reason">{{ rec.reason }}</div>
+                        <div class="curation-reason">
+                            {% if demo_mode %}
+                                <span class="demo-blur-text">{{ rec.reason }}</span>
+                            {% else %}
+                                {{ rec.reason }}
+                            {% endif %}
+                        </div>
                     </div>
                     {% endfor %}
+                    {% if demo_mode %}
+                    <div class="demo-curation-overlay">
+                        貓咪似乎從你的煩惱中讀到一些特別訊息喵...但為了給你更精準的守護，還需要一點點真實的身體數據。上傳報告，讓我為你拼湊出完整的身心地圖。
+                    </div>
+                    {% endif %}
                 </div>
                 {% endif %}
                 
-                <div class="ai-signature">🤖 AI 生成專屬健康伙伴</div>
+                <div class="ai-signature">由貓咪為你整理</div>
             </div>
             {% if c.cat_image_source %}
             
@@ -865,11 +1018,25 @@
             {% endif %}
 
             
+            {% if demo_mode %}
+            <div class="demo-cta">
+                <h2 class="demo-cta-title">如果你願意，我可以幫你整理成一個屬於你的圖卡</h2>
+                <p class="demo-cta-subtitle">上傳真實報告，貓咪能透過數據更精準地為你挑選建議電影與活動喔！</p>
+            </div>
+            {% endif %}
+
             <div class="action-buttons">
+                {% if demo_mode %}
+                <a href="{{ url_for('cards.upload_health') }}" class="btn btn-secondary">
+                    <span class="material-symbols-outlined">upload_file</span>
+                    給貓咪看看報告
+                </a>
+                {% else %}
                 <button class="btn btn-secondary" onclick="downloadCard(event)">
                     <span class="material-symbols-outlined">download</span>
                     下載貓咪卡片
                 </button>
+                {% endif %}
                 <a href="/" class="btn btn-primary">
                     <span class="material-symbols-outlined">home</span>
                     回到首頁
@@ -937,14 +1104,16 @@
                 </div>
             </div>
             
-            
             {% if health_tips %}
             <div class="tips-overlay" id="tipsOverlay">
                 <div class="tips-modal">
                     <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
-                        <h3>AI健康建議</h3>
+                        <h3>{% if demo_mode %}AI健康建議（此為示範報告）{% else %}AI健康建議{% endif %}</h3>
                         <button type="button" class="tips-close" onclick="closeTips()">&#10005;</button>
                     </div>
+                    {% if demo_mode %}
+                    <p class="tips-subtitle">上傳您的報告，為您提供個人化的提醒</p>
+                    {% endif %}
                     {% for tip in health_tips %}
                     <div class="tips-card">
                         <p>{{ tip.description }}</p>
