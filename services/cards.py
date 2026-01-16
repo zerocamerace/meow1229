@@ -276,7 +276,7 @@ def generate_cat_card_text(report: dict, psychology: dict, preferred_style: str)
         "- recommendations: 物件，內含 movie/music/activity 三個子欄位，每個子欄位需提供 title 與 reason。\n"
         "  * movie: 推薦一部符合當前情緒需求的電影或影集，reason 需點出氛圍或療癒重點。\n"
         "  * music: 推薦一首歌曲或播放清單，說明為何適合此刻的節奏。\n"
-        "  * activity: 推薦一個放鬆或充電的小活動，要具體且富有品味。\n"
+        "  * activity: 推薦一個放鬆或充電的小活動，title 需在 20 字內且要具體有品味。\n"
         "所有文字務必使用繁體中文，保持溫柔且有品味，不可引用精確的血壓、血脂等數值。\n"
         f"建議風格：{preferred_style}\n"
         f"健康資料：{json.dumps(report, ensure_ascii=False, default=str)}\n"
@@ -340,6 +340,14 @@ def _normalize_recommendations(
     raw_recs = payload.get("recommendations") or {}
     fallback_map = _fallback_recommendations(style_key)
     movie_candidates = rag_movie_recommendations(psychology, style_key, top_n=5)
+
+    def _coerce_activity_title(title: str, fallback_title: str) -> str:
+        cleaned = (title or "").strip()
+        if not cleaned:
+            return fallback_title
+        if len(cleaned) <= 20:
+            return cleaned
+        return fallback_title
     normalized = []
     for key in ("movie", "music", "activity"):
         label = RECOMMENDATION_LABELS[key]
@@ -359,6 +367,11 @@ def _normalize_recommendations(
             if fallback:
                 title = title or fallback["title"]
                 reason = reason or fallback["reason"]
+        if key == "activity":
+            fallback_title = fallback_map.get("activity", {}).get(
+                "title", "輕鬆散步放空"
+            )
+            title = _coerce_activity_title(title, fallback_title)
         normalized.append({"label": label, "title": title, "reason": reason})
     movie_entry = next(
         (

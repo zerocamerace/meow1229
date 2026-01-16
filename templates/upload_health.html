@@ -288,6 +288,98 @@
                 background-color: rgba(246, 245, 243, 0.95);
             }
 
+            .demo-choice-card {
+                border: 1px solid rgba(210, 200, 190, 0.7);
+                border-radius: 20px;
+                padding: 20px 24px;
+                text-align: center;
+                margin-bottom: 24px;
+                box-shadow: 0 8px 20px rgba(110, 83, 63, 0.08);
+            }
+
+            .demo-choice-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 16px;
+                flex-wrap: wrap;
+                margin-top: 16px;
+            }
+
+            .demo-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 12px 20px;
+                border-radius: 999px;
+                font-weight: 600;
+                font-size: 14px;
+                border: 1px solid rgba(205, 175, 154, 0.75);
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                cursor: pointer;
+            }
+
+            .demo-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 18px rgba(110, 83, 63, 0.15);
+            }
+
+            .demo-btn-primary {
+                background: linear-gradient(135deg, #f4d7c3 0%, #e8c3ad 100%);
+                color: #5b4032;
+            }
+
+            .demo-btn-secondary {
+                background: #fff;
+                color: #6a5648;
+            }
+
+            .demo-modal {
+                position: fixed;
+                inset: 0;
+                background: rgba(44, 35, 28, 0.45);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                z-index: 1000;
+            }
+
+            .demo-modal.hidden {
+                display: none;
+            }
+
+            .demo-modal-card {
+                background: #fdfbf8;
+                border-radius: 20px;
+                padding: 28px;
+                max-width: 520px;
+                width: 100%;
+                box-shadow: 0 20px 50px rgba(60, 45, 35, 0.2);
+                text-align: center;
+            }
+
+            .demo-modal-title {
+                margin: 0 0 12px;
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: #3c2f26;
+            }
+
+            .demo-modal-body {
+                margin: 0 0 20px;
+                color: #6f5e52;
+                line-height: 1.7;
+                font-size: 0.95rem;
+            }
+
+            .demo-modal-actions {
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
             
             .invalid-report-card {
                 background-color: #fdfbf8;
@@ -562,6 +654,15 @@
                     justify-content: center;
                     max-width: 200px;
                 }
+
+                .demo-choice-buttons {
+                    flex-direction: column;
+                }
+
+                .demo-btn {
+                    width: 100%;
+                    max-width: 240px;
+                }
             }
             @media (min-width: 768px) {
                 #webcrumbs .md\:flex { display: flex; }
@@ -572,7 +673,21 @@
                 #webcrumbs .lg\:max-w-4xl { max-width: 56rem; }
                 #webcrumbs .lg\:max-w-3xl { max-width: 48rem; }
             }
-        </style>
+
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
         <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
@@ -642,7 +757,7 @@
                             <div class="status-card">
                                 <p class="status-title">已找到您最近一次的健檢報告</p>
                                 <p class="status-subtitle">系統將以此作為後續心理測驗的參考摘要</p>
-                                <a href="{{ url_for('upload_health', reupload=1) }}" class="button-reupload">
+                                <a href="{{ url_for('upload_health', reupload=1, next=next_url) if next_url else url_for('upload_health', reupload=1) }}" class="button-reupload">
                                     <span class="button-text">我想重新上傳報告</span>
                                 </a>
                             </div>
@@ -663,6 +778,47 @@
                         </div>
                         {% endif %}
                         {% if not auto_redirect %}
+                        <div class="demo-choice-card warm-surface warm-border w-full max-w-3xl sm:max-w-full">
+                            <p class="text-sm font-medium mb-2">還沒有健檢報告？</p>
+                            <p class="text-sm text-gray-600">先用示範資料體驗，或直接上傳你的報告。</p>
+                            <div class="demo-choice-buttons">
+                                <button type="button" class="demo-btn demo-btn-secondary" id="demo-trigger">
+                                    沒報告？先用範例試試
+                                </button>
+                            </div>
+                        </div>
+                        <form id="demo-form" method="POST" action="{{ url_for('upload_health') }}">
+                            <input type="hidden" name="use_demo" value="1">
+                            {% if next_url %}
+                            <input type="hidden" name="next" value="{{ next_url }}">
+                            {% endif %}
+                        </form>
+                        <div id="demo-modal" class="demo-modal hidden" role="dialog" aria-modal="true">
+                            <div class="demo-modal-card">
+                                <h3 class="demo-modal-title">
+                                    {% if demo_available %}
+                                        確認使用示範資料
+                                    {% else %}
+                                        今日已使用過示範資料
+                                    {% endif %}
+                                </h3>
+                                <p class="demo-modal-body">
+                                    {% if demo_available %}
+                                        {{ demo_notice }}
+                                    {% else %}
+                                        {{ demo_limit_message }}
+                                    {% endif %}
+                                </p>
+                                <div class="demo-modal-actions">
+                                    <button type="button" class="demo-btn demo-btn-secondary" id="demo-cancel">
+                                        {% if demo_available %}取消{% else %}知道了{% endif %}
+                                    </button>
+                                    {% if demo_available %}
+                                        <button type="button" class="demo-btn demo-btn-primary" id="demo-confirm">確認使用</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                         {% set flashed_messages = get_flashed_messages(with_categories=true) %}
                         {% set msg_ns = namespace(invalid_message=None, general=[]) %}
                         {% for category, message in flashed_messages %}
@@ -676,15 +832,18 @@
                         
                         <div class="invalid-report-card" role="status">
                             <p class="invalid-report-title">未辨識為健檢報告</p>
-                            <p class="invalid-report-body">系統已完成檔案掃描，但內容未符合健檢報告的判定條件，<br>因此無法作為後續分析的參考。</p>
+                            <p class="invalid-report-body">系統已完成檔案掃描，但內容未符合健檢報告的判定條件，因此無法作為後續分析的參考。</p>
                             <p class="invalid-report-note">此檔案不會被儲存或使用，請放心。</p>
                             <div class="invalid-report-actions">
-                                <a class="btn-invalid-primary" href="{{ url_for('upload_health', reupload=1) }}">重新上傳健檢報告</a>
+                                <a class="btn-invalid-primary" href="{{ url_for('upload_health', reupload=1, next=next_url) if next_url else url_for('upload_health', reupload=1) }}">重新上傳健檢報告</a>
                                 <a class="btn-invalid-secondary" href="{{ url_for('psychology_test') }}">使用既有報告繼續</a>
                             </div>
                         </div>
                         {% endif %}
                         <form id="health-upload-form" method="POST" action="{{ url_for('upload_health') }}" enctype="multipart/form-data" class="space-y-6 max-w-md w-full sm:max-w-full">
+                            {% if next_url %}
+                            <input type="hidden" name="next" value="{{ next_url }}">
+                            {% endif %}
                             <div class="warm-surface upload-card rounded-lg shadow-sm p-6">
                                 {% if error %}
                                 <p class="text-sm text-red-600 mb-4 text-center">{{ error }}</p>
@@ -866,6 +1025,38 @@
                     }
                     
                     showLoading('報告上傳中，請稍候...');
+                });
+            }
+
+            const demoTrigger = document.getElementById('demo-trigger');
+            const demoModal = document.getElementById('demo-modal');
+            const demoCancel = document.getElementById('demo-cancel');
+            const demoConfirm = document.getElementById('demo-confirm');
+            const demoForm = document.getElementById('demo-form');
+
+            if (demoTrigger && demoModal) {
+                demoTrigger.addEventListener('click', () => {
+                    demoModal.classList.remove('hidden');
+                });
+            }
+
+            if (demoCancel && demoModal) {
+                demoCancel.addEventListener('click', () => {
+                    demoModal.classList.add('hidden');
+                });
+            }
+
+            if (demoModal) {
+                demoModal.addEventListener('click', (event) => {
+                    if (event.target === demoModal) {
+                        demoModal.classList.add('hidden');
+                    }
+                });
+            }
+
+            if (demoConfirm && demoForm) {
+                demoConfirm.addEventListener('click', () => {
+                    demoForm.submit();
                 });
             }
 

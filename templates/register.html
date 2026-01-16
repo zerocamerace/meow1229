@@ -305,7 +305,20 @@
             font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
         }
 
-    </style>
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
         <link rel="apple-touch-icon" sizes="192x192" href="https://cdn.webcrumbs.org/assets/images/landing/logo192.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="https://cdn.webcrumbs.org/assets/images/landing/logo512.png" />
@@ -377,6 +390,10 @@
                             {% endfor %}
                             
                             <form method="POST" action="{{ url_for('register') }}" class="space-y-4 comfort-text">
+                                <div style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;" aria-hidden="true">
+                                    <label for="website">Leave this field blank</label>
+                                    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                                </div>
                                 <div class="mb-4">
                                     <label class="block text-sm font-medium mb-1">電子郵件</label>
                                     <input type="email" name="email" class="w-full p-2 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-gray-400" required>

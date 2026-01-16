@@ -567,6 +567,8 @@
             .footer-cookie-note {
                 margin-top: 0.5rem;
                 margin-bottom: 2rem;
+                text-wrap: balance;
+                line-break: strict;
             }
             .privacy-backdrop {
                 position: fixed;
@@ -706,7 +708,21 @@
                 .team-grid { gap: 12px; }
                 .team-card { padding: 20px; }
             }
-        </style>
+
+
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"],
+        [class*="btn"],
+        [class*="button"],
+        .warm-cta,
+        .warm-cta-main,
+        .warm-cta-outline {
+            font-family: 'Noto Serif TC', 'Source Han Serif TC', 'Songti TC', serif;
+            font-weight: 700;
+        }
+</style>
         
         <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
@@ -857,7 +873,7 @@
                             </div>
                         </div>
                         <div class="w-full max-w-md sm:max-w-full">
-                            <a href="{{ url_for('upload_health') }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
+                            <a href="{{ url_for('upload_health', next=url_for('cards.psychology_test')) }}" class="primary-cta w-full py-4 px-6 warm-cta rounded-lg text-lg font-medium transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center">
                                 <span class="material-symbols-outlined mr-2">pets</span> 開始聊天，說說我現在的狀態
                             </a>
                         </div>
@@ -1071,7 +1087,7 @@
                     </div>
                     <p class="text-xs text-gray-600 mt-6">© 2025 Meow Yourself. All rights reserved.<button id="privacy-toggle" type="button" class="privacy-link" aria-haspopup="dialog" aria-expanded="false">隱私權政策</button></p>
                     <p class="footer-cookie-note text-xs text-gray-500 mt-2 max-w-prose mx-auto leading-snug">
-                        本網站使用Cookie分析技術，以提供您更優質的瀏覽體驗與情緒陪伴服務。繼續瀏覽即表示您同意我們的隱私權政策。
+                        本網站為測試中的陪伴型互動工具，並非醫療、健康評估或診斷建議。<br />本網站使用Cookie分析技術，以提供您更優質的瀏覽體驗與情緒陪伴服務。繼續瀏覽即表示您同意我們的隱私權政策。
                     </p>
                 </footer>
             </div>

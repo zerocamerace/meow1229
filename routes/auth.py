@@ -4,7 +4,15 @@ import logging
 
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
-from config.settings import DEFAULT_AVATAR, REWARD_BADGES
+from config.settings import (
+    DEFAULT_AVATAR,
+    REGISTER_HONEYPOT_FIELD,
+    REGISTER_RATE_LIMIT_MAX_PER_EMAIL,
+    REGISTER_RATE_LIMIT_MAX_PER_IP,
+    REGISTER_RATE_LIMIT_MESSAGE,
+    REGISTER_RATE_LIMIT_WINDOW_SECONDS,
+    REWARD_BADGES,
+)
 from google.cloud.firestore import SERVER_TIMESTAMP
 from services.auth_points import (
     authenticate_with_password,
@@ -14,6 +22,7 @@ from services.auth_points import (
     delete_user_storage_files,
 )
 from services.firebase import auth, db
+from utils.rate_limit import is_rate_limited
 from utils.security import _form_keys, _mask_email
 
 auth_bp = Blueprint("auth", __name__)
@@ -45,6 +54,17 @@ def _localized_login_error(message: str, email: str) -> str:
     return "登入失敗：系統目前忙碌，請稍後再試。"
 
 
+def _client_ip() -> str:
+    return request.remote_addr or "unknown"
+
+
+def _register_template_context(is_logged_in: bool, error: str | None = None) -> dict:
+    return {
+        "error": error,
+        "is_logged_in": is_logged_in,
+    }
+
+
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     is_logged_in = "user_id" in session
@@ -54,18 +74,56 @@ def register():
 
     if request.method == "POST":
         logging.debug("Register submission fields: %s", _form_keys(request.form))
+        client_ip = _client_ip()
+        honeypot_value = request.form.get(REGISTER_HONEYPOT_FIELD, "")
+        if honeypot_value:
+            logging.warning("Register blocked by honeypot for ip=%s", client_ip)
+            flash(REGISTER_RATE_LIMIT_MESSAGE, "error")
+            return render_template(
+                "register.html",
+                **_register_template_context(
+                    is_logged_in, error=REGISTER_RATE_LIMIT_MESSAGE
+                ),
+            )
+        if is_rate_limited(
+            f"register:ip:{client_ip}",
+            REGISTER_RATE_LIMIT_MAX_PER_IP,
+            REGISTER_RATE_LIMIT_WINDOW_SECONDS,
+        ):
+            logging.warning("Register rate limit hit for ip=%s", client_ip)
+            flash(REGISTER_RATE_LIMIT_MESSAGE, "error")
+            return render_template(
+                "register.html",
+                **_register_template_context(
+                    is_logged_in, error=REGISTER_RATE_LIMIT_MESSAGE
+                ),
+            )
         email = request.form.get("email")
         password = request.form.get("password")
         gender = request.form.get("gender")
         logging.debug("Parsed register data for email=%s", _mask_email(email))
+        if email and is_rate_limited(
+            f"register:email:{email.lower()}",
+            REGISTER_RATE_LIMIT_MAX_PER_EMAIL,
+            REGISTER_RATE_LIMIT_WINDOW_SECONDS,
+        ):
+            logging.warning("Register rate limit hit for email=%s", _mask_email(email))
+            flash(REGISTER_RATE_LIMIT_MESSAGE, "error")
+            return render_template(
+                "register.html",
+                **_register_template_context(
+                    is_logged_in, error=REGISTER_RATE_LIMIT_MESSAGE
+                ),
+            )
 
         if not email or not password or not gender:
             flash("請輸入電子郵件、密碼和生理性別！", "error")
             logging.warning("Missing email, password, or gender in form submission")
             return render_template(
                 "register.html",
-                error="請輸入電子郵件、密碼和生理性別",
-                is_logged_in=is_logged_in,
+                **_register_template_context(
+                    is_logged_in, error="請輸入電子郵件、密碼和生理性別"
+                ),
             )
 
         try:
@@ -92,10 +150,11 @@ def register():
             logging.error("Registration failed: %s", exc)
             flash("註冊失敗：請稍後再試。", "error")
             return render_template(
-                "register.html", error=str(exc), is_logged_in=is_logged_in
+                "register.html",
+                **_register_template_context(is_logged_in, error=str(exc)),
             )
 
-    return render_template("register.html", is_logged_in=is_logged_in)
+    return render_template("register.html", **_register_template_context(is_logged_in))
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])

@@ -119,4 +119,5 @@ def register_context_processors(app):
             "reward_badges": enriched_badges,
             "reward_unlocks": reward_unlocks,
             "user_avatar": user_avatar,
+            "debug_enabled": bool(app.debug),
         }
