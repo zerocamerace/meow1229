@@ -1943,17 +1943,19 @@
 
                 const combinedScore = Math.round((mindScore + bodyScore) / 2);
 
-                console.log('Generated Scores:', {
-                    mindScore: Math.max(0, Math.min(100, mindScore)),
-                    bodyScore: Math.max(0, Math.min(100, bodyScore)),
-                    combinedScore: Math.max(0, Math.min(100, combinedScore)),
-                    emotionVector: emotionVector,
-                    extremeLanguage: {
-                        detected: extremeCount > 0,
-                        matchedKeywords: Array.from(matchedKeywords),
-                        deductAmount: deductAmount
-                    }
-                });
+                if ({{ debug_enabled | default(false) | tojson }}) {
+                    console.log('Generated Scores:', {
+                        mindScore: Math.max(0, Math.min(100, mindScore)),
+                        bodyScore: Math.max(0, Math.min(100, bodyScore)),
+                        combinedScore: Math.max(0, Math.min(100, combinedScore)),
+                        emotionVector: emotionVector,
+                        extremeLanguage: {
+                            detected: extremeCount > 0,
+                            matchedKeywords: Array.from(matchedKeywords),
+                            deductAmount: deductAmount
+                        }
+                    });
+                }
 
                 const finalReportData = {
                     ...reportData,
